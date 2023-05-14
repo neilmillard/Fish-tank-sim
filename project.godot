@@ -1,0 +1,27 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="FishTank Simulator"
+run/main_scene="res://Scenes/underwater.tscn"
+config/features=PackedStringArray("4.0", "Mobile")
+config/icon="res://icon.svg"
+
+[layer_names]
+
+2d_physics/layer_1="walls"
+2d_physics/layer_2="fish"
+2d_physics/layer_3="food"
+2d_physics/layer_4="floor"
+
+[rendering]
+
+renderer/rendering_method="mobile"

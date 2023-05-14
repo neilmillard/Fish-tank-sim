@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://dr7yr46m6ebpw"]
+
+[ext_resource type="Texture2D" uid="uid://c71ripcb17pg2" path="res://art/fish.png" id="1_7rajn"]
+[ext_resource type="Texture2D" uid="uid://bd84ewdeg3nyb" path="res://art/Background.png" id="2_qpcaf"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tfhka"]
+texture = ExtResource("1_7rajn")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sj05l"]
+resource_name = "Background"
+texture = ExtResource("2_qpcaf")
+texture_region_size = Vector2i(64, 48)
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:1/0 = 0
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+3:1/0 = 0
+2:1/0 = 0
+1:1/0 = 0
+4:0/0 = 0
+4:1/0 = 0
+4:2/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_m5f21"]
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "Terrain 0"
+terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
+sources/0 = SubResource("TileSetAtlasSource_tfhka")
+sources/1 = SubResource("TileSetAtlasSource_sj05l")
+
+[node name="BackgroundFarTerrain" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="."]
+scale = Vector2(4, 4)
+tile_set = SubResource("TileSet_m5f21")
+cell_quadrant_size = 64
+format = 2
+layer_0/tile_data = PackedInt32Array(65537, 1, 0, 65541, 65537, 0, 65545, 131073, 0, 65549, 196609, 0, 65553, 262145, 0, 262145, 1, 1, 262149, 65537, 1, 262153, 131073, 1, 262157, 196609, 1, 262161, 262145, 1, 458753, 1, 2, 458757, 1, 2, 458761, 1, 2, 458765, 1, 2, 458769, 1, 2)

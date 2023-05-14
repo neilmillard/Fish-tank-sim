@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="TankData" load_steps=2 format=3 uid="uid://cy8w2smuy2yxt"]
+
+[ext_resource type="Script" path="res://Scripts/TankData.gd" id="1_wju7x"]
+
+[resource]
+script = ExtResource("1_wju7x")

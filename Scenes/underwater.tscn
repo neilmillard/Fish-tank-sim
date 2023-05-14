@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://bcnklujjjcylb"]
+
+[ext_resource type="Script" path="res://Scripts/UnderwaterProcedural.gd" id="1_ilmkv"]
+[ext_resource type="PackedScene" uid="uid://dr7yr46m6ebpw" path="res://Scenes/BackgroundFarTerrain.tscn" id="2_8wyk3"]
+[ext_resource type="PackedScene" uid="uid://dw3wlqc6n0i6c" path="res://Scenes/middle_water.tscn" id="2_rcjv1"]
+[ext_resource type="PackedScene" uid="uid://bx8vlqf5lbrgu" path="res://Scenes/Floor.tscn" id="3_xf8mu"]
+
+[node name="Underwater" type="Node2D"]
+script = ExtResource("1_ilmkv")
+
+[node name="BackgroundFarTerrain" parent="." instance=ExtResource("2_8wyk3")]
+
+[node name="Background Far Water" type="Node2D" parent="."]
+
+[node name="Background Near Terrain" type="Node2D" parent="."]
+
+[node name="Background Near Water" type="Node2D" parent="."]
+
+[node name="Floor" parent="." instance=ExtResource("3_xf8mu")]
+
+[node name="MiddleWater" parent="." instance=ExtResource("2_rcjv1")]
+
+[node name="Surface" type="Node2D" parent="."]
+
+[node name="Foreground Terrain" type="Node2D" parent="."]
+
+[node name="Foreground Water" type="Node2D" parent="."]

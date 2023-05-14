@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvplseuj47e66"]
+
+[ext_resource type="Script" path="res://Scripts/food.gd" id="1_5su1c"]
+[ext_resource type="Texture2D" uid="uid://c7n0dkn264x0f" path="res://art/flake_1.png" id="2_q87a5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jrsht"]
+size = Vector2(8, 4)
+
+[node name="flakeFood" type="CharacterBody2D" groups=["food"]]
+collision_layer = 4
+collision_mask = 11
+script = ExtResource("1_5su1c")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(4, 4)
+texture = ExtResource("2_q87a5")
+
+[node name="sinkTimer" type="Timer" parent="."]
+
+[node name="rotTimer" type="Timer" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-4, -6)
+shape = SubResource("RectangleShape2D_jrsht")
+
+[connection signal="timeout" from="sinkTimer" to="." method="_on_sink_timer_timeout"]
+[connection signal="timeout" from="rotTimer" to="." method="_on_rot_timer_timeout"]
