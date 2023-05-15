@@ -4,12 +4,11 @@ class_name UnderwaterPrecedural
 const CHUNK_HEIGHT: int = 128
 const CHUNK_WIDTH: int = 320
 
-@export var flakeFood: food
+@export var flakeFood: Food
 
 @onready var chunk_layers = get_children()
 
 var tank_data : TankData
-var flakeFood : Food
 
 func build(tank: TankData) -> void:
 	tank_data = tank

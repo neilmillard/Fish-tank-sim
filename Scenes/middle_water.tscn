@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dw3wlqc6n0i6c"]
+[gd_scene load_steps=10 format=3 uid="uid://dw3wlqc6n0i6c"]
 
 [ext_resource type="Script" path="res://Scripts/MiddleWater.gd" id="1_a4esy"]
 [ext_resource type="PackedScene" uid="uid://x880ou1fdnop" path="res://Scenes/fish.tscn" id="2_r12g1"]
@@ -6,6 +6,18 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3cru1"]
 size = Vector2(1249.5, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ahdei"]
+size = Vector2(61, 560)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y1wyn"]
+size = Vector2(51, 564)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v55an"]
+size = Vector2(1245, 43)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s46yf"]
+size = Vector2(1251, 17)
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_fqfxf"]
 vertices = PackedVector2Array(0, 0, 1110, 0, 1108, 551, 0, 554)
@@ -32,7 +44,43 @@ collision_mask = 4
 position = Vector2(577.25, 600)
 shape = SubResource("RectangleShape2D_3cru1")
 
+[node name="Right" type="StaticBody2D" parent="."]
+disable_mode = 1
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right"]
+visible = false
+position = Vector2(1171.5, 307)
+shape = SubResource("RectangleShape2D_ahdei")
+
+[node name="Left" type="StaticBody2D" parent="."]
+disable_mode = 1
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left"]
+visible = false
+position = Vector2(-19.5, 305)
+shape = SubResource("RectangleShape2D_y1wyn")
+
+[node name="Bottom" type="StaticBody2D" parent="."]
+disable_mode = 1
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bottom"]
+visible = false
+position = Vector2(578.5, 624.5)
+shape = SubResource("RectangleShape2D_v55an")
+
+[node name="Surface" type="StaticBody2D" parent="."]
+disable_mode = 1
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Surface"]
+position = Vector2(580.5, 9.5)
+shape = SubResource("RectangleShape2D_s46yf")
+
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+visible = false
 position = Vector2(20, 16)
 navigation_polygon = SubResource("NavigationPolygon_fqfxf")
 

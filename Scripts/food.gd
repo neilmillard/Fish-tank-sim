@@ -1,4 +1,5 @@
 extends CharacterBody2D
+class_name Food
 
 @export var nutritionValue: int = 20
 @export var doesFloat: bool = true
