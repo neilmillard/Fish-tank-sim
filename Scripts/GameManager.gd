@@ -7,7 +7,8 @@ enum State {
 var currentState = State.Play
 
 # Resources
-var flakeFood := 30
+var flakeFood := 10
+var liveFood := 0
 var fish := 4
 var credits := 10
 

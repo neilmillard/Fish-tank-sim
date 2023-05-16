@@ -51,7 +51,7 @@ offset_left = 236.0
 offset_top = -1.0
 offset_right = 308.0
 offset_bottom = 30.0
-text = "Food"
+text = "Flake Food"
 
 [node name="Control" type="Control" parent="Control"]
 anchors_preset = 0
@@ -85,6 +85,42 @@ size_flags_horizontal = 0
 text = "Action:"
 
 [node name="ActionValue" type="Label" parent="Control/Control/VBoxContainer/ActionLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "Idle"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 915.0
+offset_top = -2.0
+offset_right = 915.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FlakeFoodLabel" type="Label" parent="Control/Control/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "FlakeFood:"
+
+[node name="FlakeFoodValue" type="Label" parent="Control/Control/VBoxContainer2/FlakeFoodLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "100"
+
+[node name="LiveFoodLabel" type="Label" parent="Control/Control/VBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Action:"
+
+[node name="LiveFoodValue" type="Label" parent="Control/Control/VBoxContainer2/LiveFoodLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0

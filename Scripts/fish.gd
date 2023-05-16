@@ -135,9 +135,17 @@ func nav_to_food():
 				velocity = direction * swimSpeed
 
 func find_food():
-	nearestFood = get_nearest_food()
-	if nearestFood:
-		navagent.set_target_position(nearestFood.global_position)
+	if food_is_near():
+		nearestFood = get_nearest_food(self)
+		if nearestFood:
+			navagent.set_target_position(nearestFood.global_position)
+	else:
+		var someFood = get_nearest_food()
+		if someFood:
+			var direction = global_position.direction_to(someFood.global_position)
+			if direction != Vector2.ZERO:
+				velocity = direction * swimSpeed
+				change_state_to_idle()
 	return
 
 func eat_food(foodObject):
@@ -148,8 +156,15 @@ func eat_food(foodObject):
 	change_state_to_idle()
 
 
-func get_nearest_food():
-	var resources = get_tree().get_nodes_in_group("food")
+func get_nearest_food(finder: Fish = null):
+	var foods = get_tree().get_nodes_in_group("food")
+	var resources : Array
+	if finder:
+		for i in foods:
+			if i.finder == null:
+				resources.append(i)
+	else:
+		resources = foods
 	if resources.is_empty():
 		# No food found
 		return null
@@ -157,6 +172,8 @@ func get_nearest_food():
 	for i in resources:
 		if i.position.distance_to(position) < food.position.distance_to(position):
 			food = i
+	if finder:
+		food.finder = finder
 	return food
 
 func preditor_is_near():
@@ -165,18 +182,17 @@ func preditor_is_near():
 func food_is_near():
 	var food = get_nearest_food()
 	if food:
-		# print("food is %f away" % food.position.distance_to(position))
 		if food.position.distance_to(position) < idleFoodDistanceThreshold:
 			return true
 	return false
 
-func pick_random_direction():
+func pick_idle_direction():
 	var direction = Vector2(randi_range(-1,1),randi_range(-1,1))
 	velocity = direction.normalized() * (swimSpeed / 2.0)
 
 func _on_idle_timer_timeout():
 	if currentState == FishStates.Idle:
-		pick_random_direction()
+		pick_idle_direction()
 		change_state_to_idle()
 
 # The mouse is hovering over us

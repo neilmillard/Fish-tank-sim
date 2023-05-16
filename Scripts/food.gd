@@ -11,6 +11,7 @@ class_name Food
 @onready var rotTimer = $rotTimer
 
 var sinking: bool = false
+var finder: Fish = null
 var move_direction : Vector2 = Vector2.ZERO
 
 
@@ -28,7 +29,6 @@ func _physics_process(delta):
 		move_and_slide()
 
 func eat():
-	print("Eating food")
 	queue_free()
 	return nutritionValue
 	
@@ -38,11 +38,8 @@ func start_sink():
 	velocity = move_direction * move_speed
 	
 func _on_sink_timer_timeout():
-	print("on_sink_timout")
 	if !sinking:
-		print("start sinking")
 		start_sink()
 
 func _on_rot_timer_timeout():
-	print("Food rotten")
 	queue_free()
