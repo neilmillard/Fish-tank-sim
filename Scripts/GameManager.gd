@@ -4,6 +4,9 @@ enum State {
 	Play,
 }
 
+const CHUNK_HEIGHT: int = 128
+const CHUNK_WIDTH: int = 320
+
 var currentState = State.Play
 
 # Resources

@@ -28,24 +28,25 @@ script = ExtResource("1_ilmkv")
 [node name="Foreground Water" type="Node2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2(575, 325)
+position = Vector2(575, 325)
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="Camera2D"]
 layout_mode = 3
 anchors_preset = 0
-offset_top = 600.0
-offset_right = 1150.0
-offset_bottom = 650.0
+offset_left = -575.0
+offset_top = 275.0
+offset_right = 575.0
+offset_bottom = 325.0
 script = ExtResource("5_b0xfj")
 
-[node name="Panel" type="Panel" parent="Control"]
+[node name="Panel" type="Panel" parent="Camera2D/Control"]
 layout_mode = 0
 offset_left = -1.0
 offset_top = -7.0
 offset_right = 1150.0
 offset_bottom = 48.0
 
-[node name="FlakeFoodButton" type="Button" parent="Control"]
+[node name="FlakeFoodButton" type="Button" parent="Camera2D/Control"]
 layout_mode = 0
 offset_left = 236.0
 offset_top = -1.0
@@ -53,13 +54,13 @@ offset_right = 308.0
 offset_bottom = 30.0
 text = "Flake Food"
 
-[node name="Control" type="Control" parent="Control"]
+[node name="Control" type="Control" parent="Camera2D/Control"]
 anchors_preset = 0
 offset_top = -5.0
 offset_right = 233.0
 offset_bottom = 47.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/Control"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Camera2D/Control/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -67,31 +68,31 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HungerLabel" type="Label" parent="Control/Control/VBoxContainer"]
+[node name="HungerLabel" type="Label" parent="Camera2D/Control/Control/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Hunger:"
 
-[node name="HungerValue" type="Label" parent="Control/Control/VBoxContainer/HungerLabel"]
+[node name="HungerValue" type="Label" parent="Camera2D/Control/Control/VBoxContainer/HungerLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
 
-[node name="ActionLabel" type="Label" parent="Control/Control/VBoxContainer"]
+[node name="ActionLabel" type="Label" parent="Camera2D/Control/Control/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Action:"
 
-[node name="ActionValue" type="Label" parent="Control/Control/VBoxContainer/ActionLabel"]
+[node name="ActionValue" type="Label" parent="Camera2D/Control/Control/VBoxContainer/ActionLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "Idle"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Control/Control"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Camera2D/Control/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -103,28 +104,28 @@ offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="FlakeFoodLabel" type="Label" parent="Control/Control/VBoxContainer2"]
+[node name="FlakeFoodLabel" type="Label" parent="Camera2D/Control/Control/VBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "FlakeFood:"
 
-[node name="FlakeFoodValue" type="Label" parent="Control/Control/VBoxContainer2/FlakeFoodLabel"]
+[node name="FlakeFoodValue" type="Label" parent="Camera2D/Control/Control/VBoxContainer2/FlakeFoodLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
 
-[node name="LiveFoodLabel" type="Label" parent="Control/Control/VBoxContainer2"]
+[node name="LiveFoodLabel" type="Label" parent="Camera2D/Control/Control/VBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Action:"
 
-[node name="LiveFoodValue" type="Label" parent="Control/Control/VBoxContainer2/LiveFoodLabel"]
+[node name="LiveFoodValue" type="Label" parent="Camera2D/Control/Control/VBoxContainer2/LiveFoodLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "Idle"
 
-[connection signal="button_down" from="Control/FlakeFoodButton" to="Control" method="_on_flake_food_button_button_down"]
+[connection signal="button_down" from="Camera2D/Control/FlakeFoodButton" to="Camera2D/Control" method="_on_flake_food_button_button_down"]
