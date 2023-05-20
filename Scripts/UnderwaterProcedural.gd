@@ -11,6 +11,7 @@ var tank_data : TankData
 
 	
 func build(tank: TankData) -> void:
+	GameManager.set_current_level(tank)
 	tank_data = tank
 	
 	for layer in chunk_layers:

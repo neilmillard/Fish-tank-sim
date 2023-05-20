@@ -1,20 +1,22 @@
 extends Control
 
 const CAMERA_SPEED = 200
-@onready var middleWater = $"../MiddleWater"
-var camera: Camera2D
+@onready var middleWater = $"../../MiddleWater"
+@onready var camera_focus = $"../../Camera_Focus"
+@onready var camera = $"../../Camera_Focus/Camera2D"
+
 
 var mousePosGlobal: Vector2
 var cam_velocity: Vector2
 
 func _ready():
-	camera = get_viewport().get_camera_2d()
-	camera.transform.origin = Vector2(camera.get_viewport().get_window().size.x / 2,
-		camera.get_viewport().get_window().size.y / 2)
-	#camera.limit_top = 0
-	#camera.limit_left = 0
-	#camera.limit_right = GameManager.CHUNK_WIDTH
-	#camera.limit_bottom = GameManager.CHUNK_HEIGHT
+	pass
+	#camera.transform.origin = Vector2(GameManager.CHUNK_WIDTH,
+	#									GameManager.CHUNK_HEIGHT)
+	camera.set_limit(SIDE_TOP, 0) # limit_top = 0
+	camera.set_limit(SIDE_LEFT, 0) #limit_left = 0
+	#camera.limit_right = GameManager.CHUNK_WIDTH * 2
+	#camera.limit_bottom = GameManager.CHUNK_HEIGHT * 2
 	
 func _process(delta):
 	check_camera_moves(delta)
@@ -34,7 +36,9 @@ func check_camera_moves(delta: float):
 		cam_velocity.y = directiony * CAMERA_SPEED * delta
 	else:
 		cam_velocity.y = 0.0
-	camera.transform.origin += cam_velocity
+	camera_focus.position += cam_velocity
+	camera_focus.position.x = clamp(camera_focus.position.x, (1150 * camera.zoom.x) /2, GameManager.currentLevelWidth - ((1150 * camera.zoom.x)/2))
+	camera_focus.position.y = clamp(camera_focus.position.y, (644 * camera.zoom.y) /2, GameManager.currentLevelHeight - ((644 * camera.zoom.y) /2))
 
 func update_inventory_display():
 	$Control/VBoxContainer2/FlakeFoodLabel/FlakeFoodValue.text = str(GameManager.flakeFood)

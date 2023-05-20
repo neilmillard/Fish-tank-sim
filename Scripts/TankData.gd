@@ -2,8 +2,8 @@ extends Resource
 
 class_name TankData
 
-var width: int
-var height: int
+@export var width: int
+@export var height: int
 var heater: bool
 
 var fish = []

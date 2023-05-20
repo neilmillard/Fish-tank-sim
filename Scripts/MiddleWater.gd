@@ -14,7 +14,7 @@ func build(tank: TankData) -> void:
 	tank_data = tank
 	
 func spawn_flakefood():
-	spawn_obj(flakeFood,Vector2(randf_range(50, 950), surface))
+	spawn_obj(flakeFood,Vector2(randf_range(50, GameManager.currentLevelWidth), surface))
 
 func spawn_fish():
 	spawn_obj(fish, Vector2(randf_range(50,950),randf_range(50, 300)))

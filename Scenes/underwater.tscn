@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bcnklujjjcylb"]
+[gd_scene load_steps=7 format=3 uid="uid://bcnklujjjcylb"]
 
 [ext_resource type="Script" path="res://Scripts/UnderwaterProcedural.gd" id="1_ilmkv"]
 [ext_resource type="PackedScene" uid="uid://dr7yr46m6ebpw" path="res://Scenes/BackgroundFarTerrain.tscn" id="2_8wyk3"]
 [ext_resource type="PackedScene" uid="uid://dw3wlqc6n0i6c" path="res://Scenes/middle_water.tscn" id="2_rcjv1"]
 [ext_resource type="PackedScene" uid="uid://bx8vlqf5lbrgu" path="res://Scenes/Floor.tscn" id="3_xf8mu"]
 [ext_resource type="Script" path="res://Scenes/InterfaceManager.gd" id="5_b0xfj"]
+[ext_resource type="Texture2D" uid="uid://c7n0dkn264x0f" path="res://art/flake_1.png" id="5_p6iks"]
 
 [node name="Underwater" type="Node2D"]
 script = ExtResource("1_ilmkv")
@@ -27,26 +28,35 @@ script = ExtResource("1_ilmkv")
 
 [node name="Foreground Water" type="Node2D" parent="."]
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(575, 325)
+[node name="Camera_Focus" type="Node2D" parent="."]
+position = Vector2(575, 322)
 
-[node name="Control" type="Control" parent="Camera2D"]
+[node name="Camera2D" type="Camera2D" parent="Camera_Focus"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Camera_Focus"]
+visible = false
+rotation = 1.68075
+texture = ExtResource("5_p6iks")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = -575.0
-offset_top = 275.0
-offset_right = 575.0
-offset_bottom = 325.0
+offset_top = 600.0
+offset_right = 1150.0
+offset_bottom = 650.0
 script = ExtResource("5_b0xfj")
 
-[node name="Panel" type="Panel" parent="Camera2D/Control"]
+[node name="Panel" type="Panel" parent="CanvasLayer/Control"]
 layout_mode = 0
 offset_left = -1.0
 offset_top = -7.0
 offset_right = 1150.0
 offset_bottom = 48.0
 
-[node name="FlakeFoodButton" type="Button" parent="Camera2D/Control"]
+[node name="FlakeFoodButton" type="Button" parent="CanvasLayer/Control"]
 layout_mode = 0
 offset_left = 236.0
 offset_top = -1.0
@@ -54,13 +64,13 @@ offset_right = 308.0
 offset_bottom = 30.0
 text = "Flake Food"
 
-[node name="Control" type="Control" parent="Camera2D/Control"]
+[node name="Control" type="Control" parent="CanvasLayer/Control"]
 anchors_preset = 0
 offset_top = -5.0
 offset_right = 233.0
 offset_bottom = 47.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Camera2D/Control/Control"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -68,31 +78,31 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HungerLabel" type="Label" parent="Camera2D/Control/Control/VBoxContainer"]
+[node name="HungerLabel" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Hunger:"
 
-[node name="HungerValue" type="Label" parent="Camera2D/Control/Control/VBoxContainer/HungerLabel"]
+[node name="HungerValue" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer/HungerLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
 
-[node name="ActionLabel" type="Label" parent="Camera2D/Control/Control/VBoxContainer"]
+[node name="ActionLabel" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Action:"
 
-[node name="ActionValue" type="Label" parent="Camera2D/Control/Control/VBoxContainer/ActionLabel"]
+[node name="ActionValue" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer/ActionLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "Idle"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Camera2D/Control/Control"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/Control/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -104,28 +114,28 @@ offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="FlakeFoodLabel" type="Label" parent="Camera2D/Control/Control/VBoxContainer2"]
+[node name="FlakeFoodLabel" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "FlakeFood:"
 
-[node name="FlakeFoodValue" type="Label" parent="Camera2D/Control/Control/VBoxContainer2/FlakeFoodLabel"]
+[node name="FlakeFoodValue" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer2/FlakeFoodLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
 
-[node name="LiveFoodLabel" type="Label" parent="Camera2D/Control/Control/VBoxContainer2"]
+[node name="LiveFoodLabel" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Action:"
 
-[node name="LiveFoodValue" type="Label" parent="Camera2D/Control/Control/VBoxContainer2/LiveFoodLabel"]
+[node name="LiveFoodValue" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer2/LiveFoodLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "Idle"
 
-[connection signal="button_down" from="Camera2D/Control/FlakeFoodButton" to="Camera2D/Control" method="_on_flake_food_button_button_down"]
+[connection signal="button_down" from="CanvasLayer/Control/FlakeFoodButton" to="CanvasLayer/Control" method="_on_flake_food_button_button_down"]
