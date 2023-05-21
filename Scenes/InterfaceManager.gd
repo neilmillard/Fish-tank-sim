@@ -24,19 +24,27 @@ func _process(delta):
 	update_fish_display()
 	if Input.is_action_just_released("MouseLeft"):
 		mousePosGlobal = get_global_mouse_position()
+		if GameManager.currentFish:
+			GameManager.currentCameraTarget = GameManager.currentFish
+		else:
+			GameManager.currentCameraTarget = null
 		
 func check_camera_moves(delta: float):
-	var directionx = Input.get_axis("ui_left", "ui_right")
-	if directionx:
-		cam_velocity.x = directionx * CAMERA_SPEED * delta
+	if GameManager.currentCameraTarget:
+		camera_focus.position = GameManager.currentCameraTarget.position
 	else:
-		cam_velocity.x = 0.0
-	var directiony = Input.get_axis("ui_up", "ui_down")
-	if directiony:
-		cam_velocity.y = directiony * CAMERA_SPEED * delta
-	else:
-		cam_velocity.y = 0.0
-	camera_focus.position += cam_velocity
+		var directionx = Input.get_axis("ui_left", "ui_right")
+		if directionx:
+			cam_velocity.x = directionx * CAMERA_SPEED * delta
+		else:
+			cam_velocity.x = 0.0
+		var directiony = Input.get_axis("ui_up", "ui_down")
+		if directiony:
+			cam_velocity.y = directiony * CAMERA_SPEED * delta
+		else:
+			cam_velocity.y = 0.0
+		camera_focus.position += cam_velocity
+	
 	camera_focus.position.x = clamp(camera_focus.position.x, (1150 * camera.zoom.x) /2, GameManager.currentLevelWidth - ((1150 * camera.zoom.x)/2))
 	camera_focus.position.y = clamp(camera_focus.position.y, (644 * camera.zoom.y) /2, GameManager.currentLevelHeight - ((644 * camera.zoom.y) /2))
 

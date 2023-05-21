@@ -9,6 +9,9 @@ class_name UnderwaterPrecedural
 
 var tank_data : TankData
 
+func onready():
+	tank_data = load("res://Resources/default_tank.tres")
+	
 	
 func build(tank: TankData) -> void:
 	GameManager.set_current_level(tank)

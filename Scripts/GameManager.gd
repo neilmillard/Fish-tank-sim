@@ -6,6 +6,7 @@ enum State {
 
 const CHUNK_HEIGHT: int = 128
 const CHUNK_WIDTH: int = 320
+const GRAVITY: int = 2000
 
 var currentState = State.Play
 var currentLevelWidth: int = 2400
@@ -20,6 +21,7 @@ var credits := 10
 
 # UI
 var currentFish : Fish
+var currentCameraTarget
 
 func set_current_level(tankData : TankData):
 	currentTankData = tankData

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dw3wlqc6n0i6c"]
+[gd_scene load_steps=7 format=3 uid="uid://dw3wlqc6n0i6c"]
 
 [ext_resource type="Script" path="res://Scripts/MiddleWater.gd" id="1_a4esy"]
 [ext_resource type="PackedScene" uid="uid://x880ou1fdnop" path="res://Scenes/fish.tscn" id="2_r12g1"]
@@ -9,9 +9,6 @@ size = Vector2(61, 1186)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y1wyn"]
 size = Vector2(51, 1235)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s46yf"]
-size = Vector2(2729, 17)
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_fqfxf"]
 vertices = PackedVector2Array(0, 0, 1110, 0, 1108, 551, 0, 554)
@@ -46,14 +43,6 @@ collision_mask = 6
 visible = false
 position = Vector2(-19.5, 640.5)
 shape = SubResource("RectangleShape2D_y1wyn")
-
-[node name="Surface" type="StaticBody2D" parent="."]
-disable_mode = 1
-collision_mask = 6
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Surface"]
-position = Vector2(1319.5, 9.5)
-shape = SubResource("RectangleShape2D_s46yf")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 visible = false

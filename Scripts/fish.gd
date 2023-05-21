@@ -33,7 +33,7 @@ var animationPlayer: AnimationPlayer
 var currentState: FishStates
 # Amount of hunger level, is reduced by food
 var hunger: float = 0
-var nearestFood
+var nearestFoodPosition: Vector2
 var idleFoodDistanceThreshold: float = 400
 
 var fishState: String = ""
@@ -69,6 +69,8 @@ func _on_debug_timeout():
 	pass
 
 func calculate_movement(delta):
+	if position.y <= 5:
+		velocity.y += GameManager.GRAVITY * delta
 	if currentState == FishStates.Feeding:
 		nav_to_food()
 	if currentState == FishStates.Idle:
@@ -78,6 +80,8 @@ func calculate_movement(delta):
 	if collision:
 		if collision.get_collider().has_method("eat"):
 			eat_food(collision.get_collider())
+		else:
+			velocity = velocity.bounce(collision.get_normal()) * 2
 
 func update_animation():
 	if velocity.x < 0:
@@ -99,9 +103,9 @@ func decide_next_action():
 				
 		FishStates.Feeding:
 			fishState = "Feeding"
-			if nearestFood == null:
+			if nearestFoodPosition == Vector2.ZERO:
 				find_food()
-			if nearestFood == null:
+			if nearestFoodPosition == Vector2.ZERO:
 				change_state_to_idle()
 
 		FishStates.Fleeing:
@@ -118,17 +122,15 @@ func change_state_to_idle():
 	idle_timer.start(randf_range(2,6))
 
 func nav_to_food():
-	if nearestFood:
+	if nearestFoodPosition:
 		if navagent.is_navigation_finished():
-			eat_food(null)
+			reset_food_finder()
 			return
 		else:
-			if nearestFood.sinking:
-				navagent.set_target_position(nearestFood.global_position)
 			var targetpos = navagent.get_next_path_position()
 			if (targetpos == null):
 				print("Cannot get to food")
-				nearestFood = null
+				reset_food_finder()
 				return
 			var direction = global_position.direction_to(targetpos)
 			if direction != Vector2.ZERO:
@@ -136,9 +138,9 @@ func nav_to_food():
 
 func find_food():
 	if food_is_near():
-		nearestFood = get_nearest_food(self)
-		if nearestFood:
-			navagent.set_target_position(nearestFood.global_position)
+		nearestFoodPosition = get_nearest_food().global_position
+		if nearestFoodPosition != Vector2.ZERO:
+			navagent.set_target_position(nearestFoodPosition)
 	else:
 		var someFood = get_nearest_food()
 		if someFood:
@@ -148,23 +150,17 @@ func find_food():
 				change_state_to_idle()
 	return
 
+func reset_food_finder():
+	nearestFoodPosition = Vector2.ZERO
+	change_state_to_idle()
+
 func eat_food(foodObject):
 	if foodObject:
 		if hunger > foodObject.nutritionValue:
 			hunger = hunger - foodObject.eat()
-	nearestFood = null
-	change_state_to_idle()
 
-
-func get_nearest_food(finder: Fish = null):
-	var foods = get_tree().get_nodes_in_group("food")
-	var resources : Array
-	if finder:
-		for i in foods:
-			if i.finder == null:
-				resources.append(i)
-	else:
-		resources = foods
+func get_nearest_food():
+	var resources = get_tree().get_nodes_in_group("food")
 	if resources.is_empty():
 		# No food found
 		return null
@@ -172,8 +168,6 @@ func get_nearest_food(finder: Fish = null):
 	for i in resources:
 		if i.position.distance_to(position) < food.position.distance_to(position):
 			food = i
-	if finder:
-		food.finder = finder
 	return food
 
 func preditor_is_near():
