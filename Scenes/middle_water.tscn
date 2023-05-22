@@ -11,9 +11,9 @@ size = Vector2(61, 1186)
 size = Vector2(51, 1235)
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_fqfxf"]
-vertices = PackedVector2Array(0, 0, 1110, 0, 1108, 551, 0, 554)
+vertices = PackedVector2Array(0, 0, 2595, -12, 2586, 1187, -11, 1181)
 polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 1110, 0, 1108, 551, 0, 554)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, 0, 2595, -12, 2586, 1187, -11, 1181)])
 
 [node name="MiddleWater" type="Node2D"]
 script = ExtResource("1_a4esy")
@@ -31,21 +31,19 @@ disable_mode = 1
 collision_mask = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Right"]
-visible = false
 position = Vector2(2643, 616)
 shape = SubResource("RectangleShape2D_ahdei")
+debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
 [node name="Left" type="StaticBody2D" parent="."]
 disable_mode = 1
 collision_mask = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Left"]
-visible = false
 position = Vector2(-19.5, 640.5)
 shape = SubResource("RectangleShape2D_y1wyn")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
-visible = false
 position = Vector2(20, 16)
 navigation_polygon = SubResource("NavigationPolygon_fqfxf")
 

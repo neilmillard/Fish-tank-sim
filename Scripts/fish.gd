@@ -5,6 +5,7 @@ class_name Fish
 # Fish management
 @export var swimSpeed: int = 60
 @export var fleeSpeed: int = 100
+@export var rotationSpeed = 40.0
 @export var isMale: bool = true
 @export var feedLevel: FeedLevel = FeedLevel.Middle
 
@@ -36,7 +37,8 @@ var hunger: float = 0
 var nearestFoodPosition: Vector2
 var idleFoodDistanceThreshold: float = 400
 
-var fishState: String = ""
+var fishRight : bool
+var fishState : String = ""
 var _timer = null
 
 
@@ -72,8 +74,9 @@ func calculate_movement(delta):
 	if position.y <= 5:
 		velocity.y += GameManager.GRAVITY * delta
 	if currentState == FishStates.Feeding:
-		nav_to_food()
+		nav_to_food(delta)
 	if currentState == FishStates.Idle:
+		rotate_to_direction(Vector2(velocity.x, 0), delta)
 		if velocity.length() > 0:
 			velocity = velocity - velocity * (0.5 * delta)
 	var collision = move_and_collide(velocity * delta)
@@ -85,9 +88,28 @@ func calculate_movement(delta):
 
 func update_animation():
 	if velocity.x < 0:
-		animationPlayer.play("SwimLeft")
+		if fishRight == true:
+			fishRight = false
+			animationPlayer.play("SwimLeft")
+			rotation_degrees = rotation_degrees * -1
 	else:
-		animationPlayer.play("SwimRight")
+		if fishRight == false:
+			fishRight = true
+			animationPlayer.play("SwimRight")
+			rotation_degrees = rotation_degrees * -1
+
+func rotate_to_target(target, delta):
+	var direction = target.global_position - global_position
+	var angleTo = transform.x.angle_to(direction)
+	transform.rotated(sign(angleTo) * min(delta * rotationSpeed, abs(angleTo)))
+
+func rotate_to_direction(direction, delta):
+	var angleTo = transform.x.angle_to(direction)
+	var angleDelta = sign(angleTo) * min(delta * rotationSpeed, abs(angleTo))
+	if velocity.x < 0:
+		rotation_degrees -= angleDelta 
+	else:
+		rotation_degrees += angleDelta
 
 func decide_next_action():
 	match currentState:
@@ -121,7 +143,7 @@ func change_state_to_idle():
 	currentState = FishStates.Idle
 	idle_timer.start(randf_range(2,6))
 
-func nav_to_food():
+func nav_to_food(delta : float):
 	if nearestFoodPosition:
 		if navagent.is_navigation_finished():
 			reset_food_finder()
@@ -134,6 +156,7 @@ func nav_to_food():
 				return
 			var direction = global_position.direction_to(targetpos)
 			if direction != Vector2.ZERO:
+				rotate_to_direction(direction, delta)
 				velocity = direction * swimSpeed
 
 func find_food():
