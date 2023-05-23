@@ -8,8 +8,8 @@ class_name Fish
 @export var rotationSpeed = 40.0
 @export var isMale: bool = true
 @export var feedLevel: FeedLevel = FeedLevel.Middle
-
-@onready var navagent : NavigationAgent2D = $NavigationAgent
+@export var sizeOfStomach: float = 100
+@onready var navagent: NavigationAgent2D = $NavigationAgent
 @onready var idle_timer = $IdleTimer
 
 # State, Eating, pooing, water levels, reproduction, movement, health
@@ -37,8 +37,8 @@ var hunger: float = 0
 var nearestFoodPosition: Vector2
 var idleFoodDistanceThreshold: float = 400
 
-var fishRight : bool
-var fishState : String = ""
+var fishRight: bool
+var fishState: String = ""
 var _timer = null
 
 
@@ -71,20 +71,25 @@ func _on_debug_timeout():
 	pass
 
 func calculate_movement(delta):
+	# Fish cannot fly out of water
 	if position.y <= 5:
 		velocity.y += GameManager.GRAVITY * delta
+	
+	# go to food
 	if currentState == FishStates.Feeding:
 		nav_to_food(delta)
+	
+	# reset floating attitude and drift
 	if currentState == FishStates.Idle:
 		rotate_to_direction(Vector2(velocity.x, 0), delta)
 		if velocity.length() > 0:
 			velocity = velocity - velocity * (0.5 * delta)
+	
+	# collide with walls and eat food
 	var collision = move_and_collide(velocity * delta)
 	if collision:
 		if collision.get_collider().has_method("eat"):
 			eat_food(collision.get_collider())
-		else:
-			velocity = velocity.bounce(collision.get_normal()) * 2
 
 func update_animation():
 	if velocity.x < 0:
@@ -149,6 +154,9 @@ func nav_to_food(delta : float):
 			reset_food_finder()
 			return
 		else:
+			# if we are nearly at the destination (food) let's check if it moved
+			if navagent.distance_to_target() < swimSpeed:
+				find_food()
 			var targetpos = navagent.get_next_path_position()
 			if (targetpos == null):
 				print("Cannot get to food")
@@ -171,6 +179,8 @@ func find_food():
 			if direction != Vector2.ZERO:
 				velocity = direction * swimSpeed
 				change_state_to_idle()
+		else:
+			change_state_to_idle()
 	return
 
 func reset_food_finder():
@@ -179,7 +189,8 @@ func reset_food_finder():
 
 func eat_food(foodObject):
 	if foodObject:
-		if hunger > foodObject.nutritionValue:
+		# hunger can go negative, equiv to the fish storing food in belly
+		if hunger + sizeOfStomach > foodObject.nutritionValue:
 			hunger = hunger - foodObject.eat()
 
 func get_nearest_food():

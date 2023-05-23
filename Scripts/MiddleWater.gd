@@ -7,14 +7,18 @@ var flakeFood : PackedScene = ResourceLoader.load("res://Scenes/flakeFood.tscn")
 var fish : PackedScene = ResourceLoader.load("res://Scenes/fish.tscn")
 
 
-var tank_data : TankData
-var surface : float = 29.0
+var tank_data: TankData
+var surface: float = 29.0
+var foodPinch: int = 4
+
 
 func build(tank: TankData) -> void:
 	tank_data = tank
 	
 func spawn_flakefood():
-	spawn_obj(flakeFood,Vector2(randf_range(50, GameManager.currentLevelWidth), surface))
+	var spawnLocation = randf_range(100, GameManager.currentLevelWidth)
+	for n in range(1, foodPinch):
+		spawn_obj(flakeFood,Vector2(spawnLocation + randi_range(-30, 30), surface))
 
 func spawn_fish():
 	spawn_obj(fish, Vector2(randf_range(50,950),randf_range(50, 300)))
