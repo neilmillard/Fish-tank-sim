@@ -9,6 +9,8 @@ class_name Fish
 @export var isMale: bool = true
 @export var feedLevel: FeedLevel = FeedLevel.Middle
 @export var sizeOfStomach: float = 100
+
+@onready var myStomach: Stomach = $Stomach
 @onready var navagent: NavigationAgent2D = $NavigationAgent
 @onready var idle_timer = $IdleTimer
 
@@ -33,7 +35,7 @@ var animationPlayer: AnimationPlayer
 
 var currentState: FishStates
 # Amount of hunger level, is reduced by food
-var hunger: float = 0
+
 var nearestFoodPosition: Vector2
 var idleFoodDistanceThreshold: float = 400
 
@@ -59,9 +61,9 @@ func _ready():
 
 func _process(delta):
 	# delta is in seconds
-	hunger = hunger + delta
 	decide_next_action()
 	update_animation()
+	process_waste(delta)
 	pass
 
 func _physics_process(delta):
@@ -103,6 +105,11 @@ func update_animation():
 			animationPlayer.play("SwimRight")
 			rotation_degrees = rotation_degrees * -1
 
+func process_waste(delta: float) -> void:
+	# lets get rid of waste if we are moving
+	if(abs(velocity.x)) > swimSpeed / 4:
+		myStomach.flush_waste(0.1 * delta)
+
 func rotate_to_target(target, delta):
 	var direction = target.global_position - global_position
 	var angleTo = transform.x.angle_to(direction)
@@ -123,9 +130,9 @@ func decide_next_action():
 			# fish will only change from idle, if food, mate or preditor present
 			if preditor_is_near():
 				currentState = FishStates.Fleeing
-			if hunger > 70:
+			if myStomach.storedEnergy < 40:
 				currentState = FishStates.Feeding
-			if food_is_near() && hunger > 40:
+			if food_is_near() && myStomach.storedFood.size < (myStomach.capacity / 2):
 				currentState = FishStates.Feeding
 				
 		FishStates.Feeding:
@@ -187,11 +194,11 @@ func reset_food_finder():
 	nearestFoodPosition = Vector2.ZERO
 	change_state_to_idle()
 
-func eat_food(foodObject):
+func eat_food(foodObject: Food):
 	if foodObject:
 		# hunger can go negative, equiv to the fish storing food in belly
-		if hunger + sizeOfStomach > foodObject.nutritionValue:
-			hunger = hunger - foodObject.eat()
+		if myStomach.has_space_to_eat(foodObject.nutritionValue.size):
+			myStomach.receive_food(foodObject.eat())
 
 func get_nearest_food():
 	var resources = get_tree().get_nodes_in_group("food")

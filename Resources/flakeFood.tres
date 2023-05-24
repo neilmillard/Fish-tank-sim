@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Nutrition" load_steps=2 format=3 uid="uid://cceafdfe0ravn"]
+
+[ext_resource type="Script" path="res://Scripts/nutrition.gd" id="1_kb676"]
+
+[resource]
+script = ExtResource("1_kb676")
+carbs = 5.0
+fats = 2.0
+proteins = 1.0
+size = 2.0

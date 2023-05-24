@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://x880ou1fdnop"]
+[gd_scene load_steps=9 format=3 uid="uid://x880ou1fdnop"]
 
 [ext_resource type="Script" path="res://Scripts/fish.gd" id="1_3b5rb"]
 [ext_resource type="Texture2D" uid="uid://tyus3e1vdqvx" path="res://art/fish_2.png" id="2_28141"]
+[ext_resource type="Script" path="res://Scripts/stomach.gd" id="3_38pa7"]
 
 [sub_resource type="Animation" id="Animation_mxa7c"]
 length = 0.001
@@ -122,6 +123,9 @@ rotation = 1.5708
 shape = SubResource("CapsuleShape2D_0hl1j")
 
 [node name="IdleTimer" type="Timer" parent="."]
+
+[node name="Stomach" type="Node2D" parent="."]
+script = ExtResource("3_38pa7")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

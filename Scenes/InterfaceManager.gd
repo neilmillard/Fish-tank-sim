@@ -55,7 +55,8 @@ func update_inventory_display():
 
 func update_fish_display():
 	if GameManager.currentFish != null:
-		$Control/VBoxContainer/HungerLabel/HungerValue.text = str(floor(GameManager.currentFish.hunger))
+		$Control/VBoxContainer/HungerLabel/HungerValue.text = str(floor(GameManager.currentFish.myStomach.storedFood.size))
+		$Control/VBoxContainer/EnergyLabel/EnergyValue.text = str(floor(GameManager.currentFish.myStomach.storedEnergy))
 		$Control/VBoxContainer/ActionLabel/ActionValue.text = GameManager.currentFish.fishState
 	else:
 		$Control/VBoxContainer/HungerLabel/HungerValue.text = ""

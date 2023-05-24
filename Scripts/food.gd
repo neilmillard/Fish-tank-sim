@@ -1,7 +1,7 @@
 extends CharacterBody2D
 class_name Food
 
-@export var nutritionValue: int = 20
+@export var nutritionValue: Nutrition
 @export var doesFloat: bool = true
 @export var sinkTime: float = 50
 @export var move_speed : float = 10
@@ -13,6 +13,7 @@ class_name Food
 var sinking: bool = false
 var finder: Fish = null
 var move_direction : Vector2 = Vector2.ZERO
+
 
 
 func _ready():
