@@ -7,7 +7,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jrsht"]
 size = Vector2(8, 4)
 
-[node name="flakeFood" type="CharacterBody2D" node_paths=PackedStringArray("nutritionValue") groups=["food"]]
+[node name="flakeFood" type="Area2D" node_paths=PackedStringArray("nutritionValue") groups=["food"]]
 collision_layer = 4
 collision_mask = 11
 script = ExtResource("1_5su1c")
@@ -33,5 +33,6 @@ fats = 2.0
 proteins = 1.0
 size = 2.0
 
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="timeout" from="sinkTimer" to="." method="_on_sink_timer_timeout"]
 [connection signal="timeout" from="rotTimer" to="." method="_on_rot_timer_timeout"]

@@ -8,7 +8,6 @@ class_name Fish
 @export var rotationSpeed = 40.0
 @export var isMale: bool = true
 @export var feedLevel: FeedLevel = FeedLevel.Middle
-@export var sizeOfStomach: float = 100
 
 @onready var myStomach: Stomach = $Stomach
 @onready var navagent: NavigationAgent2D = $NavigationAgent
@@ -38,6 +37,7 @@ var currentState: FishStates
 
 var nearestFoodPosition: Vector2
 var idleFoodDistanceThreshold: float = 400
+var oldVelocity: Vector2
 
 var fishRight: bool
 var fishState: String = ""
@@ -52,18 +52,14 @@ func _ready():
 	change_state_to_idle()
 	# set so we get collision events from mouse
 	input_pickable = true
-	_timer = Timer.new()
-	add_child(_timer)
-	_timer.connect("timeout", Callable(self, "_on_debug_timeout"))
-	_timer.set_wait_time(1.0)
-	_timer.set_one_shot(false) # so it loops
-	_timer.start()
+	add_debug_timer()
 
 func _process(delta):
 	# delta is in seconds
 	decide_next_action()
 	update_animation()
-	process_waste(delta)
+	# TODO: effect water chemistry when processing waste
+	# process_waste(delta)
 	pass
 
 func _physics_process(delta):
@@ -88,7 +84,7 @@ func calculate_movement(delta):
 			velocity = velocity - velocity * (0.5 * delta)
 	
 	# collide with walls and eat food
-	var collision = move_and_collide(velocity * delta)
+	var collision = use_muscle_energy(delta)
 	if collision:
 		if collision.get_collider().has_method("eat"):
 			eat_food(collision.get_collider())
@@ -105,6 +101,19 @@ func update_animation():
 			animationPlayer.play("SwimRight")
 			rotation_degrees = rotation_degrees * -1
 
+func use_muscle_energy(delta: float) -> KinematicCollision2D:
+	# energy is needed to accelerate
+	var velocityDiff =  velocity.length_squared() - oldVelocity.length_squared()
+	if velocityDiff > 0:
+		var energyRequired = (velocityDiff / swimSpeed) * delta
+		var energyUsed = myStomach.get_energy(energyRequired)
+		if energyRequired > energyUsed:
+			velocity = oldVelocity
+			
+	oldVelocity = velocity
+	var collision = move_and_collide(velocity * delta)
+	return collision
+	
 func process_waste(delta: float) -> void:
 	# lets get rid of waste if we are moving
 	if(abs(velocity.x)) > swimSpeed / 4:
@@ -124,31 +133,30 @@ func rotate_to_direction(direction: Vector2, delta: float) -> void:
 		rotation_degrees += angleDelta
 
 func decide_next_action():
-	match currentState:
-		FishStates.Idle:
-			fishState = "Idle"
-			# fish will only change from idle, if food, mate or preditor present
-			if preditor_is_near():
-				currentState = FishStates.Fleeing
-			if myStomach.storedEnergy < 40:
-				currentState = FishStates.Feeding
-			if food_is_near() && myStomach.could_eat():
-				currentState = FishStates.Feeding
+	if currentState == FishStates.Idle:
+		fishState = "Idle"
+		# fish will only change from idle, if food, mate or preditor present
+		if preditor_is_near():
+			currentState = FishStates.Fleeing
+		if myStomach.storedEnergy < myStomach.capacity && myStomach.could_eat():
+			currentState = FishStates.Feeding
+		if food_is_near() && myStomach.could_eat():
+			currentState = FishStates.Feeding
 				
-		FishStates.Feeding:
-			fishState = "Feeding"
-			if nearestFoodPosition == Vector2.ZERO:
-				find_food()
-			if nearestFoodPosition == Vector2.ZERO:
-				change_state_to_idle()
+	if currentState == FishStates.Feeding:
+		fishState = "Feeding"
+		if nearestFoodPosition == Vector2.ZERO:
+			find_food()
+		if nearestFoodPosition == Vector2.ZERO:
+			change_state_to_idle()
 
-		FishStates.Fleeing:
-			fishState = "Fleeing"
-			pass
+	if currentState == FishStates.Fleeing:
+		fishState = "Fleeing"
+		pass
 
-		FishStates.Mating:
-			fishState = "Mating"
-			pass
+	if currentState == FishStates.Mating:
+		fishState = "Mating"
+		pass
 	return
 
 func change_state_to_idle():
@@ -238,3 +246,11 @@ func _on_mouse_entered():
 # The mouse is no longer hovering over us
 func _on_mouse_exited():
 	GameManager.clear_fish()
+
+func add_debug_timer():
+	_timer = Timer.new()
+	add_child(_timer)
+	_timer.connect("timeout", Callable(self, "_on_debug_timeout"))
+	_timer.set_wait_time(1.0)
+	_timer.set_one_shot(false) # so it loops
+	_timer.start()

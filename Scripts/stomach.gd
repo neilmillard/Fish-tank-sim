@@ -5,9 +5,9 @@ class_name Stomach
 # food stored in the stomach takes a while to process, so we have a capacity
 
 # capacity of this stomach
-@export var capacity: float = 50.0
+@export var capacity: float = 10.0
 # percentage of full capacity processed per second
-@export var processingSpeed: float = 0.1
+@export var processingSpeed: float = 0.02
 # percentage of size that is waste
 @export var processingEfficiency: float = 0.60
 
@@ -17,7 +17,7 @@ const proteinEnergy: float = 1.0
 
 var storedFood:= []
 var storedWaste: float = 0.0
-var storedEnergy: float = 0.0
+var storedEnergy: float = 4.0
 
 func get_amount_food_stored():
 	var foodSize = 0.0

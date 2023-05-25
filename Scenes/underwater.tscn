@@ -45,17 +45,20 @@ layer = 100
 [node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 0
-offset_top = 600.0
+offset_top = 586.0
 offset_right = 1150.0
 offset_bottom = 650.0
 script = ExtResource("5_b0xfj")
 
 [node name="Panel" type="Panel" parent="CanvasLayer/Control"]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.14
+anchor_bottom = -0.14
 offset_left = -1.0
-offset_top = -7.0
+offset_top = -8.04
 offset_right = 1150.0
-offset_bottom = 48.0
+offset_bottom = 66.96
 
 [node name="FlakeFoodButton" type="Button" parent="CanvasLayer/Control"]
 layout_mode = 0

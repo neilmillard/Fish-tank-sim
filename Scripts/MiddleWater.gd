@@ -16,7 +16,7 @@ func build(tank: TankData) -> void:
 	tank_data = tank
 	
 func spawn_flakefood():
-	var spawnLocation = randf_range(100, GameManager.currentLevelWidth)
+	var spawnLocation = randf_range(100, GameManager.currentLevelWidth - 200)
 	for n in range(1, foodPinch):
 		spawn_obj(flakeFood,Vector2(spawnLocation + randi_range(-30, 30), surface))
 

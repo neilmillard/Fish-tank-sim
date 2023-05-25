@@ -60,6 +60,7 @@ func update_fish_display():
 		$Control/VBoxContainer/ActionLabel/ActionValue.text = GameManager.currentFish.fishState
 	else:
 		$Control/VBoxContainer/HungerLabel/HungerValue.text = ""
+		$Control/VBoxContainer/EnergyLabel/EnergyValue.text = ""
 		$Control/VBoxContainer/ActionLabel/ActionValue.text = ""
 
 func _on_flake_food_button_button_down():
