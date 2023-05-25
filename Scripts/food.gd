@@ -31,7 +31,7 @@ func _physics_process(delta):
 
 func eat():
 	queue_free()
-	return nutritionValue
+	return nutritionValue.duplicate()
 	
 func start_sink():
 	sinking = true

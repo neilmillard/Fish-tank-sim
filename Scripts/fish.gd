@@ -115,7 +115,7 @@ func rotate_to_target(target, delta):
 	var angleTo = transform.x.angle_to(direction)
 	transform.rotated(sign(angleTo) * min(delta * rotationSpeed, abs(angleTo)))
 
-func rotate_to_direction(direction, delta):
+func rotate_to_direction(direction: Vector2, delta: float) -> void:
 	var angleTo = transform.x.angle_to(direction)
 	var angleDelta = sign(angleTo) * min(delta * rotationSpeed, abs(angleTo))
 	if velocity.x < 0:
@@ -132,7 +132,7 @@ func decide_next_action():
 				currentState = FishStates.Fleeing
 			if myStomach.storedEnergy < 40:
 				currentState = FishStates.Feeding
-			if food_is_near() && myStomach.storedFood.size < (myStomach.capacity / 2):
+			if food_is_near() && myStomach.could_eat():
 				currentState = FishStates.Feeding
 				
 		FishStates.Feeding:

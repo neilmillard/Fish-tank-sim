@@ -14,21 +14,30 @@ class_name Stomach
 const carbEnergy: float = 1.0
 const fatEnergy: float = 3.0
 const proteinEnergy: float = 1.0
-const sizeEnergy: float = 1.0
 
-var storedFood: Nutrition = Nutrition.new()
+var storedFood:= []
 var storedWaste: float = 0.0
 var storedEnergy: float = 0.0
 
+func get_amount_food_stored():
+	var foodSize = 0.0
+	for food in storedFood:
+		foodSize += food.size
+	return foodSize
+
+func get_stored_energy() -> float:
+	return storedEnergy
+	
 func has_space_to_eat(size: float) -> bool:
-	return size + storedFood.size + storedWaste < capacity
+	return size + get_amount_food_stored() + storedWaste <= capacity
+
+func could_eat() -> bool:
+	return get_amount_food_stored() + storedWaste <= capacity / 2
 	
 func receive_food(nutritionValue: Nutrition) -> void:
-	if nutritionValue.size + storedFood.size <= capacity:
-		storedFood.carbs += nutritionValue.carbs
-		storedFood.fats += nutritionValue.fats
-		storedFood.proteins += nutritionValue.proteins
-		storedFood.size += nutritionValue.size
+	if has_space_to_eat(nutritionValue.size):
+		print("Received food " + str(nutritionValue.size))
+		storedFood.append(nutritionValue)
 
 # tells the stomach to expell this amount of waste
 func flush_waste(amount: float) -> float:
@@ -42,25 +51,35 @@ func get_energy(energyRequired: float) -> float:
 	return energyAvailable
 
 func _process(delta: float) -> void:
+	process_food(delta)
+	
+func process_food(delta: float) -> void:
 	# we need storedFood
 	# each call we get processingSpeed * delta as a percent of storedFood
-	if storedFood.size < 0.001:
+	if len(storedFood) == 0:
 		return
 	
-	var processingPercent = (capacity / storedFood.size) * (processingSpeed / 1000) * delta
-	var carbs = min(storedFood.carbs, storedFood.carbs * processingSpeed)
-	var fats = min(storedFood.fats, storedFood.fats * processingSpeed)
-	var proteins = min(storedFood.proteins, storedFood.proteins * processingSpeed)
-	var size = min(storedFood.size, capacity * (processingSpeed) / 1000)
+	var currentNutrition = storedFood[0]
+	var processAmount: float = 1.0 / currentNutrition.size
+	var processingPercent = processAmount * (processingSpeed) * delta
+	var carbs = min(currentNutrition.carbs, currentNutrition.carbs * processingPercent)
+	var fats = min(currentNutrition.fats, currentNutrition.fats * processingPercent)
+	var proteins = min(currentNutrition.proteins, currentNutrition.proteins * processingPercent)
+	currentNutrition.processedCarbs += carbs
+	currentNutrition.processedFats += fats
+	currentNutrition.processedProteins += proteins
 	
-	storedFood.carbs -= carbs
-	storedFood.fats -= fats
-	storedFood.proteins -= proteins
-	storedFood.size -= size
-	
+	# Have we processed all the food?
+	if currentNutrition.carbs > currentNutrition.processedCarbs:
+		storedFood[0] = currentNutrition
+	else:
+		storedWaste += currentNutrition.size * processingEfficiency
+		storedFood.pop_front()
+		currentNutrition.free()
+		currentNutrition = null
+		
 	storedEnergy += carbs * carbEnergy
 	storedEnergy += fats * fatEnergy
 	storedEnergy += proteins * proteinEnergy
 	
-	storedWaste += size * processingEfficiency
 	
