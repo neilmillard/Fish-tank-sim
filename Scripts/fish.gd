@@ -24,9 +24,9 @@ enum FishStates {
 #	Sleeping,
 	Idle,
 	Feeding,
+	Hunting,
 	Mating,
 	Fleeing,
-	Swimming,
 }
 
 var myTank: TankData
@@ -37,6 +37,7 @@ var currentState: FishStates
 
 var nearestFoodPosition: Vector2
 var idleFoodDistanceThreshold: float = 400
+var idleTimerRunning: bool = false
 var oldVelocity: Vector2
 
 var fishRight: bool
@@ -49,7 +50,7 @@ func initFish(tank: TankData):
 
 func _ready():
 	animationPlayer = $AnimationPlayer
-	change_state_to_idle()
+	start_idle_timer()
 	# set so we get collision events from mouse
 	input_pickable = true
 	add_debug_timer()
@@ -78,16 +79,18 @@ func calculate_movement(delta):
 		nav_to_food(delta)
 	
 	# reset floating attitude and drift
-	if currentState == FishStates.Idle:
+	if currentState == FishStates.Idle or nearestFoodPosition == Vector2.ZERO:
 		rotate_to_direction(Vector2(velocity.x, 0), delta)
-		if velocity.length() > 0:
-			velocity = velocity - velocity * (0.5 * delta)
-	
+		
 	# collide with walls and eat food
 	var collision = use_muscle_energy(delta)
 	if collision:
 		if collision.get_collider().has_method("eat"):
 			eat_food(collision.get_collider())
+	
+	if velocity.length() > 0:
+		velocity = velocity - velocity * (0.5 * delta)
+	
 
 func update_animation():
 	if velocity.x < 0:
@@ -132,24 +135,46 @@ func rotate_to_direction(direction: Vector2, delta: float) -> void:
 	else:
 		rotation_degrees += angleDelta
 
+func change_fish_state(state: FishStates):
+	if currentState != state:
+		print("changing state")
+		idleTimerRunning = false
+		idle_timer.stop()
+	
+	if state == FishStates.Idle:	
+		start_idle_timer()
+	
+	currentState = state
+
 func decide_next_action():
 	if currentState == FishStates.Idle:
 		fishState = "Idle"
 		# fish will only change from idle, if food, mate or preditor present
 		if preditor_is_near():
-			currentState = FishStates.Fleeing
+			change_fish_state(FishStates.Fleeing)
 		if myStomach.storedEnergy < myStomach.capacity && myStomach.could_eat():
-			currentState = FishStates.Feeding
+			if food_is_near():
+				change_fish_state(FishStates.Feeding)
+			else:
+				change_fish_state(FishStates.Hunting)
 		if food_is_near() && myStomach.could_eat():
-			currentState = FishStates.Feeding
+			change_fish_state(FishStates.Feeding)
 				
 	if currentState == FishStates.Feeding:
 		fishState = "Feeding"
 		if nearestFoodPosition == Vector2.ZERO:
 			find_food()
 		if nearestFoodPosition == Vector2.ZERO:
-			change_state_to_idle()
+			change_fish_state(FishStates.Idle)
 
+	if currentState == FishStates.Hunting:
+		fishState = "Hunting"
+		if food_is_near():
+			change_fish_state(FishStates.Feeding)
+		if !idleTimerRunning:
+			start_idle_timer()
+		pass
+		
 	if currentState == FishStates.Fleeing:
 		fishState = "Fleeing"
 		pass
@@ -159,9 +184,11 @@ func decide_next_action():
 		pass
 	return
 
-func change_state_to_idle():
-	currentState = FishStates.Idle
-	idle_timer.start(randf_range(2,6))
+func start_idle_timer():
+	if !idleTimerRunning:
+		print("starting idle timer")
+		idleTimerRunning = true
+		idle_timer.start(randf_range(2,6))
 
 func nav_to_food(delta : float):
 	if nearestFoodPosition:
@@ -183,30 +210,32 @@ func nav_to_food(delta : float):
 				velocity = direction * swimSpeed
 
 func find_food():
-	if food_is_near():
-		nearestFoodPosition = get_nearest_food().global_position
-		if nearestFoodPosition != Vector2.ZERO:
-			navagent.set_target_position(nearestFoodPosition)
-	else:
-		var someFood = get_nearest_food()
-		if someFood:
-			var direction = global_position.direction_to(someFood.global_position)
-			if direction != Vector2.ZERO:
-				velocity = direction * swimSpeed
-				change_state_to_idle()
+	if !idleTimerRunning:
+		if food_is_near():
+			nearestFoodPosition = get_nearest_food().global_position
+			if nearestFoodPosition != Vector2.ZERO:
+				navagent.set_target_position(nearestFoodPosition)
 		else:
-			change_state_to_idle()
+			var someFood = get_nearest_food()
+			if someFood:
+				var direction = global_position.direction_to(someFood.global_position)
+				if direction != Vector2.ZERO:
+					velocity = direction * swimSpeed
+			if currentState != FishStates.Hunting:
+				change_fish_state(FishStates.Hunting)
 	return
 
 func reset_food_finder():
 	nearestFoodPosition = Vector2.ZERO
-	change_state_to_idle()
+	if idleTimerRunning == false:
+		change_fish_state(FishStates.Idle)
 
 func eat_food(foodObject: Food):
 	if foodObject:
 		# hunger can go negative, equiv to the fish storing food in belly
 		if myStomach.has_space_to_eat(foodObject.nutritionValue.size):
 			myStomach.receive_food(foodObject.eat())
+		nearestFoodPosition = Vector2.ZERO
 
 func get_nearest_food():
 	var resources = get_tree().get_nodes_in_group("food")
@@ -230,13 +259,20 @@ func food_is_near():
 	return false
 
 func pick_idle_direction():
+	print("picking Direction")
 	var direction = Vector2(randi_range(-1,1),randi_range(-1,1))
 	velocity = direction.normalized() * (swimSpeed / 2.0)
 
 func _on_idle_timer_timeout():
+	print("idle timer timeout")
+	idleTimerRunning = false
 	if currentState == FishStates.Idle:
 		pick_idle_direction()
-		change_state_to_idle()
+		start_idle_timer()
+	if currentState == FishStates.Hunting:
+		find_food()
+		start_idle_timer()
+		
 
 # The mouse is hovering over us
 func _on_mouse_entered():

@@ -7,7 +7,7 @@ class_name Stomach
 # capacity of this stomach
 @export var capacity: float = 10.0
 # percentage of full capacity processed per second
-@export var processingSpeed: float = 0.02
+@export var processingSpeed: float = 0.03
 # percentage of size that is waste
 @export var processingEfficiency: float = 0.60
 

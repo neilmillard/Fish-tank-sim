@@ -6,7 +6,7 @@ enum State {
 
 const CHUNK_HEIGHT: int = 128
 const CHUNK_WIDTH: int = 320
-const GRAVITY: int = 2000
+const GRAVITY: int = 200
 
 var currentState = State.Play
 var currentLevelWidth: int = 2400
