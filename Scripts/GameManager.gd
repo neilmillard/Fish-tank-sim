@@ -11,7 +11,7 @@ const GRAVITY: int = 200
 var currentState = State.Play
 var currentLevelWidth: int = 2400
 var currentLevelHeight: int = 1280
-var floor: int = 1200
+var floorHeight: int = 80
 var currentTankData: TankData
 
 # Resources

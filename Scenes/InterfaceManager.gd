@@ -11,12 +11,6 @@ var cam_velocity: Vector2
 
 func _ready():
 	pass
-	#camera.transform.origin = Vector2(GameManager.CHUNK_WIDTH,
-	#									GameManager.CHUNK_HEIGHT)
-	#camera.set_limit(SIDE_TOP, -50) # limit_top = 0
-	#camera.set_limit(SIDE_LEFT, 40) #limit_left = 0
-	#camera.limit_right = GameManager.CHUNK_WIDTH * 2
-	#camera.limit_bottom = GameManager.CHUNK_HEIGHT * 2
 	
 func _process(delta):
 	check_camera_moves(delta)
@@ -47,13 +41,13 @@ func check_camera_moves(delta: float):
 	
 	camera_focus.position.x = clamp(
 		camera_focus.position.x, 
-		(1050 * camera.zoom.x) /2, 
-		GameManager.currentLevelWidth * 2 - ((1050 * camera.zoom.x)/2)
+		(1060 * camera.zoom.x) /2, 
+		GameManager.currentLevelWidth - ((1060 * camera.zoom.x)/2)
 		)
 	camera_focus.position.y = clamp(
 		camera_focus.position.y, 
 		(604 * camera.zoom.y) /2, 
-		GameManager.currentLevelHeight * 2 - ((604 * camera.zoom.y) /2)
+		GameManager.currentLevelHeight - ((604 * camera.zoom.y) /2)
 		)
 
 func update_inventory_display():
