@@ -124,6 +124,8 @@ func rotate_to_target(target, delta):
 	transform.rotated(sign(angleTo) * min(delta * rotationSpeed, abs(angleTo)))
 
 func rotate_to_direction(direction: Vector2, delta: float) -> void:
+	if velocity == Vector2.ZERO:
+		return
 	var angleTo = transform.x.angle_to(direction)
 	var angleDelta = sign(angleTo) * min(delta * rotationSpeed, abs(angleTo))
 	if velocity.x < 0:

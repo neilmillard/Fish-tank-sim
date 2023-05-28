@@ -28,7 +28,7 @@ func _physics_process(delta):
 	if sinking:
 		# Move and Slide function uses velocity of character body to move character on map
 		position += move_direction * move_speed * delta
-		if position.y > GameManager.floor:
+		if position.y > GameManager.currentLevelHeight - GameManager.floorHeight:
 			move_direction = Vector2.ZERO
 
 func eat():

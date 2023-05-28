@@ -1,7 +1,7 @@
 extends Control
 
 const CAMERA_SPEED = 200
-@onready var middleWater = $"../../MiddleWater"
+@onready var middleWater: MiddleWater = $"../../MiddleWater"
 @onready var camera_focus = $"../../Camera_Focus"
 @onready var camera = $"../../Camera_Focus/Camera2D"
 
@@ -70,3 +70,8 @@ func _on_flake_food_button_button_down():
 		GameManager.flakeFood -= 1
 		middleWater.spawn_flakefood()
 		
+
+
+func _on_spawn_fish_button_button_up():
+	middleWater.spawn_fish()
+	

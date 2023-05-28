@@ -1,4 +1,5 @@
 extends Node2D
+class_name MiddleWater
 
 # This script manages the objects in the middle water Layer
 # Our main concerns are the fish, plants and water quality
@@ -16,7 +17,11 @@ func build(tank: TankData) -> void:
 	tank_data = tank
 	add_vertical_wall(tank_data.width + (wallsWidth/2), tank_data.height)
 	add_vertical_wall(0 - (wallsWidth/2), tank_data.height)
-	build_navmesh(Vector2(0,0), Vector2(tank_data.width, tank_data.height), GameManager.floorHeight)
+	build_navmesh(
+		Vector2(0,0), 
+		Vector2(tank_data.width, tank_data.height), 
+		GameManager.floorHeight
+		)
 	
 # add a collisionshape2d at the coords with fixed width and half heigh
 func add_vertical_wall(x: float, y: float):
@@ -41,7 +46,8 @@ func build_navmesh(topLeft: Vector2, bottomRight: Vector2, floorHeight: int):
 	var _floor = bottomRight.y - floorHeight
 	var navRegion2D = NavigationRegion2D.new()
 	var polygon = NavigationPolygon.new()
-	var outline = PackedVector2Array([topLeft, Vector2(topLeft.x, _floor), Vector2(bottomRight.x, _floor), Vector2(bottomRight.x, topLeft.y)])
+	var outline = PackedVector2Array([topLeft, Vector2(topLeft.x, _floor), 
+				Vector2(bottomRight.x, _floor), Vector2(bottomRight.x, topLeft.y)])
 	polygon.add_outline(outline)
 	polygon.make_polygons_from_outlines()
 	navRegion2D.navigation_polygon = polygon
@@ -54,7 +60,8 @@ func spawn_flakefood():
 		spawn_obj(flakeFood,Vector2(spawnLocation + randi_range(-30, 30), surface))
 
 func spawn_fish():
-	spawn_obj(fish, Vector2(randf_range(50,950),randf_range(50, 300)))
+	spawn_obj(fish, Vector2(randf_range(50,GameManager.currentLevelWidth - 100),
+							randf_range(50, 300)))
 
 func spawn_obj(obj : PackedScene, where : Vector2):
 	var myObject := obj.instantiate()

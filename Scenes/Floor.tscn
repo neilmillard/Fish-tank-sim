@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bx8vlqf5lbrgu"]
+[gd_scene load_steps=6 format=3 uid="uid://bx8vlqf5lbrgu"]
 
 [ext_resource type="Script" path="res://Scenes/Floor.gd" id="1_aqmy5"]
 [ext_resource type="Texture2D" uid="uid://b0r4nhx6wjsia" path="res://art/Foreground.png" id="1_kxgwy"]
@@ -14,9 +14,6 @@ texture_region_size = Vector2i(64, 45)
 
 [sub_resource type="TileSet" id="TileSet_vvbe6"]
 sources/0 = SubResource("TileSetAtlasSource_ew3e7")
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_35cyw"]
-size = Vector2(2785.5, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_txae7"]
 size = Vector2(1245, 43)
@@ -36,10 +33,6 @@ scale = Vector2(4, 4)
 tile_set = SubResource("TileSet_vvbe6")
 format = 2
 layer_0/tile_data = PackedInt32Array(589825, 0, 3, 589829, 65536, 3, 589833, 131072, 3, 589837, 196608, 3, 589841, 262144, 3, 589845, 0, 3, 589849, 65536, 3, 589853, 131072, 3, 589857, 196608, 3, 589861, 262144, 3, 589865, 0, 3)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
-position = Vector2(1345.25, 0)
-shape = SubResource("RectangleShape2D_35cyw")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Floor"]
 position = Vector2(578.5, 24.5)

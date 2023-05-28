@@ -36,7 +36,6 @@ func could_eat() -> bool:
 	
 func receive_food(nutritionValue: Nutrition) -> void:
 	if has_space_to_eat(nutritionValue.size):
-		print("Received food " + str(nutritionValue.size))
 		storedFood.append(nutritionValue)
 
 # tells the stomach to expell this amount of waste
