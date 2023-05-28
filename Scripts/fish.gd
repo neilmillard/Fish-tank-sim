@@ -29,7 +29,6 @@ enum FishStates {
 	Fleeing,
 }
 
-var myTank: TankData
 var animationPlayer: AnimationPlayer
 
 var currentState: FishStates
@@ -44,9 +43,6 @@ var fishRight: bool
 var fishState: String = ""
 var _timer = null
 
-
-func initFish(tank: TankData):
-	myTank = tank
 
 func _ready():
 	animationPlayer = $AnimationPlayer
@@ -71,7 +67,7 @@ func _on_debug_timeout():
 
 func calculate_movement(delta):
 	# Fish cannot fly out of water
-	if position.y <= 5:
+	if position.y <= 28:
 		velocity.y += GameManager.GRAVITY * delta
 	
 	# go to food
@@ -137,7 +133,6 @@ func rotate_to_direction(direction: Vector2, delta: float) -> void:
 
 func change_fish_state(state: FishStates):
 	if currentState != state:
-		print("changing state")
 		idleTimerRunning = false
 		idle_timer.stop()
 	
@@ -186,7 +181,6 @@ func decide_next_action():
 
 func start_idle_timer():
 	if !idleTimerRunning:
-		print("starting idle timer")
 		idleTimerRunning = true
 		idle_timer.start(randf_range(2,6))
 
@@ -259,12 +253,10 @@ func food_is_near():
 	return false
 
 func pick_idle_direction():
-	print("picking Direction")
 	var direction = Vector2(randi_range(-1,1),randi_range(-1,1))
 	velocity = direction.normalized() * (swimSpeed / 2.0)
 
 func _on_idle_timer_timeout():
-	print("idle timer timeout")
 	idleTimerRunning = false
 	if currentState == FishStates.Idle:
 		pick_idle_direction()

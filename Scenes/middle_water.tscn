@@ -1,11 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dw3wlqc6n0i6c"]
+[gd_scene load_steps=6 format=3 uid="uid://dw3wlqc6n0i6c"]
 
 [ext_resource type="Script" path="res://Scripts/MiddleWater.gd" id="1_a4esy"]
 [ext_resource type="PackedScene" uid="uid://x880ou1fdnop" path="res://Scenes/fish.tscn" id="2_r12g1"]
 [ext_resource type="PackedScene" uid="uid://cvplseuj47e66" path="res://Scenes/flakeFood.tscn" id="3_6jlgs"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ahdei"]
-size = Vector2(61, 1186)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y1wyn"]
 size = Vector2(51, 1235)
@@ -25,15 +22,6 @@ feedLevel = 0
 [node name="flakeFood" parent="." instance=ExtResource("3_6jlgs")]
 position = Vector2(508, 29)
 sinkTime = 20.0
-
-[node name="Right" type="StaticBody2D" parent="."]
-disable_mode = 1
-collision_mask = 6
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Right"]
-position = Vector2(2643, 616)
-shape = SubResource("RectangleShape2D_ahdei")
-debug_color = Color(0, 0.6, 0.701961, 0.419608)
 
 [node name="Left" type="StaticBody2D" parent="."]
 disable_mode = 1

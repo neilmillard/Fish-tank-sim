@@ -13,8 +13,8 @@ func _ready():
 	pass
 	#camera.transform.origin = Vector2(GameManager.CHUNK_WIDTH,
 	#									GameManager.CHUNK_HEIGHT)
-	camera.set_limit(SIDE_TOP, 0) # limit_top = 0
-	camera.set_limit(SIDE_LEFT, 0) #limit_left = 0
+	#camera.set_limit(SIDE_TOP, -50) # limit_top = 0
+	#camera.set_limit(SIDE_LEFT, 40) #limit_left = 0
 	#camera.limit_right = GameManager.CHUNK_WIDTH * 2
 	#camera.limit_bottom = GameManager.CHUNK_HEIGHT * 2
 	
@@ -45,8 +45,16 @@ func check_camera_moves(delta: float):
 			cam_velocity.y = 0.0
 		camera_focus.position += cam_velocity
 	
-	camera_focus.position.x = clamp(camera_focus.position.x, (1150 * camera.zoom.x) /2, GameManager.currentLevelWidth - ((1150 * camera.zoom.x)/2))
-	camera_focus.position.y = clamp(camera_focus.position.y, (644 * camera.zoom.y) /2, GameManager.currentLevelHeight - ((644 * camera.zoom.y) /2))
+	camera_focus.position.x = clamp(
+		camera_focus.position.x, 
+		(1050 * camera.zoom.x) /2, 
+		GameManager.currentLevelWidth * 2 - ((1050 * camera.zoom.x)/2)
+		)
+	camera_focus.position.y = clamp(
+		camera_focus.position.y, 
+		(604 * camera.zoom.y) /2, 
+		GameManager.currentLevelHeight * 2 - ((604 * camera.zoom.y) /2)
+		)
 
 func update_inventory_display():
 	$Control/VBoxContainer2/FlakeFoodLabel/FlakeFoodValue.text = str(GameManager.flakeFood)

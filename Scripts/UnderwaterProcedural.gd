@@ -9,8 +9,9 @@ class_name UnderwaterPrecedural
 
 var tank_data : TankData
 
-func onready():
+func _ready():
 	tank_data = load("res://Resources/default_tank.tres")
+	build(tank_data)
 	
 	
 func build(tank: TankData) -> void:
@@ -18,4 +19,7 @@ func build(tank: TankData) -> void:
 	tank_data = tank
 	
 	for layer in chunk_layers:
-		layer.build(tank_data)
+		if layer.has_method("build"):
+			layer.build(tank_data)
+		else:
+			print("layer " + str(layer.get_path()) + " has no build method")
