@@ -53,7 +53,7 @@ func check_camera_moves(delta: float):
 func update_inventory_display():
 	$Control/VBoxContainer2/FlakeFoodLabel/FlakeFoodValue.text = str(GameManager.flakeFood)
 	$Control/VBoxContainer2/LiveFoodLabel/LiveFoodValue.text = str(GameManager.liveFood)
-
+	$Control/VBoxContainer3/TankO2Label/TankO2Value.text = str(floor(GameManager.currentTankData.get("availableO2")))
 
 func update_fish_display():
 	if GameManager.currentFish != null:

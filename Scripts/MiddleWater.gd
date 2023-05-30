@@ -9,9 +9,15 @@ var fish : PackedScene = ResourceLoader.load("res://Scenes/fish.tscn")
 
 
 var tank_data: TankData
+var surfaceO2TransferEfficiency = 0.0024
 var surface: float = 29.0
 var foodPinch: int = 4
 var wallsWidth: float = 60.0
+
+func _process(delta):
+	calc_O2_surface_transfer(delta)
+	pass
+
 
 func build(tank: TankData) -> void:
 	tank_data = tank
@@ -67,4 +73,8 @@ func spawn_obj(obj : PackedScene, where : Vector2):
 	var myObject := obj.instantiate()
 	get_tree().root.add_child(myObject)
 	myObject.position = where
+	
+func calc_O2_surface_transfer(delta):
+	var newO2 = delta * GameManager.currentLevelWidth * surfaceO2TransferEfficiency
+	GameManager.chargeO2(newO2)
 	

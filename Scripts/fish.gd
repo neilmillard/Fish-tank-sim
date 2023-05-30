@@ -10,6 +10,7 @@ class_name Fish
 @export var feedLevel: FeedLevel = FeedLevel.Middle
 
 @onready var myStomach: Stomach = $Stomach
+@onready var myLung: Lung = $Lung
 @onready var navagent: NavigationAgent2D = $NavigationAgent
 @onready var idle_timer = $IdleTimer
 
@@ -30,17 +31,16 @@ enum FishStates {
 }
 
 var animationPlayer: AnimationPlayer
-
+var fishFaceRight: bool
+var fishState: String = ""
 var currentState: FishStates
-# Amount of hunger level, is reduced by food
 
 var nearestFoodPosition: Vector2
 var idleFoodDistanceThreshold: float = 400
 var idleTimerRunning: bool = false
 var oldVelocity: Vector2
 
-var fishRight: bool
-var fishState: String = ""
+
 var _timer = null
 
 
@@ -90,13 +90,13 @@ func calculate_movement(delta):
 
 func update_animation():
 	if velocity.x < 0:
-		if fishRight == true:
-			fishRight = false
+		if fishFaceRight == true:
+			fishFaceRight = false
 			animationPlayer.play("SwimLeft")
 			rotation_degrees = rotation_degrees * -1
 	else:
-		if fishRight == false:
-			fishRight = true
+		if fishFaceRight == false:
+			fishFaceRight = true
 			animationPlayer.play("SwimRight")
 			rotation_degrees = rotation_degrees * -1
 
@@ -106,6 +106,9 @@ func use_muscle_energy(delta: float) -> KinematicCollision2D:
 	if velocityDiff > 0:
 		var energyRequired = (velocityDiff / swimSpeed) * delta
 		var energyUsed = myStomach.get_energy(energyRequired)
+		var o2Used = myLung.requestO2(energyUsed)
+		if o2Used < energyUsed:
+			print("dying")
 		if energyRequired > energyUsed:
 			velocity = oldVelocity
 			

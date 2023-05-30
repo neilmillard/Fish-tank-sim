@@ -28,8 +28,10 @@ func set_current_level(tankData : TankData):
 	currentTankData = tankData
 	currentLevelHeight = tankData.height
 	currentLevelWidth = tankData.width
+	tankData.maxO2 = tankData.width * 24
 	print("setting height: " + str(currentLevelHeight))
 	print("setting width: " + str(currentLevelWidth))
+	print("setting MaxO2:" + str(tankData.maxO2))
 
 func set_fish(fish: Fish):
 	currentFish = fish
@@ -37,3 +39,8 @@ func set_fish(fish: Fish):
 func clear_fish():
 	currentFish = null
 
+func requestO2(requested :float) -> float:
+	return currentTankData.requestO2(requested)
+
+func chargeO2(amountO2: float):
+	currentTankData.chargeO2(amountO2)

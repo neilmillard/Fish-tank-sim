@@ -17,7 +17,7 @@ const proteinEnergy: float = 1.0
 
 var storedFood:= []
 var storedWaste: float = 0.0
-var storedEnergy: float = 4.0
+var storedEnergy: float = 6.0
 
 func get_amount_food_stored():
 	var foodSize = 0.0
