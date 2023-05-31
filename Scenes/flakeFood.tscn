@@ -18,10 +18,6 @@ texture_filter = 1
 scale = Vector2(4, 4)
 texture = ExtResource("2_q87a5")
 
-[node name="sinkTimer" type="Timer" parent="."]
-
-[node name="rotTimer" type="Timer" parent="."]
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-4, -6)
 shape = SubResource("RectangleShape2D_jrsht")
@@ -34,5 +30,3 @@ proteins = 1.0
 size = 2.0
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="timeout" from="sinkTimer" to="." method="_on_sink_timer_timeout"]
-[connection signal="timeout" from="rotTimer" to="." method="_on_rot_timer_timeout"]

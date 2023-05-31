@@ -51,7 +51,7 @@ func _ready():
 	input_pickable = true
 	add_debug_timer()
 
-func _process(delta):
+func _process(_delta):
 	# delta is in seconds
 	decide_next_action()
 	update_animation()
@@ -118,7 +118,7 @@ func use_muscle_energy(delta: float) -> KinematicCollision2D:
 	
 func process_waste(delta: float) -> void:
 	# lets get rid of waste if we are moving
-	if(abs(velocity.x)) > swimSpeed / 4:
+	if(abs(velocity.x)) > swimSpeed / 4.0:
 		myStomach.flush_waste(0.1 * delta)
 
 func rotate_to_target(target, delta):

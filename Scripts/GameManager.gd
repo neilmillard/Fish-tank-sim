@@ -33,8 +33,8 @@ func set_current_level(tankData : TankData):
 	print("setting width: " + str(currentLevelWidth))
 	print("setting MaxO2:" + str(tankData.maxO2))
 
-func set_fish(fish: Fish):
-	currentFish = fish
+func set_fish(myFish: Fish):
+	currentFish = myFish
 	
 func clear_fish():
 	currentFish = null
