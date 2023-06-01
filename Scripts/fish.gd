@@ -50,13 +50,20 @@ func _ready():
 	# set so we get collision events from mouse
 	input_pickable = true
 	add_debug_timer()
+	
+	#Nasty hack to ensure stomach is not empty on new fish
+	if myStomach.get_amount_food_stored() == 0:
+		var food = Nutrition.new()
+		food.fats = 3
+		food.size = 6
+		myStomach.receive_food(food)
 
-func _process(_delta):
+func _process(delta):
 	# delta is in seconds
 	decide_next_action()
 	update_animation()
 	# TODO: effect water chemistry when processing waste
-	# process_waste(delta)
+	process_waste(delta)
 	pass
 
 func _physics_process(delta):
@@ -84,9 +91,12 @@ func calculate_movement(delta):
 		if collision.get_collider().has_method("eat"):
 			eat_food(collision.get_collider())
 	
+	# Water friction init
 	if velocity.length() > 0:
 		velocity = velocity - velocity * (0.5 * delta)
-	
+	# stash for energy calculation
+	oldVelocity = velocity
+
 
 func update_animation():
 	if velocity.x < 0:
@@ -105,22 +115,25 @@ func use_muscle_energy(delta: float) -> KinematicCollision2D:
 	var velocityDiff =  velocity.length_squared() - oldVelocity.length_squared()
 	if velocityDiff > 0:
 		var energyRequired = (velocityDiff / swimSpeed) * delta
-		var energyUsed = myStomach.get_energy(energyRequired)
-		var o2Used = myLung.requestO2(energyUsed)
-		if o2Used < energyUsed:
-			print("dying")
-		if energyRequired > energyUsed:
+		var energyReceived = myStomach.get_energy(energyRequired)
+		if energyReceived < energyRequired:
 			velocity = oldVelocity
-			
-	oldVelocity = velocity
+		else:
+			var o2Used = myLung.requestO2(energyReceived)
+			if o2Used < energyReceived:
+				print("dying")
+			# stash waste in the stomach (well sorta kidneys bladder)
+			myStomach.receive_nh3(energyReceived)
+		
 	var collision = move_and_collide(velocity * delta)
 	return collision
 	
 func process_waste(delta: float) -> void:
 	# lets get rid of waste if we are moving
-	if(abs(velocity.x)) > swimSpeed / 4.0:
-		myStomach.flush_waste(0.1 * delta)
-
+	if(abs(velocity.x)) > swimSpeed / 2.0:
+		GameManager.currentTankData.add_waste(myStomach.flush_waste(1.0 * delta))
+		GameManager.currentTankData.add_nh3(myStomach.flush_nh3(1.0 * delta))
+		
 func rotate_to_target(target, delta):
 	var direction = target.global_position - global_position
 	var angleTo = transform.x.angle_to(direction)

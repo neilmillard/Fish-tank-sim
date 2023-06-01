@@ -17,8 +17,13 @@ const proteinEnergy: float = 1.0
 
 var storedFood:= []
 var storedWaste: float = 0.0
-var storedEnergy: float = 6.0
+var storedNH3: float = 0.0
+var storedEnergy: float = 8.0
 
+
+func _process(delta: float) -> void:
+	process_food(delta)
+	
 func get_amount_food_stored():
 	var foodSize = 0.0
 	for food in storedFood:
@@ -38,19 +43,26 @@ func receive_food(nutritionValue: Nutrition) -> void:
 	if has_space_to_eat(nutritionValue.size):
 		storedFood.append(nutritionValue)
 
+func receive_nh3(amount: float) -> void:
+	storedNH3 += amount
+
 # tells the stomach to expell this amount of waste
 func flush_waste(amount: float) -> float:
-	var wasteFlushed = min(amount, storedWaste)
+	var wasteFlushed = minf(amount, storedWaste)
 	storedWaste -= wasteFlushed
 	return wasteFlushed
 
-func get_energy(energyRequired: float) -> float:
-	var energyAvailable = min(energyRequired, storedEnergy)
-	storedEnergy -= energyAvailable
-	return energyAvailable
+# tells the stomach to expell this amount of NH3
+func flush_nh3(amount: float) -> float:
+	var NH3Flushed = minf(amount, storedNH3)
+	storedNH3 -= NH3Flushed
+	return NH3Flushed
 
-func _process(delta: float) -> void:
-	process_food(delta)
+func get_energy(energyRequired: float) -> float:
+	if energyRequired > storedEnergy:
+		return 0.0
+	storedEnergy -= energyRequired
+	return energyRequired
 	
 func process_food(delta: float) -> void:
 	# we need storedFood
@@ -61,9 +73,9 @@ func process_food(delta: float) -> void:
 	var currentNutrition = storedFood[0]
 	var processAmount: float = 1.0 / currentNutrition.size
 	var processingPercent = processAmount * (processingSpeed) * delta
-	var carbs = min(currentNutrition.carbs, currentNutrition.carbs * processingPercent)
-	var fats = min(currentNutrition.fats, currentNutrition.fats * processingPercent)
-	var proteins = min(currentNutrition.proteins, currentNutrition.proteins * processingPercent)
+	var carbs = minf(currentNutrition.carbs, currentNutrition.carbs * processingPercent)
+	var fats = minf(currentNutrition.fats, currentNutrition.fats * processingPercent)
+	var proteins = minf(currentNutrition.proteins, currentNutrition.proteins * processingPercent)
 	currentNutrition.processedCarbs += carbs
 	currentNutrition.processedFats += fats
 	currentNutrition.processedProteins += proteins
@@ -72,7 +84,7 @@ func process_food(delta: float) -> void:
 	if currentNutrition.carbs > currentNutrition.processedCarbs:
 		storedFood[0] = currentNutrition
 	else:
-		storedWaste += currentNutrition.size * processingEfficiency
+		storedWaste += float(currentNutrition.size) * processingEfficiency
 		storedFood.pop_front()
 		currentNutrition.free()
 		currentNutrition = null

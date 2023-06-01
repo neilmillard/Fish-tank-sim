@@ -6,6 +6,8 @@ class_name TankData
 @export var height: int
 var heater: bool
 var availableO2: float = 0.0
+var currentWaste: float = 0.0
+var currentNH3: float = 0.0
 
 var maxO2: float
 var fish = []
@@ -26,3 +28,9 @@ func requestO2(requestedO2 :float) -> float:
 func chargeO2(newO2: float):
 	availableO2 += newO2
 	availableO2 = clampf(availableO2, 5.0, maxO2)
+
+func add_waste(amount: float) -> void:
+	currentWaste += amount
+
+func add_nh3(amount: float) -> void:
+	currentNH3 += amount

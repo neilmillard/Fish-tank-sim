@@ -51,19 +51,21 @@ func check_camera_moves(delta: float):
 		)
 
 func update_inventory_display():
-	$Control/VBoxContainer2/FlakeFoodLabel/FlakeFoodValue.text = str(GameManager.flakeFood)
-	$Control/VBoxContainer2/LiveFoodLabel/LiveFoodValue.text = str(GameManager.liveFood)
-	$Control/VBoxContainer3/TankO2Label/TankO2Value.text = str(floor(GameManager.currentTankData.get("availableO2")))
-
+	$Control/ResourceContainer/FlakeFoodLabel/FlakeFoodValue.text = str(GameManager.flakeFood)
+	$Control/ResourceContainer/LiveFoodLabel/LiveFoodValue.text = str(GameManager.liveFood)
+	$Control/TankStatsContainer/TankO2Label/TankO2Value.text = str(floor(GameManager.currentTankData.get("availableO2")))
+	$Control/TankStatsContainer/NH3Label/NH3Value.text = str(floor(GameManager.currentTankData.get("currentNH3")))
+	$Control/TankStatsContainer/WasteLabel/WasteValue.text = str(floor(GameManager.currentTankData.get("currentWaste")))
+	
 func update_fish_display():
 	if GameManager.currentFish != null:
-		$Control/VBoxContainer/HungerLabel/HungerValue.text = str(floor(GameManager.currentFish.myStomach.get_amount_food_stored()))
-		$Control/VBoxContainer/EnergyLabel/EnergyValue.text = str(floor(GameManager.currentFish.myStomach.get_stored_energy()))
-		$Control/VBoxContainer/ActionLabel/ActionValue.text = GameManager.currentFish.fishState
+		$Control/FishStateContainer/HungerLabel/HungerValue.text = str(floor(GameManager.currentFish.myStomach.get_amount_food_stored()))
+		$Control/FishStateContainer/EnergyLabel/EnergyValue.text = str(floor(GameManager.currentFish.myStomach.get_stored_energy()))
+		$Control/FishStateContainer/ActionLabel/ActionValue.text = GameManager.currentFish.fishState
 	else:
-		$Control/VBoxContainer/HungerLabel/HungerValue.text = ""
-		$Control/VBoxContainer/EnergyLabel/EnergyValue.text = ""
-		$Control/VBoxContainer/ActionLabel/ActionValue.text = ""
+		$Control/FishStateContainer/HungerLabel/HungerValue.text = ""
+		$Control/FishStateContainer/EnergyLabel/EnergyValue.text = ""
+		$Control/FishStateContainer/ActionLabel/ActionValue.text = ""
 
 func _on_flake_food_button_button_down():
 	if GameManager.flakeFood > 0:

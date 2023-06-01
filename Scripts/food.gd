@@ -63,7 +63,7 @@ func _on_sink_timer_timeout():
 
 func _on_rot_timer_timeout():
 	# TODO:
-	# rot to NH3 and waste
+	GameManager.currentTankData.add_waste(nutritionValue.size)
 	queue_free()
 
 func _on_body_entered(body):

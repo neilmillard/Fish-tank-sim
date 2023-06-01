@@ -81,7 +81,7 @@ offset_top = -5.0
 offset_right = 233.0
 offset_bottom = 47.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/Control"]
+[node name="FishStateContainer" type="VBoxContainer" parent="CanvasLayer/Control/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -89,13 +89,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HungerLabel" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer"]
+[node name="HungerLabel" type="Label" parent="CanvasLayer/Control/Control/FishStateContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Food:"
 label_settings = ExtResource("7_txah1")
 
-[node name="HungerValue" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer/HungerLabel"]
+[node name="HungerValue" type="Label" parent="CanvasLayer/Control/Control/FishStateContainer/HungerLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
@@ -103,13 +103,13 @@ offset_bottom = 26.0
 text = "100"
 label_settings = ExtResource("7_txah1")
 
-[node name="EnergyLabel" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer"]
+[node name="EnergyLabel" type="Label" parent="CanvasLayer/Control/Control/FishStateContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Energy:"
 label_settings = ExtResource("7_txah1")
 
-[node name="EnergyValue" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer/EnergyLabel"]
+[node name="EnergyValue" type="Label" parent="CanvasLayer/Control/Control/FishStateContainer/EnergyLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
@@ -117,13 +117,13 @@ offset_bottom = 26.0
 text = "100"
 label_settings = ExtResource("7_txah1")
 
-[node name="ActionLabel" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer"]
+[node name="ActionLabel" type="Label" parent="CanvasLayer/Control/Control/FishStateContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Action:"
 label_settings = ExtResource("7_txah1")
 
-[node name="ActionValue" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer/ActionLabel"]
+[node name="ActionValue" type="Label" parent="CanvasLayer/Control/Control/FishStateContainer/ActionLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
@@ -131,7 +131,7 @@ offset_bottom = 26.0
 text = "Idle"
 label_settings = ExtResource("7_txah1")
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/Control/Control"]
+[node name="ResourceContainer" type="VBoxContainer" parent="CanvasLayer/Control/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -143,31 +143,31 @@ offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="FlakeFoodLabel" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer2"]
+[node name="FlakeFoodLabel" type="Label" parent="CanvasLayer/Control/Control/ResourceContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "FlakeFood:"
 
-[node name="FlakeFoodValue" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer2/FlakeFoodLabel"]
+[node name="FlakeFoodValue" type="Label" parent="CanvasLayer/Control/Control/ResourceContainer/FlakeFoodLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
 
-[node name="LiveFoodLabel" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer2"]
+[node name="LiveFoodLabel" type="Label" parent="CanvasLayer/Control/Control/ResourceContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Action:"
 
-[node name="LiveFoodValue" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer2/LiveFoodLabel"]
+[node name="LiveFoodValue" type="Label" parent="CanvasLayer/Control/Control/ResourceContainer/LiveFoodLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "Idle"
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="CanvasLayer/Control/Control"]
+[node name="TankStatsContainer" type="VBoxContainer" parent="CanvasLayer/Control/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -179,29 +179,41 @@ offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TankO2Label" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer3"]
+[node name="TankO2Label" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Tank O2:"
 
-[node name="TankO2Value" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer3/TankO2Label"]
+[node name="TankO2Value" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer/TankO2Label"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
 
-[node name="LiveFoodLabel" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer3"]
+[node name="NH3Label" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Action:"
+text = "Ammonia:"
 
-[node name="LiveFoodValue" type="Label" parent="CanvasLayer/Control/Control/VBoxContainer3/LiveFoodLabel"]
+[node name="NH3Value" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer/NH3Label"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
-text = "Idle"
+text = "0.0"
+
+[node name="WasteLabel" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Waste:"
+
+[node name="WasteValue" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer/WasteLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "0.0"
 
 [connection signal="button_down" from="CanvasLayer/Control/VBoxContainer/FlakeFoodButton" to="CanvasLayer/Control" method="_on_flake_food_button_button_down"]
 [connection signal="button_up" from="CanvasLayer/Control/VBoxContainer/SpawnFishButton" to="CanvasLayer/Control" method="_on_spawn_fish_button_button_up"]
