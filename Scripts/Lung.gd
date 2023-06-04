@@ -12,7 +12,7 @@ func _process(delta: float) -> void:
 	var requestedO2 = delta * airExchangeRate
 	if currentO2 + requestedO2 > maxO2:
 		requestedO2 = maxO2 - currentO2
-	var actualO2 = GameManager.requestO2(requestedO2)
+	var actualO2 = GameManager.request_o2(requestedO2)
 	currentO2 = currentO2 + actualO2
 	
 func requestO2(requestedO2: float) -> float:

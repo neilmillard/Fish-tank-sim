@@ -50,13 +50,6 @@ func _ready():
 	# set so we get collision events from mouse
 	input_pickable = true
 	add_debug_timer()
-	
-	#Nasty hack to ensure stomach is not empty on new fish
-	if myStomach.get_amount_food_stored() == 0:
-		var food = Nutrition.new()
-		food.fats = 3
-		food.size = 6
-		myStomach.receive_food(food)
 
 func _process(delta):
 	# delta is in seconds

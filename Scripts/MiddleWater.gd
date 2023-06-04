@@ -4,8 +4,8 @@ class_name MiddleWater
 # This script manages the objects in the middle water Layer
 # Our main concerns are the fish, plants and water quality
 
-var flakeFood : PackedScene = ResourceLoader.load("res://Scenes/flakeFood.tscn")
-var fish : PackedScene = ResourceLoader.load("res://Scenes/fish.tscn")
+var flakeFood : PackedScene = ResourceLoader.load("res://Scenes/game/food/flakeFood.tscn")
+var fish : PackedScene = ResourceLoader.load("res://Scenes/game/fish/fish.tscn")
 
 
 var tank_data: TankData
@@ -76,5 +76,5 @@ func spawn_obj(obj : PackedScene, where : Vector2):
 	
 func calc_O2_surface_transfer(delta):
 	var newO2 = delta * GameManager.currentLevelWidth * surfaceO2TransferEfficiency
-	GameManager.chargeO2(newO2)
+	GameManager.charge_o2(newO2)
 	

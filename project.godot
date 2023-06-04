@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="FishTank Simulator"
-run/main_scene="res://Scenes/underwater.tscn"
+run/main_scene="res://Scenes/game/tank/underwater.tscn"
 config/features=PackedStringArray("4.0", "Mobile")
 config/icon="res://icon.svg"
 

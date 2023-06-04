@@ -1,12 +1,13 @@
-[gd_scene load_steps=8 format=3 uid="uid://bcnklujjjcylb"]
+[gd_scene load_steps=9 format=3 uid="uid://7pafpo7utcpp"]
 
 [ext_resource type="Script" path="res://Scripts/UnderwaterProcedural.gd" id="1_ilmkv"]
-[ext_resource type="PackedScene" uid="uid://dr7yr46m6ebpw" path="res://Scenes/BackgroundFarTerrain.tscn" id="2_8wyk3"]
-[ext_resource type="PackedScene" uid="uid://dw3wlqc6n0i6c" path="res://Scenes/middle_water.tscn" id="2_rcjv1"]
-[ext_resource type="PackedScene" uid="uid://bx8vlqf5lbrgu" path="res://Scenes/Floor.tscn" id="3_xf8mu"]
+[ext_resource type="PackedScene" uid="uid://dr7yr46m6ebpw" path="res://Scenes/game/tank/BackgroundFarTerrain.tscn" id="2_8wyk3"]
+[ext_resource type="PackedScene" uid="uid://c0cnb4lvafvle" path="res://Scenes/game/tank/middle_water.tscn" id="2_rcjv1"]
+[ext_resource type="PackedScene" uid="uid://cmsxq0rjabw6a" path="res://Scenes/game/tank/Floor.tscn" id="3_xf8mu"]
 [ext_resource type="Script" path="res://Scenes/InterfaceManager.gd" id="5_b0xfj"]
 [ext_resource type="Texture2D" uid="uid://c7n0dkn264x0f" path="res://art/flake_1.png" id="5_p6iks"]
 [ext_resource type="LabelSettings" uid="uid://s5caed4j5v6a" path="res://Resources/new_label_settings.tres" id="7_txah1"]
+[ext_resource type="Script" path="res://Scripts/DebugStats.gd" id="8_8ctgw"]
 
 [node name="Underwater" type="Node2D"]
 script = ExtResource("1_ilmkv")
@@ -136,9 +137,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 915.0
+offset_left = 350.0
 offset_top = -2.0
-offset_right = 915.0
+offset_right = 277.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -191,12 +192,12 @@ offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
 
-[node name="NH3Label" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer"]
+[node name="BactLabel" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Ammonia:"
 
-[node name="NH3Value" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer/NH3Label"]
+[node name="BactValue" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer/BactLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
@@ -214,6 +215,62 @@ offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "0.0"
+
+[node name="TankStatsContainer2" type="VBoxContainer" parent="CanvasLayer/Control/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 890.0
+offset_top = -17.0
+offset_right = 807.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NH3Label" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Ammonia:"
+
+[node name="NH3Value" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer2/NH3Label"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "0.0"
+
+[node name="NO2Label" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "NO2:"
+
+[node name="NO2Value" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer2/NO2Label"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "100"
+
+[node name="NO3Label" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "NO3:"
+
+[node name="NO3Value" type="Label" parent="CanvasLayer/Control/Control/TankStatsContainer2/NO3Label"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "0.0"
+
+[node name="DebugStats" type="MarginContainer" parent="."]
+offset_right = 250.0
+offset_bottom = 500.0
+script = ExtResource("8_8ctgw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugStats"]
+layout_mode = 2
 
 [connection signal="button_down" from="CanvasLayer/Control/VBoxContainer/FlakeFoodButton" to="CanvasLayer/Control" method="_on_flake_food_button_button_down"]
 [connection signal="button_up" from="CanvasLayer/Control/VBoxContainer/SpawnFishButton" to="CanvasLayer/Control" method="_on_spawn_fish_button_button_up"]

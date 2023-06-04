@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bx8vlqf5lbrgu"]
+[gd_scene load_steps=6 format=3 uid="uid://cmsxq0rjabw6a"]
 
-[ext_resource type="Script" path="res://Scenes/Floor.gd" id="1_aqmy5"]
+[ext_resource type="Script" path="res://Scenes/game/tank/Floor.gd" id="1_aqmy5"]
 [ext_resource type="Texture2D" uid="uid://b0r4nhx6wjsia" path="res://art/Foreground.png" id="1_kxgwy"]
+[ext_resource type="PackedScene" uid="uid://d1ef1da1mkqle" path="res://Scenes/game/equipment/GravelFilter.tscn" id="2_erdj7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ew3e7"]
 texture = ExtResource("1_kxgwy")
@@ -17,6 +18,8 @@ sources/0 = SubResource("TileSetAtlasSource_ew3e7")
 
 [node name="Floor" type="Node2D"]
 script = ExtResource("1_aqmy5")
+
+[node name="GravelFilter" parent="." instance=ExtResource("2_erdj7")]
 
 [node name="Floor" type="StaticBody2D" parent="."]
 position = Vector2(0, 1200)
