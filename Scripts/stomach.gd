@@ -46,6 +46,12 @@ func receive_food(nutritionValue: Nutrition) -> void:
 	if has_space_to_eat(nutritionValue.size):
 		storedFood.append(nutritionValue)
 
+func release_food():
+	for nutrition in storedFood:
+		GameManager.spawn_food(nutrition)
+		nutrition.queue_free()
+	
+
 func receive_nh3(amount: float) -> void:
 	storedNH3 += amount
 

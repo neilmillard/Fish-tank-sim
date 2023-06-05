@@ -8,6 +8,7 @@ class_name Fish
 @export var rotationSpeed = 40.0
 @export var isMale: bool = true
 @export var feedLevel: FeedLevel = FeedLevel.Middle
+@export var maxHealth: float = 100
 
 @onready var myStomach: Stomach = $Stomach
 @onready var myLung: Lung = $Lung
@@ -35,6 +36,7 @@ var animationPlayer: AnimationPlayer
 var fishFaceRight: bool
 var fishState: String = ""
 var currentState: FishStates
+var currentHealth: float = 90.0
 
 var nearestFoodPosition: Vector2
 var idleFoodDistanceThreshold: float = 400
@@ -51,6 +53,8 @@ func _ready():
 	# set so we get collision events from mouse
 	input_pickable = true
 	add_debug_timer()
+	GameManager.stats.add_property(self, "currentHealth", "round")
+	GameManager.stats.add_property(self, "nearestFoodPosition", "")
 
 func _process(delta):
 	# delta is in seconds
@@ -58,6 +62,7 @@ func _process(delta):
 	update_animation()
 	# TODO: effect water chemistry when processing waste
 	process_waste(delta)
+	process_health(delta)
 	pass
 
 func _physics_process(delta):
@@ -65,6 +70,28 @@ func _physics_process(delta):
 	
 func _on_debug_timeout():
 	pass
+
+func process_health(delta: float) -> void:
+	# The fish will expend energy on fighting infection
+	if currentHealth < maxHealth:
+		var energyRequired = delta * GameManager.infectionEnergy
+		var energyReceived = myStomach.get_energy(energyRequired)
+		var o2Used = myLung.requestO2(energyReceived)
+		myStomach.receive_nh3(energyReceived / 4.0)
+		if energyReceived == energyRequired and o2Used == energyReceived:
+			currentHealth += delta
+	if currentHealth > maxHealth:
+		currentHealth == maxHealth
+	
+	# poor water quality will assist the growing infection
+	if GameManager.currentTankData.currentNH3 > GameManager.nh3HealthThreshold:
+		currentHealth -= delta / 2.0
+	
+	if currentHealth == 0:
+		# Fish is fish food
+		myStomach.release_food()
+		GameManager.spawn_dead_fish()
+		queue_free()
 
 func calculate_movement(delta):
 	# Fish cannot fly out of water
@@ -76,7 +103,7 @@ func calculate_movement(delta):
 		nav_to_food(delta)
 	
 	# reset floating attitude and drift
-	if currentState == FishStates.Idle or nearestFoodPosition == Vector2.ZERO:
+	if currentState == FishStates.Idle or currentState == FishStates.Hunting:
 		rotate_to_direction(Vector2(velocity.x, 0), delta)
 		
 	# collide with walls and eat food
@@ -110,14 +137,16 @@ func use_muscle_energy(delta: float) -> KinematicCollision2D:
 	if velocityDiff > 0:
 		var energyRequired = (velocityDiff / swimSpeed) * delta * fishSize
 		var energyReceived = myStomach.get_energy(energyRequired)
+		var o2Used = myLung.requestO2(energyReceived)
+		myStomach.receive_nh3(energyReceived / 4.0)
 		if energyReceived < energyRequired:
-			velocity = oldVelocity
+			if oldVelocity.length_squared() > 2:
+				velocity = oldVelocity
 		else:
-			var o2Used = myLung.requestO2(energyReceived)
 			if o2Used < energyReceived:
-				print("dying")
+				currentHealth -= delta
 			# stash waste in the stomach (well sorta kidneys bladder)
-			myStomach.receive_nh3(energyReceived / 4.0)
+
 		
 	var collision = move_and_collide(velocity * delta)
 	return collision

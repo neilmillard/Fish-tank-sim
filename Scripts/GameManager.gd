@@ -7,7 +7,7 @@ enum State {
 const CHUNK_HEIGHT: int = 128
 const CHUNK_WIDTH: int = 320
 const GRAVITY: int = 200
-const MAXO2MULTIPLIER: int = 24
+const MAXO2MULTIPLIER: int = 2
 
 var stats
 var currentState = State.Play
@@ -19,6 +19,9 @@ var ammoniaProcessRate: float = 0.002
 var nitriteProcessRate: float = 0.0016
 # bacteria growth rate, real = double in 13hrs
 var bacteriaGrowthRate: float = 0.04
+var nh3HealthThreshold: float = 40.0
+# infectionEnergy amount of energy to increase health by 1
+var infectionEnergy: float = 0.2
 var currentTankData: TankData
 
 # Resources
@@ -55,3 +58,9 @@ func request_o2(requested :float) -> float:
 
 func charge_o2(amountO2: float):
 	currentTankData.charge_o2(amountO2)
+
+func spawn_food(nutrition: Nutrition):
+	pass
+
+func spawn_dead_fish():
+	pass

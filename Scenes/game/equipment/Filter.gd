@@ -5,7 +5,7 @@ class_name Filter
 @export var maxBacteria: float = 100.0
 
 # Bacteria for NH3 -> NO2
-var currentBacteriaSomonas: float = 1.0
+var currentBacteriaSomonas: float = 5.0
 # Bacteria for NO2 -> NO3
 var currentBacteriaBacter: float = 1.0
 
@@ -13,8 +13,8 @@ var currentBacteriaBacter: float = 1.0
 var bacteriaGrowthRate: float
 
 func _ready():
-	GameManager.stats.add_property(self, "currentBacteriaSomonas", "round")
-	GameManager.stats.add_property(self, "currentBacteriaBacter", "round")
+	# GameManager.stats.add_property(self, "currentBacteriaSomonas", "round")
+	# GameManager.stats.add_property(self, "currentBacteriaBacter", "round")
 	bacteriaGrowthRate = GameManager.bacteriaGrowthRate
 
 func _process(delta):
