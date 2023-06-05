@@ -30,6 +30,7 @@ enum FishStates {
 	Fleeing,
 }
 
+var fishSize: float = 1.0
 var animationPlayer: AnimationPlayer
 var fishFaceRight: bool
 var fishState: String = ""
@@ -107,7 +108,7 @@ func use_muscle_energy(delta: float) -> KinematicCollision2D:
 	# energy is needed to accelerate
 	var velocityDiff =  velocity.length_squared() - oldVelocity.length_squared()
 	if velocityDiff > 0:
-		var energyRequired = (velocityDiff / swimSpeed) * delta
+		var energyRequired = (velocityDiff / swimSpeed) * delta * fishSize
 		var energyReceived = myStomach.get_energy(energyRequired)
 		if energyReceived < energyRequired:
 			velocity = oldVelocity
@@ -116,14 +117,14 @@ func use_muscle_energy(delta: float) -> KinematicCollision2D:
 			if o2Used < energyReceived:
 				print("dying")
 			# stash waste in the stomach (well sorta kidneys bladder)
-			myStomach.receive_nh3(energyReceived)
+			myStomach.receive_nh3(energyReceived / 4.0)
 		
 	var collision = move_and_collide(velocity * delta)
 	return collision
 	
 func process_waste(delta: float) -> void:
 	# lets get rid of waste if we are moving
-	if(abs(velocity.x)) > swimSpeed / 2.0:
+	if(abs(velocity.x)) > swimSpeed / 4.0:
 		GameManager.currentTankData.add_waste(myStomach.flush_waste(1.0 * delta))
 		GameManager.currentTankData.add_nh3(myStomach.flush_nh3(1.0 * delta))
 		

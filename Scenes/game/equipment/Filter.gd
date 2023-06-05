@@ -19,13 +19,21 @@ func _ready():
 
 func _process(delta):
 	growBacteria(delta)
+	processWaste(delta)
 	processNH3(delta)
 	processNO2(delta)
 
 func growBacteria(delta: float) -> void:
 	currentBacteriaBacter = minf(maxBacteria, currentBacteriaBacter + (delta * currentBacteriaBacter * bacteriaGrowthRate))
 	currentBacteriaSomonas = minf(maxBacteria, currentBacteriaSomonas + (delta * currentBacteriaSomonas * bacteriaGrowthRate))
-		
+
+func processWaste(delta: float) -> void:
+	var amount = delta * GameManager.wasteDecayRate * 1.0
+	var waste = GameManager.currentTankData.remove_waste(amount)
+	var nh3Created = waste * 4
+	GameManager.currentTankData.add_nh3(nh3Created)
+	
+	
 func processNH3(delta: float) -> void:
 	# Bacteria Somonas uses 1.5 O2 and NH3, and spits out NO2 + H+
 	var amount = delta * GameManager.ammoniaProcessRate * currentBacteriaSomonas
@@ -41,7 +49,7 @@ func processNH3(delta: float) -> void:
 	GameManager.currentTankData.add_no2(no2Created)
 	if no2Created < amount:
 		# we didn't get enough "food" for the bacteria
-		currentBacteriaSomonas = maxf(1.0, currentBacteriaSomonas - ((currentBacteriaSomonas * 0.02) * delta))
+		currentBacteriaSomonas = maxf(1.0, currentBacteriaSomonas - ((currentBacteriaSomonas * 0.05) * delta))
 	GameManager.currentTankData.add_no2(no2Created)
 	
 

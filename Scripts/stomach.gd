@@ -20,6 +20,9 @@ var storedWaste: float = 0.0
 var storedNH3: float = 0.0
 var storedEnergy: float = 8.0
 
+func _ready():
+	GameManager.stats.add_property(self, "storedWaste", "round")
+	GameManager.stats.add_property(self, "storedNH3", "round")
 
 func _process(delta: float) -> void:
 	process_food(delta)

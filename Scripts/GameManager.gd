@@ -14,9 +14,9 @@ var currentState = State.Play
 var currentLevelWidth: int = 2400
 var currentLevelHeight: int = 1280
 var floorHeight: int = 80
-var wasteDecayRate: float = 1.0
-var ammoniaProcessRate: float = 0.0005
-var nitriteProcessRate: float = 0.001
+var wasteDecayRate: float = 0.0005
+var ammoniaProcessRate: float = 0.002
+var nitriteProcessRate: float = 0.0016
 # bacteria growth rate, real = double in 13hrs
 var bacteriaGrowthRate: float = 0.04
 var currentTankData: TankData
@@ -30,6 +30,7 @@ var credits := 10
 # UI
 var currentFish : Fish
 var currentCameraTarget
+	
 
 func set_debug_overlay(debugOverlay):
 	stats = debugOverlay
