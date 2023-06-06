@@ -18,7 +18,7 @@ const proteinEnergy: float = 1.0
 var storedFood:= []
 var storedWaste: float = 0.0
 var storedNH3: float = 0.0
-var storedEnergy: float = 8.0
+var storedEnergy: float = 18.0
 
 func _ready():
 	GameManager.stats.add_property(self, "storedWaste", "round")

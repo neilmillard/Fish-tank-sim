@@ -25,6 +25,7 @@ enum FeedLevel {
 enum FishStates {
 #	Sleeping,
 	Idle,
+	Swimming,
 	Feeding,
 	Hunting,
 	Mating,
@@ -41,8 +42,9 @@ var currentHealth: float = 90.0
 var nearestFoodPosition: Vector2
 var idleFoodDistanceThreshold: float = 400
 var idleTimerRunning: bool = false
+var direction: Vector2
 var oldVelocity: Vector2
-
+var swimTime: float
 
 var _timer = null
 
@@ -58,8 +60,7 @@ func _ready():
 
 func _process(delta):
 	# delta is in seconds
-	decide_next_action()
-	update_animation()
+	decide_next_action(delta)
 	# TODO: effect water chemistry when processing waste
 	process_waste(delta)
 	process_health(delta)
@@ -67,6 +68,7 @@ func _process(delta):
 
 func _physics_process(delta):
 	calculate_movement(delta)
+	update_animation()
 	
 func _on_debug_timeout():
 	pass
@@ -94,30 +96,52 @@ func process_health(delta: float) -> void:
 		queue_free()
 
 func calculate_movement(delta):
-	# Fish cannot fly out of water
-	if position.y <= 28:
-		velocity.y += GameManager.GRAVITY * delta
+	# Water friction init
+	if velocity.length() > 0:
+		velocity = velocity - (velocity * 0.5 * delta)
+	# stash for energy calculation
+	oldVelocity = velocity
 	
 	# go to food
 	if currentState == FishStates.Feeding:
 		nav_to_food(delta)
 	
+	if direction != Vector2.ZERO && currentState != FishStates.Idle:
+		velocity = direction.normalized() * swimSpeed
+		
 	# reset floating attitude and drift
 	if currentState == FishStates.Idle or currentState == FishStates.Hunting:
-		rotate_to_direction(Vector2(velocity.x, 0), delta)
-		
+		direction = Vector2(velocity.x, 0)
+	
+	# Fish cannot fly out of water
+	if position.y <= 28:
+		velocity.y += GameManager.GRAVITY * delta
+
+	rotate_to_direction(direction, delta)
+	use_muscle_energy(delta)
+	
 	# collide with walls and eat food
-	var collision = use_muscle_energy(delta)
+	var collision = move_and_collide(velocity * delta)
 	if collision:
 		if collision.get_collider().has_method("eat"):
 			eat_food(collision.get_collider())
-	
-	# Water friction init
-	if velocity.length() > 0:
-		velocity = velocity - velocity * (0.5 * delta)
-	# stash for energy calculation
-	oldVelocity = velocity
 
+
+func use_muscle_energy(delta: float) -> void:
+	# energy is needed to accelerate
+	var velocityDiff =  velocity.length_squared() - oldVelocity.length_squared()
+	if velocityDiff > 0:
+		var energyRequired = (velocityDiff / swimSpeed) * delta * fishSize
+		var energyReceived = myStomach.get_energy(energyRequired)
+		var o2Used = myLung.requestO2(energyReceived)
+		# stash waste in the stomach (well sorta kidneys bladder)
+		myStomach.receive_nh3(energyReceived / 4.0)
+		if energyReceived < energyRequired:
+			if oldVelocity.length_squared() > 2:
+				velocity = oldVelocity
+		else:
+			if o2Used < energyReceived:
+				currentHealth -= delta
 
 func update_animation():
 	if velocity.x < 0:
@@ -131,26 +155,6 @@ func update_animation():
 			animationPlayer.play("SwimRight")
 			rotation_degrees = rotation_degrees * -1
 
-func use_muscle_energy(delta: float) -> KinematicCollision2D:
-	# energy is needed to accelerate
-	var velocityDiff =  velocity.length_squared() - oldVelocity.length_squared()
-	if velocityDiff > 0:
-		var energyRequired = (velocityDiff / swimSpeed) * delta * fishSize
-		var energyReceived = myStomach.get_energy(energyRequired)
-		var o2Used = myLung.requestO2(energyReceived)
-		myStomach.receive_nh3(energyReceived / 4.0)
-		if energyReceived < energyRequired:
-			if oldVelocity.length_squared() > 2:
-				velocity = oldVelocity
-		else:
-			if o2Used < energyReceived:
-				currentHealth -= delta
-			# stash waste in the stomach (well sorta kidneys bladder)
-
-		
-	var collision = move_and_collide(velocity * delta)
-	return collision
-	
 func process_waste(delta: float) -> void:
 	# lets get rid of waste if we are moving
 	if(abs(velocity.x)) > swimSpeed / 4.0:
@@ -180,22 +184,31 @@ func change_fish_state(state: FishStates):
 	if state == FishStates.Idle:	
 		start_idle_timer()
 	
+	if state == FishStates.Swimming:
+		swimTime = 0.0
+	
 	currentState = state
 
-func decide_next_action():
+func decide_next_action(delta):	
 	if currentState == FishStates.Idle:
 		fishState = "Idle"
 		# fish will only change from idle, if food, mate or preditor present
 		if preditor_is_near():
 			change_fish_state(FishStates.Fleeing)
-		if myStomach.storedEnergy < myStomach.capacity && myStomach.could_eat():
+		if myStomach.could_eat():
 			if food_is_near():
 				change_fish_state(FishStates.Feeding)
 			else:
 				change_fish_state(FishStates.Hunting)
 		if food_is_near() && myStomach.could_eat():
 			change_fish_state(FishStates.Feeding)
-				
+	
+	if currentState == FishStates.Swimming:
+		fishState = "Swimming"
+		if swimTime > 0.1:
+			change_fish_state(FishStates.Idle)
+		swimTime += delta
+		
 	if currentState == FishStates.Feeding:
 		fishState = "Feeding"
 		if nearestFoodPosition == Vector2.ZERO:
@@ -239,10 +252,7 @@ func nav_to_food(delta : float):
 				print("Cannot get to food")
 				reset_food_finder()
 				return
-			var direction = global_position.direction_to(targetpos)
-			if direction != Vector2.ZERO:
-				rotate_to_direction(direction, delta)
-				velocity = direction * swimSpeed
+			direction = global_position.direction_to(targetpos)
 
 func find_food():
 	if !idleTimerRunning:
@@ -253,9 +263,7 @@ func find_food():
 		else:
 			var someFood = get_nearest_food()
 			if someFood:
-				var direction = global_position.direction_to(someFood.global_position)
-				if direction != Vector2.ZERO:
-					velocity = direction * swimSpeed
+				direction = global_position.direction_to(someFood.global_position)
 			if currentState != FishStates.Hunting:
 				change_fish_state(FishStates.Hunting)
 	return
@@ -294,8 +302,8 @@ func food_is_near():
 	return false
 
 func pick_idle_direction():
-	var direction = Vector2(randi_range(-1,1),randi_range(-1,1))
-	velocity = direction.normalized() * (swimSpeed / 2.0)
+	direction = Vector2(randi_range(-1,1),randi_range(-1,1))
+	change_fish_state(FishStates.Swimming)
 
 func _on_idle_timer_timeout():
 	idleTimerRunning = false
