@@ -22,6 +22,7 @@ var bacteriaGrowthRate: float = 0.04
 var nh3HealthThreshold: float = 40.0
 # infectionEnergy amount of energy to increase health by 1
 var infectionEnergy: float = 0.2
+var waterFriction: float = 0.3
 var currentTankData: TankData
 
 # Resources

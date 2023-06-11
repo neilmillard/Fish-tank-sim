@@ -37,7 +37,7 @@ var animationPlayer: AnimationPlayer
 var fishFaceRight: bool
 var fishState: String = ""
 var currentState: FishStates
-var currentHealth: float = 90.0
+var currentHealth: float = 95.0
 
 var nearestFoodPosition: Vector2
 var idleFoodDistanceThreshold: float = 400
@@ -64,7 +64,7 @@ func _process(delta):
 	# TODO: effect water chemistry when processing waste
 	process_waste(delta)
 	process_health(delta)
-	pass
+
 
 func _physics_process(delta):
 	calculate_movement(delta)
@@ -98,7 +98,7 @@ func process_health(delta: float) -> void:
 func calculate_movement(delta):
 	# Water friction init
 	if velocity.length() > 0:
-		velocity = velocity - (velocity * 0.5 * delta)
+		velocity = velocity - (velocity * GameManager.waterFriction * delta)
 	# stash for energy calculation
 	oldVelocity = velocity
 	
@@ -106,13 +106,12 @@ func calculate_movement(delta):
 	if currentState == FishStates.Feeding:
 		nav_to_food(delta)
 	
-	if direction != Vector2.ZERO && currentState != FishStates.Idle:
+	# apply some thrust
+	if (direction != Vector2.ZERO && 
+		currentState != FishStates.Idle && 
+		currentState != FishStates.Hunting):
 		velocity = direction.normalized() * swimSpeed
 		
-	# reset floating attitude and drift
-	if currentState == FishStates.Idle or currentState == FishStates.Hunting:
-		direction = Vector2(velocity.x, 0)
-	
 	# Fish cannot fly out of water
 	if position.y <= 28:
 		velocity.y += GameManager.GRAVITY * delta
@@ -169,7 +168,13 @@ func rotate_to_target(target, delta):
 func rotate_to_direction(direction: Vector2, delta: float) -> void:
 	if velocity == Vector2.ZERO:
 		return
+	
 	var angleTo = transform.x.angle_to(direction)
+	
+	# reset floating attitude and drift
+	if currentState == FishStates.Idle or currentState == FishStates.Hunting:
+		angleTo = transform.x.angle_to(Vector2(velocity.x, 0.0))
+	
 	var angleDelta = sign(angleTo) * min(delta * rotationSpeed, abs(angleTo))
 	if velocity.x < 0:
 		rotation_degrees -= angleDelta 
@@ -236,7 +241,7 @@ func decide_next_action(delta):
 func start_idle_timer():
 	if !idleTimerRunning:
 		idleTimerRunning = true
-		idle_timer.start(randf_range(2,6))
+		idle_timer.start(randf_range(3.0,6.0))
 
 func nav_to_food(delta : float):
 	if nearestFoodPosition:
@@ -264,6 +269,8 @@ func find_food():
 			var someFood = get_nearest_food()
 			if someFood:
 				direction = global_position.direction_to(someFood.global_position)
+			else:
+				direction = Vector2.ZERO
 			if currentState != FishStates.Hunting:
 				change_fish_state(FishStates.Hunting)
 	return
@@ -311,7 +318,10 @@ func _on_idle_timer_timeout():
 		pick_idle_direction()
 		start_idle_timer()
 	if currentState == FishStates.Hunting:
-		find_food()
+		if food_is_near():
+			find_food()
+		else:
+			pick_idle_direction()
 		start_idle_timer()
 		
 
