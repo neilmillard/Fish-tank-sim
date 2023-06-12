@@ -71,7 +71,6 @@ func get_energy(energyRequired: float) -> float:
 	if energyRequired > storedEnergy:
 		return 0.0
 	storedEnergy -= energyRequired
-	print(energyRequired)
 	return energyRequired
 	
 func process_food(delta: float) -> void:

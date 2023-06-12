@@ -23,3 +23,13 @@ func build(tank: TankData) -> void:
 			layer.build(tank_data)
 		else:
 			print("layer " + str(layer.get_path()) + " has no build method")
+
+
+func _on_save_tank_button_pressed():
+	print("Save Tank")
+	pass # Replace with function body.
+
+
+func _on_load_tank_button_pressed():
+	print("Load Tank")
+	pass # Replace with function body.

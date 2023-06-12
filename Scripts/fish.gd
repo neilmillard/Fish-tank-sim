@@ -38,6 +38,7 @@ var fishFaceRight: bool
 var fishState: String = ""
 var currentState: FishStates
 var currentHealth: float = 95.0
+var currentSwimspeed: float
 
 var nearestFoodPosition: Vector2
 var idleFoodDistanceThreshold: float = 400
@@ -51,12 +52,15 @@ var _timer = null
 
 func _ready():
 	animationPlayer = $AnimationPlayer
-	start_idle_timer()
+	start_idle_timer(true)
 	# set so we get collision events from mouse
 	input_pickable = true
+	currentSwimspeed = swimSpeed
 	add_debug_timer()
 	GameManager.stats.add_property(self, "currentHealth", "round")
 	GameManager.stats.add_property(self, "nearestFoodPosition", "")
+	GameManager.stats.add_property(self, "currentSwimspeed", "round")
+	GameManager.stats.add_property(self, "velocity", "")
 
 func _process(delta):
 	# delta is in seconds
@@ -110,7 +114,7 @@ func calculate_movement(delta):
 	if (direction != Vector2.ZERO && 
 		currentState != FishStates.Idle && 
 		currentState != FishStates.Hunting):
-		velocity = direction.normalized() * swimSpeed
+		velocity = direction.normalized() * currentSwimspeed
 		
 	# Fish cannot fly out of water
 	if position.y <= 28:
@@ -186,8 +190,8 @@ func change_fish_state(state: FishStates):
 		idleTimerRunning = false
 		idle_timer.stop()
 	
-	if state == FishStates.Idle:	
-		start_idle_timer()
+	if state == FishStates.Idle:
+		start_idle_timer(true)
 	
 	if state == FishStates.Swimming:
 		swimTime = 0.0
@@ -197,6 +201,7 @@ func change_fish_state(state: FishStates):
 func decide_next_action(delta):	
 	if currentState == FishStates.Idle:
 		fishState = "Idle"
+		currentSwimspeed = swimSpeed / 4.0	
 		# fish will only change from idle, if food, mate or preditor present
 		if preditor_is_near():
 			change_fish_state(FishStates.Fleeing)
@@ -210,11 +215,12 @@ func decide_next_action(delta):
 	
 	if currentState == FishStates.Swimming:
 		fishState = "Swimming"
-		if swimTime > 0.1:
+		if swimTime > 0.05:
 			change_fish_state(FishStates.Idle)
 		swimTime += delta
 		
 	if currentState == FishStates.Feeding:
+		currentSwimspeed = swimSpeed
 		fishState = "Feeding"
 		if nearestFoodPosition == Vector2.ZERO:
 			find_food()
@@ -222,26 +228,33 @@ func decide_next_action(delta):
 			change_fish_state(FishStates.Idle)
 
 	if currentState == FishStates.Hunting:
+		currentSwimspeed = swimSpeed / 2.0
 		fishState = "Hunting"
 		if food_is_near():
 			change_fish_state(FishStates.Feeding)
 		if !idleTimerRunning:
-			start_idle_timer()
+			start_idle_timer(false)
 		pass
 		
 	if currentState == FishStates.Fleeing:
+		currentSwimspeed = fleeSpeed
 		fishState = "Fleeing"
 		pass
 
 	if currentState == FishStates.Mating:
+		currentSwimspeed = swimSpeed / 2.0
 		fishState = "Mating"
 		pass
 	return
 
-func start_idle_timer():
+func start_idle_timer(shorter: bool = true):
 	if !idleTimerRunning:
 		idleTimerRunning = true
-		idle_timer.start(randf_range(3.0,6.0))
+		var maxWait = 6.0
+		if shorter:
+			maxWait = 6.0	
+		idle_timer.start(randf_range(3.0,maxWait))
+
 
 func nav_to_food(delta : float):
 	if nearestFoodPosition:
@@ -316,13 +329,11 @@ func _on_idle_timer_timeout():
 	idleTimerRunning = false
 	if currentState == FishStates.Idle:
 		pick_idle_direction()
-		start_idle_timer()
+		start_idle_timer(true)
 	if currentState == FishStates.Hunting:
-		if food_is_near():
-			find_food()
-		else:
-			pick_idle_direction()
-		start_idle_timer()
+		find_food()
+		change_fish_state(FishStates.Swimming)
+		start_idle_timer(false)
 		
 
 # The mouse is hovering over us
