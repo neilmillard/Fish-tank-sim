@@ -1,27 +1,12 @@
 extends CharacterBody2D
 
-class_name Fish
-
-# Fish management
-@export var swimSpeed: int = 60
-@export var fleeSpeed: int = 100
-@export var rotationSpeed = 40.0
-@export var isMale: bool = true
-@export var feedLevel: FeedLevel = FeedLevel.Middle
-@export var maxHealth: float = 100
-
-@onready var myStomach: Stomach = $Stomach
-@onready var myLung: Lung = $Lung
-@onready var navagent: NavigationAgent2D = $NavigationAgent
-@onready var idle_timer = $IdleTimer
-
-# State, Eating, pooing, water levels, reproduction, movement, health
 enum FeedLevel {
 	Top,
 	Middle,
 	Bottom,
 }
 
+# State, Eating, pooing, water levels, reproduction, movement, health
 enum FishStates {
 #	Sleeping,
 	Idle,
@@ -32,16 +17,28 @@ enum FishStates {
 	Fleeing,
 }
 
-var fishSize: float = 1.0
-var animationPlayer: AnimationPlayer
+@export var stats: Fish
+
+# This fish scene stats
+@export var swimSpeed: int = 60
+@export var fleeSpeed: int = 100
+@export var rotationSpeed = 40.0
+@export var feedLevel: FeedLevel = FeedLevel.Middle
+@export var maxHealth: float = 100
+@export var idleFoodDistanceThreshold: float = 400
+
+@onready var animationPlayer: AnimationPlayer = $AnimationPlayer
+@onready var myStomach: Stomach = stats.myStomach
+@onready var myLung: Lung = stats.myLung
+@onready var navagent: NavigationAgent2D = $NavigationAgent
+@onready var idle_timer = $IdleTimer
+
+
 var fishFaceRight: bool
 var fishState: String = ""
 var currentState: FishStates
-var currentHealth: float = 95.0
 var currentSwimspeed: float
-
 var nearestFoodPosition: Vector2
-var idleFoodDistanceThreshold: float = 400
 var idleTimerRunning: bool = false
 var direction: Vector2
 var oldVelocity: Vector2
@@ -51,21 +48,25 @@ var _timer = null
 
 
 func _ready():
-	animationPlayer = $AnimationPlayer
-	start_idle_timer(true)
+	if !stats:
+		stats = GameManager.new_fish_resource()
+	print(stats)
 	# set so we get collision events from mouse
 	input_pickable = true
 	currentSwimspeed = swimSpeed
+	start_idle_timer(true)
 	add_debug_timer()
-	GameManager.stats.add_property(self, "currentHealth", "round")
-	GameManager.stats.add_property(self, "nearestFoodPosition", "")
-	GameManager.stats.add_property(self, "currentSwimspeed", "round")
-	GameManager.stats.add_property(self, "velocity", "")
+	GameManager.debug.add_property(self, "currentHealth", "round")
+	GameManager.debug.add_property(self, "nearestFoodPosition", "")
+	GameManager.debug.add_property(self, "currentSwimspeed", "round")
+	GameManager.debug.add_property(self, "velocity", "")
 
 func _process(delta):
 	# delta is in seconds
 	decide_next_action(delta)
 	# TODO: effect water chemistry when processing waste
+	process_lung(delta)
+	process_food(delta)
 	process_waste(delta)
 	process_health(delta)
 
@@ -77,23 +78,29 @@ func _physics_process(delta):
 func _on_debug_timeout():
 	pass
 
+func process_lung(delta: float) -> void:
+	myLung._process(delta)
+
+func process_food(delta: float) -> void:
+	myStomach._process(delta)
+
 func process_health(delta: float) -> void:
 	# The fish will expend energy on fighting infection
-	if currentHealth < maxHealth:
+	if stats.currentHealth < maxHealth:
 		var energyRequired = delta * GameManager.infectionEnergy
 		var energyReceived = myStomach.get_energy(energyRequired)
 		var o2Used = myLung.requestO2(energyReceived)
 		myStomach.receive_nh3(energyReceived / 4.0)
 		if energyReceived == energyRequired and o2Used == energyReceived:
-			currentHealth += delta
-	if currentHealth > maxHealth:
-		currentHealth == maxHealth
+			stats.currentHealth += delta
+	if stats.currentHealth > maxHealth:
+		stats.currentHealth = maxHealth
 	
 	# poor water quality will assist the growing infection
 	if GameManager.currentTankData.currentNH3 > GameManager.nh3HealthThreshold:
-		currentHealth -= delta / 2.0
+		stats.currentHealth -= delta / 2.0
 	
-	if currentHealth == 0:
+	if stats.currentHealth == 0:
 		# Fish is fish food
 		myStomach.release_food()
 		GameManager.spawn_dead_fish()
@@ -108,7 +115,7 @@ func calculate_movement(delta):
 	
 	# go to food
 	if currentState == FishStates.Feeding:
-		nav_to_food(delta)
+		nav_to_food()
 	
 	# apply some thrust
 	if (direction != Vector2.ZERO && 
@@ -134,7 +141,7 @@ func use_muscle_energy(delta: float) -> void:
 	# energy is needed to accelerate
 	var velocityDiff =  velocity.length_squared() - oldVelocity.length_squared()
 	if velocityDiff > 0:
-		var energyRequired = (velocityDiff / swimSpeed) * delta * fishSize
+		var energyRequired = (velocityDiff / swimSpeed) * delta * stats.fishSize
 		var energyReceived = myStomach.get_energy(energyRequired)
 		var o2Used = myLung.requestO2(energyReceived)
 		# stash waste in the stomach (well sorta kidneys bladder)
@@ -144,7 +151,7 @@ func use_muscle_energy(delta: float) -> void:
 				velocity = oldVelocity
 		else:
 			if o2Used < energyReceived:
-				currentHealth -= delta
+				stats.currentHealth -= delta
 
 func update_animation():
 	if velocity.x < 0:
@@ -160,20 +167,20 @@ func update_animation():
 
 func process_waste(delta: float) -> void:
 	# lets get rid of waste if we are moving
-	if(abs(velocity.x)) > swimSpeed / 4.0:
+	if(abs(velocity.x)) > swimSpeed / 10.0:
 		GameManager.currentTankData.add_waste(myStomach.flush_waste(1.0 * delta))
 		GameManager.currentTankData.add_nh3(myStomach.flush_nh3(1.0 * delta))
 		
 func rotate_to_target(target, delta):
-	var direction = target.global_position - global_position
+	direction = target.global_position - global_position
 	var angleTo = transform.x.angle_to(direction)
 	transform.rotated(sign(angleTo) * min(delta * rotationSpeed, abs(angleTo)))
 
-func rotate_to_direction(direction: Vector2, delta: float) -> void:
+func rotate_to_direction(newDirection: Vector2, delta: float) -> void:
 	if velocity == Vector2.ZERO:
 		return
 	
-	var angleTo = transform.x.angle_to(direction)
+	var angleTo = transform.x.angle_to(newDirection)
 	
 	# reset floating attitude and drift
 	if currentState == FishStates.Idle or currentState == FishStates.Hunting:
@@ -256,7 +263,7 @@ func start_idle_timer(shorter: bool = true):
 		idle_timer.start(randf_range(3.0,maxWait))
 
 
-func nav_to_food(delta : float):
+func nav_to_food():
 	if nearestFoodPosition:
 		if navagent.is_navigation_finished():
 			reset_food_finder()
@@ -338,7 +345,7 @@ func _on_idle_timer_timeout():
 
 # The mouse is hovering over us
 func _on_mouse_entered():
-	GameManager.set_fish(self)
+	GameManager.set_fish(stats)
 	
 
 # The mouse is no longer hovering over us
@@ -352,3 +359,23 @@ func add_debug_timer():
 	_timer.set_wait_time(1.0)
 	_timer.set_one_shot(false) # so it loops
 	_timer.start()
+
+func save():
+	var save_dict = {
+		"filename" : get_scene_file_path(),
+		"parent" : get_parent().get_path(),
+		"pos_x" : position.x, # Vector2 is not supported by JSON
+		"pos_y" : position.y,
+		"swimSpeed": swimSpeed,
+		"fleeSpeed": fleeSpeed,
+		"rotationSpeed": rotationSpeed,
+		"feedLevel" : feedLevel,
+		"maxHealth": maxHealth,
+		"currentState": currentState,
+		"dir_x" : direction.x, # Vector2 is not supported by JSON
+		"dir_y" : direction.y,
+		"swimTime": swimTime,
+		"stomach": myStomach.save(),
+		"lung": myLung.save()
+		}
+	return save_dict

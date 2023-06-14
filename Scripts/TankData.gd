@@ -1,23 +1,26 @@
-extends Resource
-
 class_name TankData
+extends Resource
 
 @export var width: int
 @export var height: int
-var availableO2: float = 0.0
-var currentWaste: float = 0.0
-var currentNH3: float = 0.0
-var currentNO2: float = 0.0
-var currentNO3: float = 0.0
+@export var availableO2: float = 0.0
+@export var currentWaste: float = 0.0
+@export var currentNH3: float = 0.0
+@export var currentNO2: float = 0.0
+@export var currentNO3: float = 0.0
 
-var heater: bool
-var currentTemp: float
+@export var heater: bool
+@export var currentTemp: float
 
 var maxO2: float
-var fish = []
-var food = []
+var fish: Array[Fish] = []
+var food: Array[Food] = []
 var plants = []
+var filters: Array[Filter] = []
 
+func add_fish(myFish: Fish):
+	fish.append(myFish)
+	
 func request_o2(requestedO2 :float) -> float:
 	var returnValue = remove(requestedO2, availableO2)
 	availableO2 = returnValue.y

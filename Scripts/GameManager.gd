@@ -8,8 +8,9 @@ const CHUNK_HEIGHT: int = 128
 const CHUNK_WIDTH: int = 320
 const GRAVITY: int = 200
 const MAXO2MULTIPLIER: int = 2
+const SAVE_FILE = "user://save_file.tres"
 
-var stats
+var debug
 var currentState = State.Play
 var currentLevelWidth: int = 2400
 var currentLevelHeight: int = 1280
@@ -23,6 +24,7 @@ var nh3HealthThreshold: float = 40.0
 # infectionEnergy amount of energy to increase health by 1
 var infectionEnergy: float = 0.2
 var waterFriction: float = 0.3
+
 var currentTankData: TankData
 
 # Resources
@@ -37,7 +39,7 @@ var currentCameraTarget
 	
 
 func set_debug_overlay(debugOverlay):
-	stats = debugOverlay
+	debug = debugOverlay
 
 func set_current_level(tankData : TankData):
 	currentTankData = tankData
@@ -47,6 +49,11 @@ func set_current_level(tankData : TankData):
 	print("setting height: " + str(currentLevelHeight))
 	print("setting width: " + str(currentLevelWidth))
 	print("setting MaxO2:" + str(tankData.maxO2))
+
+func new_fish_resource():
+	var myFishRes = Fish.new(true, 95.0, 1.0)
+	currentTankData.add_fish(myFishRes)
+	return myFishRes
 
 func set_fish(myFish: Fish):
 	currentFish = myFish

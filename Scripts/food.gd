@@ -11,7 +11,6 @@ var sinkTimer: Timer
 var rotTimer: Timer
 
 var sinking: bool = false
-var finder: Fish = null
 var move_direction : Vector2 = Vector2.ZERO
 
 
@@ -69,3 +68,9 @@ func _on_rot_timer_timeout():
 func _on_body_entered(body):
 	if (body.has_method("eat_food")):
 		body.eat_food(self)
+
+func save():
+	var save_data = {
+		
+	}
+	return save_data

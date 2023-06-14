@@ -1,28 +1,45 @@
-extends Node2D
+extends Resource
 class_name Stomach
 # This receives Carbs, Protein and Fat and turns it into available energy
 # The process also creates waste products of undigested inputs
 # food stored in the stomach takes a while to process, so we have a capacity
-
-# capacity of this stomach
-@export var capacity: float = 10.0
-# percentage of full capacity processed per second
-@export var processingSpeed: float = 0.03
-# percentage of size that is waste
-@export var processingEfficiency: float = 0.60
-
 const carbEnergy: float = 1.0
 const fatEnergy: float = 3.0
 const proteinEnergy: float = 1.0
 
-var storedFood:= []
-var storedWaste: float = 0.0
-var storedNH3: float = 0.0
-var storedEnergy: float = 18.0
+# capacity of this stomach
+@export var capacity: float
+# percentage of full capacity processed per second
+@export var processingSpeed: float
+# percentage of size that is waste
+@export var processingEfficiency: float
 
-func _ready():
-	GameManager.stats.add_property(self, "storedWaste", "round")
-	GameManager.stats.add_property(self, "storedNH3", "round")
+@export var storedFood: Array[Nutrition]
+@export var storedWaste: float
+@export var storedNH3: float
+@export var storedEnergy: float
+
+
+func save():
+	var save_dict = {
+		"capacity": capacity,
+		"processingSpeed": processingSpeed,
+		"processingEfficiency": processingEfficiency,
+		"storedFood": storedFood,
+		"storedWaste": storedWaste,
+		"storedNH3": storedNH3,
+		"storedEnergy": storedEnergy
+		}
+	return save_dict
+
+func _init(p_capacity = 10.0, p_processingSpeed = 0.03, p_processingEfficiency = 0.60):
+	capacity = p_capacity
+	processingSpeed = p_processingSpeed
+	processingEfficiency = p_processingEfficiency
+	storedFood = []
+	storedWaste = 0.0
+	storedNH3 = 0.0
+	storedEnergy = 18.0
 
 func _process(delta: float) -> void:
 	process_food(delta)

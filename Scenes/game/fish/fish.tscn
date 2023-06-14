@@ -2,8 +2,15 @@
 
 [ext_resource type="Script" path="res://Scripts/fish.gd" id="1_3b5rb"]
 [ext_resource type="Texture2D" uid="uid://tyus3e1vdqvx" path="res://art/fish_2.png" id="2_28141"]
-[ext_resource type="Script" path="res://Scripts/stomach.gd" id="3_38pa7"]
-[ext_resource type="Script" path="res://Scripts/Lung.gd" id="4_e1msl"]
+[ext_resource type="Script" path="res://Resources/Fish.gd" id="2_njv17"]
+
+[sub_resource type="Resource" id="Resource_rn7cc"]
+resource_local_to_scene = true
+script = ExtResource("2_njv17")
+id = 0
+isMale = false
+currentHealth = 0.0
+fishSize = 0.0
 
 [sub_resource type="Animation" id="Animation_mxa7c"]
 length = 0.001
@@ -105,6 +112,7 @@ height = 70.0
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_3b5rb")
+stats = SubResource("Resource_rn7cc")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -124,12 +132,6 @@ rotation = 1.5708
 shape = SubResource("CapsuleShape2D_0hl1j")
 
 [node name="IdleTimer" type="Timer" parent="."]
-
-[node name="Stomach" type="Node2D" parent="."]
-script = ExtResource("3_38pa7")
-
-[node name="Lung" type="Node2D" parent="."]
-script = ExtResource("4_e1msl")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

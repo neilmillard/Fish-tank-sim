@@ -70,7 +70,7 @@ func spawn_fish():
 							randf_range(50, 300)))
 
 func spawn_obj(obj : PackedScene, where : Vector2):
-	var myObject := obj.instantiate()
+	var myObject = obj.instantiate()
 	get_tree().root.add_child(myObject)
 	myObject.position = where
 	

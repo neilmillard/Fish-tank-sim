@@ -63,11 +63,9 @@ func update_fish_display():
 	if GameManager.currentFish != null:
 		$Control/FishStateContainer/HungerLabel/HungerValue.text = str(floor(GameManager.currentFish.myStomach.get_amount_food_stored()))
 		$Control/FishStateContainer/EnergyLabel/EnergyValue.text = str(floor(GameManager.currentFish.myStomach.get_stored_energy()))
-		$Control/FishStateContainer/ActionLabel/ActionValue.text = GameManager.currentFish.fishState
 	else:
 		$Control/FishStateContainer/HungerLabel/HungerValue.text = ""
 		$Control/FishStateContainer/EnergyLabel/EnergyValue.text = ""
-		$Control/FishStateContainer/ActionLabel/ActionValue.text = ""
 
 func _on_flake_food_button_button_down():
 	if GameManager.flakeFood > 0:

@@ -7,7 +7,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jrsht"]
 size = Vector2(8, 4)
 
-[node name="flakeFood" type="Area2D" node_paths=PackedStringArray("nutritionValue") groups=["food"]]
+[node name="flakeFood" type="Area2D" node_paths=PackedStringArray("nutritionValue") groups=["Persist", "food"]]
 collision_layer = 4
 collision_mask = 11
 script = ExtResource("1_5su1c")
