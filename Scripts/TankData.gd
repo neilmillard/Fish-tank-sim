@@ -13,14 +13,23 @@ extends Resource
 @export var currentTemp: float
 
 var maxO2: float
-var fish: Array[Fish] = []
-var food: Array[Food] = []
-var plants = []
-var filters: Array[Filter] = []
+@export var fish := {}
+@export var food := {}
+@export var plants := {}
+@export var filters := {}
 
-func add_fish(myFish: Fish):
-	fish.append(myFish)
-	
+func add_fish(myFish: Fish) -> void:
+	fish[myFish.id] = myFish
+
+func remove_fish(myFish: Fish) -> void:
+	fish.erase(myFish.id)
+
+func add_food(myFood: Food) -> void:
+	food[myFood.id] = myFood
+
+func remove_food(myFood: Food) -> void:
+	food.erase(myFood.id)
+
 func request_o2(requestedO2 :float) -> float:
 	var returnValue = remove(requestedO2, availableO2)
 	availableO2 = returnValue.y

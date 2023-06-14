@@ -3,11 +3,13 @@ extends Resource
 
 # Fish management
 @export var id: int
+@export var type: String
 @export var isMale: bool
 @export var currentHealth: float
 @export var fishSize: float
 @export var myLung: Lung
 @export var myStomach: Stomach
+@export var globalPosition: Vector2
 
 func _init(p_isMale = true, p_currentHealth = 95.0, p_fishSize = 1.0):
 	id = randi() % 1000000

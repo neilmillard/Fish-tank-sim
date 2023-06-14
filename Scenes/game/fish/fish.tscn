@@ -1,16 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://x880ou1fdnop"]
+[gd_scene load_steps=8 format=3 uid="uid://x880ou1fdnop"]
 
 [ext_resource type="Script" path="res://Scripts/fish.gd" id="1_3b5rb"]
 [ext_resource type="Texture2D" uid="uid://tyus3e1vdqvx" path="res://art/fish_2.png" id="2_28141"]
-[ext_resource type="Script" path="res://Resources/Fish.gd" id="2_njv17"]
-
-[sub_resource type="Resource" id="Resource_rn7cc"]
-resource_local_to_scene = true
-script = ExtResource("2_njv17")
-id = 0
-isMale = false
-currentHealth = 0.0
-fishSize = 0.0
 
 [sub_resource type="Animation" id="Animation_mxa7c"]
 length = 0.001
@@ -112,7 +103,7 @@ height = 70.0
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_3b5rb")
-stats = SubResource("Resource_rn7cc")
+type = "OrangeFish"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1

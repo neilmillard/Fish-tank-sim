@@ -1,7 +1,8 @@
 extends Area2D
-class_name Food
 
 @export var nutritionValue: Nutrition
+@export var stats: Food
+@export var type: String
 @export var doesFloat: bool = true
 @export var sinkTime: float = 50
 @export var move_speed : float = 10
@@ -10,13 +11,11 @@ class_name Food
 var sinkTimer: Timer
 var rotTimer: Timer
 
-var sinking: bool = false
-var move_direction : Vector2 = Vector2.ZERO
-
-
-
 func _ready():
-	if !sinking && doesFloat:
+	if !stats:
+		stats = GameManager.new_food_resource()
+	stats.type = type
+	if !stats.sinking && doesFloat:
 		add_sink_timer()
 	else:
 		start_sink()
@@ -24,11 +23,12 @@ func _ready():
 	add_rot_timer()
 
 func _physics_process(delta):
-	if sinking:
+	if stats.sinking:
 		# Move and Slide function uses velocity of character body to move character on map
-		position += move_direction * move_speed * delta
+		position += stats.move_direction * move_speed * delta
 		if position.y > GameManager.currentLevelHeight - GameManager.floorHeight:
-			move_direction = Vector2.ZERO
+			stats.move_direction = Vector2.ZERO
+		stats.globalPosition = global_position
 
 func add_rot_timer():
 	rotTimer = Timer.new()
@@ -50,14 +50,15 @@ func add_sink_timer():
 	
 func eat():
 	queue_free()
+	GameManager.remove_food_resource(stats)
 	return nutritionValue.duplicate()
 	
 func start_sink():
-	sinking = true
-	move_direction = Vector2.DOWN
+	stats.sinking = true
+	stats.move_direction = Vector2.DOWN
 	
 func _on_sink_timer_timeout():
-	if !sinking:
+	if !stats.sinking:
 		start_sink()
 
 func _on_rot_timer_timeout():

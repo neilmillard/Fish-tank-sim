@@ -7,7 +7,7 @@ class_name UnderwaterPrecedural
 
 @onready var chunk_layers = get_children()
 
-var tank_data : TankData
+@export var tank_data : TankData
 
 func _ready():
 	tank_data = load("res://Resources/default_tank.tres")
@@ -36,28 +36,18 @@ func _on_load_tank_button_pressed():
 	load_data()
 	pass # Replace with function body.
 
-func save_data():
-	var file = FileAccess.open(GameManager.SAVE_FILE, FileAccess.WRITE)
-	var save_nodes = get_tree().get_nodes_in_group("Persist")
-	for node in save_nodes:
-		# Check the node is an instanced scene so it can be instanced again during load.
-		if node.scene_file_path.is_empty():
-			print("persistent node '%s' is not an instanced scene, skipped" % node.name)
-			continue
+static func save_exists() -> bool:
+	return ResourceLoader.exists(GameManager.get_save_path())
 
-		# Check the node has a save function.
-		if !node.has_method("save"):
-			print("persistent node '%s' is missing a save() function, skipped" % node.name)
-			continue
-
-		# Call the node's save function.
-		# var node_data = node.call("save")
-
+func save_data() -> void:
+	ResourceSaver.save(tank_data, GameManager.get_save_path())
+#	var file = FileAccess.open(GameManager.SAVE_FILE, FileAccess.WRITE)
+	
 		# JSON provides a static method to serialized JSON string.
 		# var json_string = JSON.stringify(node_data)
 		# file.store_line(json_string)
-		file.store_var(node, true)
-	file.close()
+#	file.store_var(tank_data, true)
+#	file.close()
 
 func load_data():
 	if not FileAccess.file_exists(GameManager.SAVE_FILE):
@@ -102,3 +92,4 @@ func load_data():
 		#	if i == "filename" or i == "parent" or i == "pos_x" or i == "pos_y":
 		#		continue
 		#	new_object.set(i, node_data[i])
+

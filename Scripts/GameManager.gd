@@ -8,7 +8,7 @@ const CHUNK_HEIGHT: int = 128
 const CHUNK_WIDTH: int = 320
 const GRAVITY: int = 200
 const MAXO2MULTIPLIER: int = 2
-const SAVE_FILE = "user://save_file.tres"
+const SAVE_GAME_BASE_PATH = "user://save_file"
 
 var debug
 var currentState = State.Play
@@ -55,6 +55,14 @@ func new_fish_resource():
 	currentTankData.add_fish(myFishRes)
 	return myFishRes
 
+func new_food_resource():
+	var myFoodRes = Food.new()
+	currentTankData.add_food(myFoodRes)
+	return myFoodRes
+
+func remove_food_resource(myFood: Food) -> void:
+	currentTankData.remove_food(myFood)
+	
 func set_fish(myFish: Fish):
 	currentFish = myFish
 	
@@ -72,3 +80,9 @@ func spawn_food(nutrition: Nutrition):
 
 func spawn_dead_fish():
 	pass
+
+# This function allows us to save and load a text resource in debug builds and a
+# binary resource in the released product.
+static func get_save_path() -> String:
+	var extension := ".tres" if OS.is_debug_build() else ".res"
+	return GameManager.SAVE_GAME_BASE_PATH + extension

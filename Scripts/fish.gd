@@ -18,8 +18,11 @@ enum FishStates {
 }
 
 @export var stats: Fish
+@export var myStomach: Stomach
+@export var myLung: Lung
 
 # This fish scene stats
+@export var type: String = "Generic"
 @export var swimSpeed: int = 60
 @export var fleeSpeed: int = 100
 @export var rotationSpeed = 40.0
@@ -28,12 +31,8 @@ enum FishStates {
 @export var idleFoodDistanceThreshold: float = 400
 
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
-@onready var myStomach: Stomach = stats.myStomach
-@onready var myLung: Lung = stats.myLung
 @onready var navagent: NavigationAgent2D = $NavigationAgent
 @onready var idle_timer = $IdleTimer
-
-
 var fishFaceRight: bool
 var fishState: String = ""
 var currentState: FishStates
@@ -50,16 +49,16 @@ var _timer = null
 func _ready():
 	if !stats:
 		stats = GameManager.new_fish_resource()
-	print(stats)
+	stats.type = type
+	myStomach = stats.myStomach
+	myLung = stats.myLung
 	# set so we get collision events from mouse
 	input_pickable = true
 	currentSwimspeed = swimSpeed
+	fishFaceRight = true
+	animationPlayer.play("SwimRight")
 	start_idle_timer(true)
 	add_debug_timer()
-	GameManager.debug.add_property(self, "currentHealth", "round")
-	GameManager.debug.add_property(self, "nearestFoodPosition", "")
-	GameManager.debug.add_property(self, "currentSwimspeed", "round")
-	GameManager.debug.add_property(self, "velocity", "")
 
 func _process(delta):
 	# delta is in seconds
@@ -132,6 +131,7 @@ func calculate_movement(delta):
 	
 	# collide with walls and eat food
 	var collision = move_and_collide(velocity * delta)
+	stats.globalPosition = global_position
 	if collision:
 		if collision.get_collider().has_method("eat"):
 			eat_food(collision.get_collider())
@@ -300,7 +300,7 @@ func reset_food_finder():
 	if idleTimerRunning == false:
 		change_fish_state(FishStates.Idle)
 
-func eat_food(foodObject: Food):
+func eat_food(foodObject: Node):
 	if foodObject:
 		# hunger can go negative, equiv to the fish storing food in belly
 		if myStomach.has_space_to_eat(foodObject.nutritionValue.size):

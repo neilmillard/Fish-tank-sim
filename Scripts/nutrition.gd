@@ -1,4 +1,4 @@
-extends Node2D
+extends Resource
 class_name Nutrition
 
 @export var carbs: float = 0.0
@@ -6,9 +6,9 @@ class_name Nutrition
 @export var proteins: float = 0.0
 @export var size: float = 0.0
 
-var processedCarbs: float = 0.0
-var processedFats: float = 0.0
-var processedProteins: float = 0.0
+@export var processedCarbs: float = 0.0
+@export var processedFats: float = 0.0
+@export var processedProteins: float = 0.0
 
 
 func setup(myCarbs: float, myFats: float, myProteins: float, mySize: float):

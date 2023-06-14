@@ -112,7 +112,6 @@ func process_food(delta: float) -> void:
 	else:
 		storedWaste += float(currentNutrition.size) * processingEfficiency
 		storedFood.pop_front()
-		currentNutrition.free()
 		currentNutrition = null
 		
 	storedEnergy += carbs * carbEnergy
