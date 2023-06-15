@@ -83,6 +83,6 @@ func spawn_dead_fish():
 
 # This function allows us to save and load a text resource in debug builds and a
 # binary resource in the released product.
-static func get_save_path() -> String:
+func get_save_path() -> String:
 	var extension := ".tres" if OS.is_debug_build() else ".res"
 	return GameManager.SAVE_GAME_BASE_PATH + extension
