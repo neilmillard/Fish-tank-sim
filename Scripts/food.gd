@@ -14,8 +14,11 @@ var rotTimer: Timer
 func _ready():
 	if !stats:
 		stats = GameManager.new_food_resource()
+		stats.sinkTimerDuration = sinkTime
+		stats.rotTimerDuration = rotTime
 	stats.type = type
-	if !stats.sinking && doesFloat:
+	stats.globalPosition = global_position
+	if !stats.sinking && doesFloat && position.y < 50:
 		add_sink_timer()
 	else:
 		start_sink()
@@ -29,13 +32,17 @@ func _physics_process(delta):
 		if position.y > GameManager.currentLevelHeight - GameManager.floorHeight:
 			stats.move_direction = Vector2.ZERO
 		stats.globalPosition = global_position
+	if sinkTimer && !sinkTimer.is_stopped():
+		stats.sinkTimerDuration = sinkTimer.get_time_left()
+	if rotTimer && !rotTimer.is_stopped():
+		stats.rotTimerDuration = rotTimer.get_time_left()
 
 func add_rot_timer():
 	rotTimer = Timer.new()
 	rotTimer.name = "rotTimer"
 	add_child(rotTimer)
 	rotTimer.connect("timeout", Callable(self, "_on_rot_timer_timeout"))
-	rotTimer.set_wait_time(rotTime)
+	rotTimer.set_wait_time(stats.rotTimerDuration)
 	rotTimer.set_one_shot(true)
 	rotTimer.start()
 
@@ -44,7 +51,7 @@ func add_sink_timer():
 	sinkTimer.name = "sinkTimer"
 	add_child(sinkTimer)
 	sinkTimer.connect("timeout", Callable(self, "_on_sink_timer_timeout"))
-	sinkTimer.set_wait_time(sinkTime)
+	sinkTimer.set_wait_time(stats.sinkTimerDuration)
 	sinkTimer.set_one_shot(true)
 	sinkTimer.start()
 	
@@ -69,9 +76,3 @@ func _on_rot_timer_timeout():
 func _on_body_entered(body):
 	if (body.has_method("eat_food")):
 		body.eat_food(self)
-
-func save():
-	var save_data = {
-		
-	}
-	return save_data

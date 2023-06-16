@@ -5,7 +5,13 @@ class_name MiddleWater
 # Our main concerns are the fish, plants and water quality
 
 var flakeFood : PackedScene = ResourceLoader.load("res://Scenes/game/food/flakeFood.tscn")
+var foods := {
+	'flakeFood': ResourceLoader.load("res://Scenes/game/food/flakeFood.tscn")
+}
 var fish : PackedScene = ResourceLoader.load("res://Scenes/game/fish/fish.tscn")
+var fishes := {
+	'OrangeFish': ResourceLoader.load("res://Scenes/game/fish/orangeFish.tscn")
+}
 
 
 var tank_data: TankData
@@ -28,6 +34,8 @@ func build(tank: TankData) -> void:
 		Vector2(tank_data.width, tank_data.height), 
 		GameManager.floorHeight
 		)
+	spawn_fishes(tank_data)
+	spawn_foods(tank_data)
 	
 # add a collisionshape2d at the coords with fixed width and half heigh
 func add_vertical_wall(x: float, y: float):
@@ -59,20 +67,44 @@ func build_navmesh(topLeft: Vector2, bottomRight: Vector2, floorHeight: int):
 	navRegion2D.navigation_polygon = polygon
 	add_child(navRegion2D)
 
+func spawn_fishes(tank: TankData):
+	for myFishIndex in tank.fish:
+		spawn_fish(tank.fish[myFishIndex])
+
+func spawn_foods(tank: TankData):
+	for myFoodIndex in tank.food:
+		spawn_food(tank.food[myFoodIndex])
+			
+func spawn_food(foodStats: Food):
+	var myFood = spawn_obj(foods[foodStats.type], foodStats.globalPosition)
+	myFood.stats = foodStats
 	
+
 func spawn_flakefood():
 	var spawnLocation = randf_range(100, GameManager.currentLevelWidth - 100)
 	for n in range(1, foodPinch):
 		spawn_obj(flakeFood,Vector2(spawnLocation + randi_range(-30, 30), surface))
 
-func spawn_fish():
-	spawn_obj(fish, Vector2(randf_range(50,GameManager.currentLevelWidth - 100),
-							randf_range(50, 300)))
-
-func spawn_obj(obj : PackedScene, where : Vector2):
+func spawn_fish(fishStats: Fish = null):
+	var myPosition : Vector2
+	var myFishScene : PackedScene
+	if fishStats:
+		myPosition = fishStats.globalPosition
+		myFishScene = fishes[fishStats.type]
+	else:
+		myFishScene = fish
+		myPosition = Vector2(randf_range(50,GameManager.currentLevelWidth - 100),
+							randf_range(50, 300))
+	
+	var myFish = spawn_obj(myFishScene, myPosition)
+	if fishStats:
+		myFish.stats = fishStats
+	
+func spawn_obj(obj : PackedScene, where : Vector2) -> Node2D:
 	var myObject = obj.instantiate()
-	get_tree().root.add_child(myObject)
+	get_tree().root.add_child.call_deferred(myObject)
 	myObject.position = where
+	return myObject
 	
 func calc_O2_surface_transfer(delta):
 	var newO2 = delta * GameManager.currentLevelWidth * surfaceO2TransferEfficiency

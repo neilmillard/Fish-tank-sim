@@ -10,6 +10,7 @@ var _save: SaveGame
 
 func _ready():
 	_create_or_load_save()
+	# Then we trigger the .build() functions
 	build(_save.tankData)
 	
 	
@@ -42,7 +43,7 @@ func _create_or_load_save() -> void:
 		_save = SaveGame.new()
 		var tank_data = GameManager.currentTankData
 		if !tank_data:
-			tank_data = load("res://Resources/default_tank.tres")
+			tank_data = load("res://Resources/default_tank.tres").duplicate(true)
 		_save.tankData = tank_data
 		
 		_save.write_savegame()
@@ -52,5 +53,4 @@ func _create_or_load_save() -> void:
 	# After creating or loading a save resource, we need to dispatch its data
 	# to the various nodes that need it.
 	GameManager.currentTankData = _save.tankData
-	# Then we reload the scene to trigger the .build() functions
 	
