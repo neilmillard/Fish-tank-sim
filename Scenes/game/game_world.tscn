@@ -1,0 +1,281 @@
+[gd_scene load_steps=8 format=3 uid="uid://bb2611wtuse72"]
+
+[ext_resource type="Script" path="res://Scenes/game/game_world.gd" id="1_ayi5y"]
+[ext_resource type="PackedScene" uid="uid://7pafpo7utcpp" path="res://Scenes/game/tank/underwater.tscn" id="2_yd0gd"]
+[ext_resource type="PackedScene" uid="uid://dm5rs8fx0vnle" path="res://Scenes/menu/pause/pause_menu.tscn" id="3_ru30w"]
+[ext_resource type="Texture2D" uid="uid://c7n0dkn264x0f" path="res://art/flake_1.png" id="4_j3w7t"]
+[ext_resource type="Script" path="res://Scripts/DebugStats.gd" id="5_hgqng"]
+[ext_resource type="Script" path="res://Scenes/InterfaceManager.gd" id="6_btoso"]
+[ext_resource type="LabelSettings" uid="uid://s5caed4j5v6a" path="res://Resources/new_label_settings.tres" id="7_4vf33"]
+
+[node name="Game" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_ayi5y")
+start_tank = ExtResource("2_yd0gd")
+
+[node name="Tanks" type="Node2D" parent="."]
+process_mode = 1
+
+[node name="PauseLayer" type="CanvasLayer" parent="."]
+
+[node name="PauseMenu" parent="PauseLayer" instance=ExtResource("3_ru30w")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="DebugStats" type="MarginContainer" parent="CanvasLayer"]
+offset_right = 250.0
+offset_bottom = 500.0
+script = ExtResource("5_hgqng")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/DebugStats"]
+layout_mode = 2
+
+[node name="InterfaceManager" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 586.0
+offset_right = 1150.0
+offset_bottom = 650.0
+script = ExtResource("6_btoso")
+
+[node name="Panel" type="Panel" parent="CanvasLayer/InterfaceManager"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = -0.14
+anchor_bottom = -0.14
+offset_left = -1.0
+offset_top = -8.04
+offset_right = 1150.0
+offset_bottom = 67.96
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager"]
+layout_mode = 0
+offset_left = 236.0
+offset_top = -14.0
+offset_right = 336.0
+offset_bottom = 70.0
+
+[node name="FlakeFoodButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer"]
+layout_mode = 2
+text = "Flake Food"
+
+[node name="SpawnFishButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer"]
+layout_mode = 2
+text = "Add Fish"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/InterfaceManager"]
+layout_mode = 0
+offset_left = 520.0
+offset_top = -14.0
+offset_right = 640.0
+offset_bottom = 70.0
+
+[node name="LoadTankButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer2"]
+layout_mode = 2
+text = "Load Tank"
+
+[node name="SaveTankButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer2"]
+layout_mode = 2
+text = "Save Tank"
+
+[node name="Control" type="Control" parent="CanvasLayer/InterfaceManager"]
+anchors_preset = 0
+offset_top = -5.0
+offset_right = 233.0
+offset_bottom = 47.0
+
+[node name="FishStateContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HungerLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Food:"
+label_settings = ExtResource("7_4vf33")
+
+[node name="HungerValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer/HungerLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "100"
+label_settings = ExtResource("7_4vf33")
+
+[node name="EnergyLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Energy:"
+label_settings = ExtResource("7_4vf33")
+
+[node name="EnergyValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer/EnergyLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "100"
+label_settings = ExtResource("7_4vf33")
+
+[node name="ActionLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Action:"
+label_settings = ExtResource("7_4vf33")
+
+[node name="ActionValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer/ActionLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "Idle"
+label_settings = ExtResource("7_4vf33")
+
+[node name="ResourceContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 350.0
+offset_top = -2.0
+offset_right = 277.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FlakeFoodLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/ResourceContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "FlakeFood:"
+
+[node name="FlakeFoodValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/ResourceContainer/FlakeFoodLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "100"
+
+[node name="LiveFoodLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/ResourceContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Action:"
+
+[node name="LiveFoodValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/ResourceContainer/LiveFoodLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "Idle"
+
+[node name="TankStatsContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 740.0
+offset_top = -2.0
+offset_right = 657.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TankO2Label" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Tank O2:"
+
+[node name="TankO2Value" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer/TankO2Label"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "100"
+
+[node name="BactLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Ammonia:"
+
+[node name="BactValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer/BactLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "0.0"
+
+[node name="WasteLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Waste:"
+
+[node name="WasteValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer/WasteLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "0.0"
+
+[node name="TankStatsContainer2" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 890.0
+offset_top = -17.0
+offset_right = 807.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NH3Label" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Ammonia:"
+
+[node name="NH3Value" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2/NH3Label"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "0.0"
+
+[node name="NO2Label" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "NO2:"
+
+[node name="NO2Value" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2/NO2Label"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "100"
+
+[node name="NO3Label" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "NO3:"
+
+[node name="NO3Value" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2/NO3Label"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "0.0"
+
+[node name="Camera_Focus" type="Node2D" parent="."]
+position = Vector2(575, 322)
+
+[node name="Camera2D" type="Camera2D" parent="Camera_Focus"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Camera_Focus"]
+visible = false
+rotation = 1.68075
+texture = ExtResource("4_j3w7t")
+
+[connection signal="button_down" from="CanvasLayer/InterfaceManager/VBoxContainer/FlakeFoodButton" to="CanvasLayer/InterfaceManager" method="_on_flake_food_button_button_down"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/VBoxContainer/SpawnFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_fish_button_button_up"]

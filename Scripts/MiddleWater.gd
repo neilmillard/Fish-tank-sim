@@ -20,6 +20,9 @@ var surface: float = 29.0
 var foodPinch: int = 4
 var wallsWidth: float = 60.0
 
+func _ready():
+	GameManager.connect("spawn_new", _on_spawn_new_object)
+
 func _process(delta):
 	calc_O2_surface_transfer(delta)
 	pass
@@ -67,6 +70,19 @@ func build_navmesh(topLeft: Vector2, bottomRight: Vector2, floorHeight: int):
 	navRegion2D.navigation_polygon = polygon
 	add_child(navRegion2D)
 
+
+func _on_spawn_new_object(objectName: String):
+	if objectName == "flakeFood":
+		spawn_flakefood()
+		return
+	
+	if objectName == "orangeFish":
+		spawn_fish()
+		return
+	
+	print("Error: ObjectName not defined " + objectName)
+		
+	
 func spawn_fishes(tank: TankData):
 	for myFishIndex in tank.fish:
 		spawn_fish(tank.fish[myFishIndex])

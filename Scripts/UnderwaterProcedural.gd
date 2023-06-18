@@ -1,10 +1,9 @@
 extends Node2D
 class_name UnderwaterPrecedural
 
-
-@export var flakeFood: Food
 # We always keep a reference to the SaveGame resource here to prevent it from unloading.
 var _save: SaveGame
+var middleWater: MiddleWater
 
 @onready var chunk_layers = get_children()
 
@@ -12,6 +11,7 @@ func _ready():
 	_create_or_load_save()
 	# Then we trigger the .build() functions
 	build(_save.tankData)
+	GameManager.connect("save_button_pressed", _on_save_tank_button_pressed)
 	
 	
 func build(tank: TankData) -> void:
@@ -22,6 +22,10 @@ func build(tank: TankData) -> void:
 			layer.build(tank)
 		else:
 			print("layer " + str(layer.get_path()) + " has no build method")
+		
+		# Find the middle layer, for spawning fish and food buttons
+		if layer.has_method("spawn_obj"):
+			middleWater = layer
 
 
 func _on_save_tank_button_pressed():
@@ -29,10 +33,6 @@ func _on_save_tank_button_pressed():
 	_save.tankData = GameManager.currentTankData
 	_save.write_savegame()
 
-
-func _on_load_tank_button_pressed():
-	print("Load Tank")
-	_create_or_load_save()
 
 func _create_or_load_save() -> void:
 	if SaveGame.save_exists():

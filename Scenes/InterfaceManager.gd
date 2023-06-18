@@ -1,7 +1,7 @@
 extends Control
 
 const CAMERA_SPEED = 200
-@onready var middleWater: MiddleWater = $"../../MiddleWater"
+
 @onready var camera_focus = $"../../Camera_Focus"
 @onready var camera = $"../../Camera_Focus/Camera2D"
 
@@ -11,7 +11,11 @@ var cam_velocity: Vector2
 
 func _ready():
 	pass
-	
+
+func _input(event):
+	if event.is_action_pressed("ui_pause"):
+		GameManager.trigger_game_paused()
+
 func _process(delta):
 	check_camera_moves(delta)
 	update_inventory_display()
@@ -70,10 +74,10 @@ func update_fish_display():
 func _on_flake_food_button_button_down():
 	if GameManager.flakeFood > 0:
 		GameManager.flakeFood -= 1
-		middleWater.spawn_flakefood()
+		GameManager.spawn_new_object("flakeFood")
 		
 
 
 func _on_spawn_fish_button_button_up():
-	middleWater.spawn_fish()
+	GameManager.spawn_new_object("orangeFish")
 	

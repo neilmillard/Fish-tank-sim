@@ -4,6 +4,12 @@ enum State {
 	Play,
 }
 
+signal spawn_new(objectName: String)
+signal toggle_game_paused(is_paused: bool)
+signal save_button_pressed()
+signal load_button_pressed()
+
+
 const CHUNK_HEIGHT: int = 128
 const CHUNK_WIDTH: int = 320
 const GRAVITY: int = 200
@@ -37,7 +43,24 @@ var credits := 10
 var currentFish : Fish
 var currentCameraTarget
 	
+var gamePaused: bool = false:
+	get:
+		return gamePaused
+	set(value):
+		gamePaused = value
+		get_tree().paused = gamePaused
+		emit_signal("toggle_game_paused", gamePaused)
 
+
+func trigger_game_paused():
+	gamePaused = !gamePaused
+
+func save_button():
+	emit_signal("save_button_pressed")
+
+func load_button():
+	emit_signal("load_button_pressed")
+	
 func set_debug_overlay(debugOverlay):
 	debug = debugOverlay
 
@@ -74,6 +97,9 @@ func request_o2(requested :float) -> float:
 
 func charge_o2(amountO2: float):
 	currentTankData.charge_o2(amountO2)
+
+func spawn_new_object(objectName: String):
+	emit_signal("spawn_new", objectName)
 
 func spawn_food(nutrition: Nutrition):
 	pass
