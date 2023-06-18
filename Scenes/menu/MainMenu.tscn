@@ -79,6 +79,23 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_tq78x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ng1xh")
 text = "New Game"
 
+[node name="MarginContainer4" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 50
+
+[node name="LoadGameButton" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer/MarginContainer4"]
+layout_mode = 2
+focus_mode = 0
+theme_override_fonts/font = ExtResource("1_5nykb")
+theme_override_font_sizes/font_size = 75
+theme_override_styles/normal = SubResource("StyleBoxFlat_x6o1d")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tq78x")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ng1xh")
+text = "Load Game"
+
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -112,5 +129,6 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ng1xh")
 text = "Exit to Desktop"
 
 [connection signal="button_up" from="MarginContainer/VBoxContainer/VBoxContainer/MarginContainer/NewGameButton" to="." method="_on_new_game_button_button_up"]
+[connection signal="button_up" from="MarginContainer/VBoxContainer/VBoxContainer/MarginContainer4/LoadGameButton" to="." method="_on_load_game_button_button_up"]
 [connection signal="button_up" from="MarginContainer/VBoxContainer/VBoxContainer/MarginContainer2/OptionsButton" to="." method="_on_options_button_button_up"]
 [connection signal="button_up" from="MarginContainer/VBoxContainer/VBoxContainer/MarginContainer3/ExitButton" to="." method="_on_exit_button_button_up"]

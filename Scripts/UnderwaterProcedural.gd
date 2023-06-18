@@ -29,17 +29,14 @@ func build(tank: TankData) -> void:
 
 
 func _on_save_tank_button_pressed():
-	print("Save Tank")
 	_save.tankData = GameManager.currentTankData
 	_save.write_savegame()
 
 
 func _create_or_load_save() -> void:
 	if SaveGame.save_exists():
-		print("loading savegame")
 		_save = SaveGame.load_savegame()
 	else:
-		print("creating savegame")
 		_save = SaveGame.new()
 		var tank_data = GameManager.currentTankData
 		if !tank_data:
@@ -53,4 +50,5 @@ func _create_or_load_save() -> void:
 	# After creating or loading a save resource, we need to dispatch its data
 	# to the various nodes that need it.
 	GameManager.currentTankData = _save.tankData
+	
 	

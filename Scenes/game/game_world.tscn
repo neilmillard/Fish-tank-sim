@@ -64,21 +64,6 @@ text = "Flake Food"
 layout_mode = 2
 text = "Add Fish"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/InterfaceManager"]
-layout_mode = 0
-offset_left = 520.0
-offset_top = -14.0
-offset_right = 640.0
-offset_bottom = 70.0
-
-[node name="LoadTankButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer2"]
-layout_mode = 2
-text = "Load Tank"
-
-[node name="SaveTankButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer2"]
-layout_mode = 2
-text = "Save Tank"
-
 [node name="Control" type="Control" parent="CanvasLayer/InterfaceManager"]
 anchors_preset = 0
 offset_top = -5.0

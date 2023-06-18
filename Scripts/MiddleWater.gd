@@ -118,7 +118,7 @@ func spawn_fish(fishStats: Fish = null):
 	
 func spawn_obj(obj : PackedScene, where : Vector2) -> Node2D:
 	var myObject = obj.instantiate()
-	get_tree().root.add_child.call_deferred(myObject)
+	add_child.call_deferred(myObject)
 	myObject.position = where
 	return myObject
 	

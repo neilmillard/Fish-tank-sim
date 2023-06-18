@@ -112,3 +112,12 @@ func spawn_dead_fish():
 func get_save_path() -> String:
 	var extension := ".tres" if OS.is_debug_build() else ".res"
 	return GameManager.SAVE_GAME_BASE_PATH + extension
+
+func move_save_file():
+	var save_path := GameManager.get_save_path()
+	var backup_path : = save_path + ".bak"
+	if ResourceLoader.exists(backup_path):
+		DirAccess.remove_absolute(backup_path)
+
+	DirAccess.rename_absolute(save_path, backup_path)
+	
