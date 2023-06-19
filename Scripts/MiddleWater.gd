@@ -108,7 +108,7 @@ func spawn_fish(fishStats: Fish = null):
 		myPosition = fishStats.globalPosition
 		myFishScene = fishes[fishStats.type]
 	else:
-		myFishScene = fish
+		myFishScene = fishes["OrangeFish"]
 		myPosition = Vector2(randf_range(50,GameManager.currentLevelWidth - 100),
 							randf_range(50, 300))
 	

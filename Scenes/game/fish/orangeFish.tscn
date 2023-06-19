@@ -1,7 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://b88jjw4ckuhox"]
+[gd_scene load_steps=15 format=3 uid="uid://d2ningsghemxy"]
 
-[ext_resource type="Script" path="res://Scripts/fish.gd" id="1_ppmwa"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_body.gd" id="1_ppmwa"]
 [ext_resource type="Texture2D" uid="uid://tyus3e1vdqvx" path="res://art/fish_2.png" id="2_8njcv"]
+[ext_resource type="Script" path="res://Scenes/game/state_machine/state_machine.gd" id="3_agckn"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_idle.gd" id="4_3jhfx"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_swimming.gd" id="5_ermfm"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_fleeing.gd" id="6_7a1jn"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_feeding.gd" id="7_aycnk"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_hunting.gd" id="8_5bppq"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_mating.gd" id="9_vu25s"]
 
 [sub_resource type="Animation" id="Animation_mxa7c"]
 length = 0.001
@@ -123,6 +130,35 @@ rotation = 1.5708
 shape = SubResource("CapsuleShape2D_0hl1j")
 
 [node name="IdleTimer" type="Timer" parent="."]
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
+script = ExtResource("3_agckn")
+initialState = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("4_3jhfx")
+
+[node name="Swimming" type="Node" parent="StateMachine"]
+script = ExtResource("5_ermfm")
+
+[node name="Fleeing" type="Node" parent="StateMachine"]
+script = ExtResource("6_7a1jn")
+
+[node name="Feeding" type="Node" parent="StateMachine"]
+script = ExtResource("7_aycnk")
+
+[node name="Hunting" type="Node" parent="StateMachine"]
+script = ExtResource("8_5bppq")
+
+[node name="Mating" type="Node" parent="StateMachine"]
+script = ExtResource("9_vu25s")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -19.0
+offset_top = 22.0
+offset_right = 21.0
+offset_bottom = 48.0
+text = "State"
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
