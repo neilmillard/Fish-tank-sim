@@ -47,6 +47,10 @@ var direction: Vector2
 var oldVelocity: Vector2
 var swimTime: float
 var idleTime: float
+var avoidUp: int
+var avoidDown: int
+var avoidLeft: int
+var avoidRight: int
 
 var _timer = null
 
@@ -81,6 +85,64 @@ func _physics_process(delta):
 func _on_debug_timeout():
 	pass
 
+func is_foe(result) -> bool:
+	return result.collider.collision_layer && result.collider.collision_layer != 1
+
+func is_wall(result) -> bool:
+	return result.collider.collision_layer && result.collider.collision_layer == 1
+
+func check_raycast_result(result, new_result) -> Dictionary:
+	new_result = {
+		'move': 1,
+	}
+	if result:
+		result['move'] = 0
+		if result.collider:
+			if is_foe(result):
+				new_result['flee'] = true
+			if is_wall(result):
+				new_result['wall'] = true
+	return new_result
+
+# throw out some rays so fish can tell what is around it.
+# we populate the allowed directions
+# flee is true if we should flee, otherwise flee is false
+# flee should only be true for fish same size or bigger
+# flee should not be true for walls
+func check_environment()-> String:
+	var rayLength = 50.0 * stats.fishSize
+	var result
+	var check_result
+	
+	result = shoot_physics_ray(Vector2.UP * rayLength)
+	check_result = check_raycast_result(result,{})
+	avoidUp = check_result['move'] * -1
+	
+	result = shoot_physics_ray(Vector2.DOWN * rayLength)
+	check_result = check_raycast_result(result,check_result)
+	avoidDown = check_result['move']
+		
+	result = shoot_physics_ray(Vector2.RIGHT * rayLength)
+	check_result = check_raycast_result(result,check_result)
+	avoidRight = check_result['move']
+		
+	result = shoot_physics_ray(Vector2.LEFT * rayLength)
+	check_result = check_raycast_result(result,check_result)
+	avoidLeft = check_result['move'] * -1
+	
+	if check_result.has('flee'):
+		return 'flee'
+	if check_result.has('wall'):
+		return 'wall'
+	
+	return ''
+
+func shoot_physics_ray(direction: Vector2) -> Dictionary:
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsRayQueryParameters2D.create(global_position, global_position + direction)
+	query.exclude = [self]
+	return space_state.intersect_ray(query)
+	
 func process_lung(delta: float) -> void:
 	myLung._process(delta)
 

@@ -154,6 +154,7 @@ script = ExtResource("8_5bppq")
 script = ExtResource("9_vu25s")
 
 [node name="Label" type="Label" parent="."]
+visible = false
 offset_left = -19.0
 offset_top = 22.0
 offset_right = 21.0

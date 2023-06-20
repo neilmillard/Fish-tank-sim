@@ -15,6 +15,12 @@ func update(_delta: float) -> void:
 		emit_signal("Transitioned", "Hunting", "Feeding")
 		
 func physics_update(delta: float) -> void:
+	var detection = fishBody.check_environment()
+	if detection == 'flee':
+		emit_signal("Transitioned", "Hunting", "Fleeing")
+	if detection == 'wall':
+		emit_signal("Transitioned", "Hunting", "Swimming", {"direction" = Vector2.ZERO})
+		
 	fishBody.rotate_to_direction(Vector2(fishBody.velocity.x, 0.0), delta)
 
 func on_idle_timer_timeout():

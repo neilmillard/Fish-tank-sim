@@ -29,7 +29,7 @@ func _process(delta):
 		
 func check_camera_moves(delta: float):
 	if GameManager.currentCameraTarget:
-		camera_focus.position = GameManager.currentCameraTarget.position
+		camera_focus.position = GameManager.currentCameraTarget.globalPosition
 	else:
 		var directionx = Input.get_axis("ui_left", "ui_right")
 		if directionx:

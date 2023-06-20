@@ -9,7 +9,10 @@ func enter(_msg:={}):
 	
 func physics_update(_delta: float) -> void:
 	if direction == Vector2.ZERO:
-		direction = Vector2(randi_range(-1,1),randi_range(-1,1))
+		direction = Vector2(
+			randi_range(fishBody.avoidLeft,fishBody.avoidRight),
+			randi_range(fishBody.avoidUp,fishBody.avoidDown)
+			)
 	fishBody.direction = direction
 	fishBody.velocity = fishBody.direction.normalized() * fishBody.currentSwimspeed
 	emit_signal("Transitioned", "Swimming", "Idle")
