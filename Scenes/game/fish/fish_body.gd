@@ -7,17 +7,6 @@ enum FeedLevel {
 	Bottom,
 }
 
-# State, Eating, pooing, water levels, reproduction, movement, health
-enum FishStates {
-#	Sleeping,
-	Idle,
-	Swimming,
-	Feeding,
-	Hunting,
-	Mating,
-	Fleeing,
-}
-
 @export var stats: Fish
 @export var myStomach: Stomach
 @export var myLung: Lung
@@ -39,7 +28,6 @@ enum FishStates {
 @onready var idle_timer = $IdleTimer
 var fishFaceRight: bool
 var fishState: String = ""
-var currentState: FishStates
 var currentSwimspeed: float
 var nearestFoodPosition: Vector2
 var idleTimerRunning: bool = false
@@ -47,13 +35,14 @@ var direction: Vector2
 var oldVelocity: Vector2
 var swimTime: float
 var idleTime: float
-var avoidUp: int
-var avoidDown: int
-var avoidLeft: int
-var avoidRight: int
+var avoidUp: int = -1
+var avoidDown: int = -1
+var avoidLeft: int = -1
+var avoidRight: int = -1
 
 var _timer = null
-
+var debug := true
+var debugLines = []
 
 func _ready():
 	if !stats:
@@ -66,6 +55,7 @@ func _ready():
 	currentSwimspeed = swimSpeed
 	fishFaceRight = true
 	animationPlayer.play("SwimRight")
+	start_idle_timer(true)
 	add_debug_timer()
 
 func _process(delta):
@@ -81,7 +71,13 @@ func _process(delta):
 func _physics_process(delta):
 	calculate_movement(delta)
 	update_animation()
-	
+
+# Only run once per frame if queue_redraw() is called
+func _draw():
+	var col = Color(0, 255, 0, 0.2)
+	for line in debugLines:
+		draw_line(line[0] - global_position, line[1] - global_position, col, 1)
+
 func _on_debug_timeout():
 	pass
 
@@ -113,7 +109,8 @@ func check_environment()-> String:
 	var rayLength = 50.0 * stats.fishSize
 	var result
 	var check_result
-	
+	if debug:
+		debugLines = []
 	result = shoot_physics_ray(Vector2.UP * rayLength)
 	check_result = check_raycast_result(result,{})
 	avoidUp = check_result['move'] * -1
@@ -139,6 +136,9 @@ func check_environment()-> String:
 
 func shoot_physics_ray(direction: Vector2) -> Dictionary:
 	var space_state = get_world_2d().direct_space_state
+	if debug:
+		queue_redraw()
+		debugLines.append([global_position, global_position + direction])
 	var query = PhysicsRayQueryParameters2D.create(global_position, global_position + direction)
 	query.exclude = [self]
 	return space_state.intersect_ray(query)
