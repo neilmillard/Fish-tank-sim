@@ -74,13 +74,19 @@ func _physics_process(delta):
 
 # Only run once per frame if queue_redraw() is called
 func _draw():
-	var col = Color(0, 255, 0, 0.2)
+	var col
 	for line in debugLines:
+		col = Color(255, 0, 0, 0.6) if line[2] else Color(0, 255, 0, 0.2)
 		draw_line(line[0] - global_position, line[1] - global_position, col, 1)
 
 func _on_debug_timeout():
 	pass
 
+func get_safe_direction():
+	return Vector2(
+			randi_range(avoidLeft,avoidRight),
+			randi_range(avoidUp,avoidDown)
+			)
 func is_foe(result) -> bool:
 	return result.collider.collision_layer && result.collider.collision_layer != 1
 
@@ -92,7 +98,7 @@ func check_raycast_result(result, new_result) -> Dictionary:
 		'move': 1,
 	}
 	if result:
-		result['move'] = 0
+		new_result['move'] = 0
 		if result.collider:
 			if is_foe(result):
 				new_result['flee'] = true
@@ -101,7 +107,7 @@ func check_raycast_result(result, new_result) -> Dictionary:
 	return new_result
 
 # throw out some rays so fish can tell what is around it.
-# we populate the allowed directions
+# we populate the allowed directions used by 
 # flee is true if we should flee, otherwise flee is false
 # flee should only be true for fish same size or bigger
 # flee should not be true for walls
@@ -109,23 +115,78 @@ func check_environment()-> String:
 	var rayLength = 50.0 * stats.fishSize
 	var result
 	var check_result
+	var result_vectors = []
 	if debug:
 		debugLines = []
+		
+	avoidUp = -1
+	avoidRight = 1
+	avoidDown = 1
+	avoidLeft = -1
+	
 	result = shoot_physics_ray(Vector2.UP * rayLength)
 	check_result = check_raycast_result(result,{})
-	avoidUp = check_result['move'] * -1
+	if check_result['move'] == 0:
+		result_vectors.append(0)
+	
+	# Right Up
+	result = shoot_physics_ray(Vector2(1, -1) * rayLength * 1.2)
+	check_result = check_raycast_result(result,check_result)
+	if check_result['move'] == 0:
+		result_vectors.append(1)
+	
+	result = shoot_physics_ray(Vector2.RIGHT * rayLength)
+	check_result = check_raycast_result(result,check_result)
+	if check_result['move'] == 0:
+		result_vectors.append(2)
+	
+	# Right Down
+	result = shoot_physics_ray(Vector2(1, 1) * rayLength * 1.2)
+	check_result = check_raycast_result(result,check_result)
+	if check_result['move'] == 0:
+		result_vectors.append(3)
 	
 	result = shoot_physics_ray(Vector2.DOWN * rayLength)
 	check_result = check_raycast_result(result,check_result)
-	avoidDown = check_result['move']
-		
-	result = shoot_physics_ray(Vector2.RIGHT * rayLength)
+	if check_result['move'] == 0:
+		result_vectors.append(4)
+	
+	# Left Down
+	result = shoot_physics_ray(Vector2(-1, 1) * rayLength * 1.2)
 	check_result = check_raycast_result(result,check_result)
-	avoidRight = check_result['move']
+	if check_result['move'] == 0:
+		result_vectors.append(5)
 		
 	result = shoot_physics_ray(Vector2.LEFT * rayLength)
 	check_result = check_raycast_result(result,check_result)
-	avoidLeft = check_result['move'] * -1
+	if check_result['move'] == 0:
+		result_vectors.append(6)
+	
+	# Left Up
+	result = shoot_physics_ray(Vector2(-1, -1) * rayLength * 1.2)
+	check_result = check_raycast_result(result,check_result)
+	if check_result['move'] == 0:
+		result_vectors.append(7)
+	
+	if (7 in result_vectors or 
+		0 in result_vectors or
+		1 in result_vectors):
+			avoidUp = 0
+	
+	if (1 in result_vectors or 
+		2 in result_vectors or
+		3 in result_vectors):
+			avoidRight = 0
+	
+	if (3 in result_vectors or 
+		4 in result_vectors or
+		5 in result_vectors):
+			avoidDown = 0
+	
+	if (5 in result_vectors or 
+		6 in result_vectors or
+		7 in result_vectors):
+			avoidLeft = 0
 	
 	if check_result.has('flee'):
 		return 'flee'
@@ -136,12 +197,13 @@ func check_environment()-> String:
 
 func shoot_physics_ray(direction: Vector2) -> Dictionary:
 	var space_state = get_world_2d().direct_space_state
-	if debug:
-		queue_redraw()
-		debugLines.append([global_position, global_position + direction])
 	var query = PhysicsRayQueryParameters2D.create(global_position, global_position + direction)
 	query.exclude = [self]
-	return space_state.intersect_ray(query)
+	var result = space_state.intersect_ray(query)
+	if debug:
+		queue_redraw()
+		debugLines.append([global_position, global_position + direction, result != {}])
+	return result
 	
 func process_lung(delta: float) -> void:
 	myLung._process(delta)
