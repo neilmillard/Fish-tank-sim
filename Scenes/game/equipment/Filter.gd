@@ -31,8 +31,9 @@ func processWaste(delta: float) -> void:
 	var amount = delta * GameManager.wasteDecayRate * 1.0
 	var waste = GameManager.currentTankData.remove_waste(amount)
 	var nh3Created = waste * 4
-	GameManager.currentTankData.add_nh3(nh3Created)
-	
+	var nh3Added = GameManager.currentTankData.add_nh3(nh3Created)
+	if nh3Added < nh3Created:
+		GameManager.currentTankData.add_waste(nh3Created - nh3Added)
 	
 func processNH3(delta: float) -> void:
 	# Bacteria Somonas uses 1.5 O2 and NH3, and spits out NO2 + H+

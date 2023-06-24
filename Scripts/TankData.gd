@@ -12,7 +12,7 @@ extends Resource
 @export var heater: bool
 @export var currentTemp: float
 
-var maxO2: float
+var maxGas: float
 @export var fish := {}
 @export var food := {}
 @export var plants := {}
@@ -44,10 +44,21 @@ func remove(amount: float, currentValue: float) -> Vector2:
 	
 	currentValue -= provided
 	return Vector2(provided, currentValue)
-	
-func charge_o2(newO2: float):
-	availableO2 += newO2
-	availableO2 = clampf(availableO2, 5.0, maxO2)
+
+func get_current_gas() -> float:
+	return currentNH3 + currentNO2 + currentNO3 + availableO2
+
+func get_gas_capacity(gasAmount: float) -> float:
+	var waterGas = get_current_gas()
+	if waterGas + gasAmount < maxGas:
+		return gasAmount
+	else:
+		return max(0, maxGas - waterGas)
+		
+func charge_o2(newO2: float) -> float:
+	var amountAdded = get_gas_capacity(newO2)
+	availableO2 += amountAdded
+	return amountAdded
 
 func add_waste(amount: float) -> void:
 	currentWaste += amount
@@ -57,24 +68,30 @@ func remove_waste(amount: float) -> float:
 	currentWaste = returnValue.y
 	return returnValue.x
 
-func add_nh3(amount: float) -> void:
-	currentNH3 += amount
+func add_nh3(amount: float) -> float:
+	var amount_added = get_gas_capacity(amount)
+	currentNH3 += amount_added
+	return amount_added
 
 func remove_nh3(amount: float) -> float:
 	var returnValue = remove(amount, currentNH3)
 	currentNH3 = returnValue.y
 	return returnValue.x
 	
-func add_no2(amount: float) -> void:
-	currentNO2 += amount
+func add_no2(amount: float) -> float:
+	var amountAdded = get_gas_capacity(amount)
+	currentNO2 += amountAdded
+	return amountAdded
 
 func remove_no2(amount: float) -> float:
 	var returnValue = remove(amount, currentNO2)
 	currentNO2 = returnValue.y
 	return returnValue.x
 	
-func add_no3(amount: float) -> void:
-	currentNO3 += amount
+func add_no3(amount: float) -> float:
+	var amountAdded = get_gas_capacity(amount)
+	currentNO3 += amountAdded
+	return amountAdded
 
 func remove_NO3(amount: float) -> float:
 	var returnValue = remove(amount, currentNO3)

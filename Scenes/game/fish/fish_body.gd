@@ -293,8 +293,9 @@ func process_waste(delta: float) -> void:
 	# lets get rid of waste if we are moving
 	if(abs(velocity.x)) > swimSpeed / 10.0:
 		GameManager.currentTankData.add_waste(myStomach.flush_waste(1.0 * delta))
-		GameManager.currentTankData.add_nh3(myStomach.flush_nh3(1.0 * delta))
-
+		var nh3Flushed = GameManager.currentTankData.add_nh3(myStomach.flush_nh3(1.0 * delta))
+		myStomach.flush_nh3(nh3Flushed, true)
+		
 #Currently never called. just here for reference
 func rotate_to_target(target, delta):
 	direction = target.global_position - global_position

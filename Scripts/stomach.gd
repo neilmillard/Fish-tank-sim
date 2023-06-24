@@ -79,9 +79,10 @@ func flush_waste(amount: float) -> float:
 	return wasteFlushed
 
 # tells the stomach to expell this amount of NH3
-func flush_nh3(amount: float) -> float:
+func flush_nh3(amount: float, realFlush: bool = false) -> float:
 	var NH3Flushed = minf(amount, storedNH3)
-	storedNH3 -= NH3Flushed
+	if realFlush:
+		storedNH3 -= NH3Flushed
 	return NH3Flushed
 
 func get_energy(energyRequired: float) -> float:

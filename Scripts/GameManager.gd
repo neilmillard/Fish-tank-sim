@@ -13,7 +13,7 @@ signal load_button_pressed()
 const CHUNK_HEIGHT: int = 128
 const CHUNK_WIDTH: int = 320
 const GRAVITY: int = 200
-const MAXO2MULTIPLIER: int = 2
+const MAXGASMULTIPLIER: float = 0.5
 const SAVE_GAME_BASE_PATH = "user://save_file"
 
 var debug
@@ -68,10 +68,10 @@ func set_current_level(tankData : TankData):
 	currentTankData = tankData
 	currentLevelHeight = tankData.height
 	currentLevelWidth = tankData.width
-	tankData.maxO2 = tankData.width * MAXO2MULTIPLIER
+	tankData.maxGas = tankData.width * MAXGASMULTIPLIER
 	print("setting height: " + str(currentLevelHeight))
 	print("setting width: " + str(currentLevelWidth))
-	print("setting MaxO2:" + str(tankData.maxO2))
+	print("setting MaxGas:" + str(tankData.maxGas))
 
 func new_fish_resource(type: String = "OrangeFish"):
 	var myFishRes = Fish.new(type, true, 95.0, 1.0)
