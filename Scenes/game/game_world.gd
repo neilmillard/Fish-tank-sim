@@ -22,3 +22,4 @@ func _on_load_game_button_pressed():
 	current_tank.queue_free()
 	await current_tank.tree_exited
 	_load_tank()
+

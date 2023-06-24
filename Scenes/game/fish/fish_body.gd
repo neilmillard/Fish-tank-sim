@@ -46,7 +46,10 @@ var debugLines = []
 
 func _ready():
 	if !stats:
-		stats = GameManager.new_fish_resource()
+		if type.length() > 0:
+			stats = GameManager.new_fish_resource(type)
+		else:
+			stats = GameManager.new_fish_resource()
 	stats.type = type
 	myStomach = stats.myStomach
 	myLung = stats.myLung
@@ -213,13 +216,17 @@ func process_food(delta: float) -> void:
 
 func process_health(delta: float) -> void:
 	# The fish will expend energy on fighting infection
+	var energyRequired
 	if stats.currentHealth < maxHealth:
-		var energyRequired = delta * GameManager.infectionEnergy
-		var energyReceived = myStomach.get_energy(energyRequired)
-		var o2Used = myLung.requestO2(energyReceived)
-		myStomach.receive_nh3(energyReceived / 4.0)
-		if energyReceived == energyRequired and o2Used == energyReceived:
-			stats.currentHealth += delta
+		energyRequired = delta * GameManager.infectionEnergy
+	else:
+		stats.currentHealth -= delta
+		energyRequired = delta * GameManager.infectionEnergy / 2.0
+	var energyReceived = myStomach.get_energy(energyRequired)
+	var o2Used = myLung.requestO2(energyReceived)
+	myStomach.receive_nh3(energyReceived / 4.0)
+	if energyReceived == energyRequired and o2Used == energyReceived:
+		stats.currentHealth += delta
 	if stats.currentHealth > maxHealth:
 		stats.currentHealth = maxHealth
 	

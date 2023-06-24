@@ -10,7 +10,8 @@ var foods := {
 }
 var fish : PackedScene = ResourceLoader.load("res://Scenes/game/fish/fish.tscn")
 var fishes := {
-	'OrangeFish': ResourceLoader.load("res://Scenes/game/fish/orangeFish.tscn")
+	'OrangeFish': ResourceLoader.load("res://Scenes/game/fish/orangeFish.tscn"),
+	'GreenFish': ResourceLoader.load("res://Scenes/game/fish/greenFish.tscn")
 }
 
 
@@ -30,8 +31,8 @@ func _process(delta):
 
 func build(tank: TankData) -> void:
 	tank_data = tank
-	add_vertical_wall(tank_data.width + (wallsWidth/2), tank_data.height)
-	add_vertical_wall(0 - (wallsWidth/2), tank_data.height)
+	add_vertical_wall(tank_data.width + (wallsWidth/2), tank_data.height + 160, (tank_data.height - 80) / 2.0)
+	add_vertical_wall(0 - (wallsWidth/2), tank_data.height + 160, (tank_data.height - 80) / 2.0)
 	build_navmesh(
 		Vector2(0,0), 
 		Vector2(tank_data.width, tank_data.height), 
@@ -41,7 +42,7 @@ func build(tank: TankData) -> void:
 	spawn_foods(tank_data)
 	
 # add a collisionshape2d at the coords with fixed width and half heigh
-func add_vertical_wall(x: float, y: float):
+func add_vertical_wall(x: float, y: float, y_pos: float):
 	var _wall = StaticBody2D.new()
 	var _collisionShape = CollisionShape2D.new()
 	var _collisionRectangle = RectangleShape2D.new()
@@ -57,7 +58,7 @@ func add_vertical_wall(x: float, y: float):
 	_wall.set_collision_layer_value(1, true)
 	_wall.set_collision_mask_value(2, true)
 	_wall.set_collision_mask_value(3, true)
-	_wall.position = Vector2(x, y / 2.0)
+	_wall.position = Vector2(x, y_pos)
 
 func build_navmesh(topLeft: Vector2, bottomRight: Vector2, floorHeight: int):
 	var _floor = bottomRight.y - floorHeight
@@ -77,7 +78,11 @@ func _on_spawn_new_object(objectName: String):
 		return
 	
 	if objectName == "orangeFish":
-		spawn_fish()
+		spawn_fish(null, "OrangeFish")
+		return
+	
+	if objectName == "greenFish":
+		spawn_fish(null, "GreenFish")
 		return
 	
 	print("Error: ObjectName not defined " + objectName)
@@ -101,14 +106,14 @@ func spawn_flakefood():
 	for n in range(1, foodPinch):
 		spawn_obj(flakeFood,Vector2(spawnLocation + randi_range(-30, 30), surface))
 
-func spawn_fish(fishStats: Fish = null):
+func spawn_fish(fishStats: Fish = null, type: String ="OrangeFish"):
 	var myPosition : Vector2
 	var myFishScene : PackedScene
 	if fishStats:
 		myPosition = fishStats.globalPosition
 		myFishScene = fishes[fishStats.type]
 	else:
-		myFishScene = fishes["OrangeFish"]
+		myFishScene = fishes[type]
 		myPosition = Vector2(randf_range(50,GameManager.currentLevelWidth - 100),
 							randf_range(50, 300))
 	

@@ -51,23 +51,23 @@ offset_bottom = 67.96
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager"]
 layout_mode = 0
-offset_left = 236.0
+offset_left = 204.0
 offset_top = -14.0
-offset_right = 336.0
-offset_bottom = 70.0
+offset_right = 352.0
+offset_bottom = 60.0
 
 [node name="FlakeFoodButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer"]
 layout_mode = 2
 text = "Flake Food"
 
-[node name="SpawnFishButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer"]
+[node name="SpawnOrangeFishButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer"]
 layout_mode = 2
-text = "Add Fish"
+text = "Add OrangeFish"
 
 [node name="Control" type="Control" parent="CanvasLayer/InterfaceManager"]
 anchors_preset = 0
 offset_top = -5.0
-offset_right = 233.0
+offset_right = 200.0
 offset_bottom = 47.0
 
 [node name="FishStateContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
@@ -106,19 +106,9 @@ offset_bottom = 26.0
 text = "100"
 label_settings = ExtResource("7_4vf33")
 
-[node name="ActionLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer"]
+[node name="SpawnGreenFishButton" type="Button" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer"]
 layout_mode = 2
-size_flags_horizontal = 0
-text = "Action:"
-label_settings = ExtResource("7_4vf33")
-
-[node name="ActionValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer/ActionLabel"]
-layout_mode = 2
-offset_left = 89.0
-offset_right = 189.0
-offset_bottom = 26.0
-text = "Idle"
-label_settings = ExtResource("7_4vf33")
+text = "Add Green Fish"
 
 [node name="ResourceContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
 layout_mode = 1
@@ -147,14 +137,14 @@ text = "100"
 [node name="LiveFoodLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/ResourceContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Action:"
+text = "LiveFood:"
 
 [node name="LiveFoodValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/ResourceContainer/LiveFoodLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
-text = "Idle"
+text = "100"
 
 [node name="TankStatsContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
 layout_mode = 1
@@ -263,4 +253,5 @@ rotation = 1.68075
 texture = ExtResource("4_j3w7t")
 
 [connection signal="button_down" from="CanvasLayer/InterfaceManager/VBoxContainer/FlakeFoodButton" to="CanvasLayer/InterfaceManager" method="_on_flake_food_button_button_down"]
-[connection signal="button_up" from="CanvasLayer/InterfaceManager/VBoxContainer/SpawnFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_fish_button_button_up"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/VBoxContainer/SpawnOrangeFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_fish_button_button_up"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/Control/FishStateContainer/SpawnGreenFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_green_fish_button_button_up"]

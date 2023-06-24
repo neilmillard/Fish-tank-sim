@@ -73,8 +73,8 @@ func set_current_level(tankData : TankData):
 	print("setting width: " + str(currentLevelWidth))
 	print("setting MaxO2:" + str(tankData.maxO2))
 
-func new_fish_resource():
-	var myFishRes = Fish.new(true, 95.0, 1.0)
+func new_fish_resource(type: String = "OrangeFish"):
+	var myFishRes = Fish.new(type, true, 95.0, 1.0)
 	currentTankData.add_fish(myFishRes)
 	return myFishRes
 

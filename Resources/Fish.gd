@@ -11,8 +11,9 @@ extends Resource
 @export var myStomach: Stomach
 @export var globalPosition: Vector2
 
-func _init(p_isMale = true, p_currentHealth = 95.0, p_fishSize = 1.0):
+func _init(p_type = "OrangeFish", p_isMale = true, p_currentHealth = 95.0, p_fishSize = 1.0):
 	id = randi() % 1000000
+	type = p_type
 	isMale = p_isMale
 	currentHealth = p_currentHealth
 	fishSize = p_fishSize
