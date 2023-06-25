@@ -13,6 +13,9 @@ var fishes := {
 	'OrangeFish': ResourceLoader.load("res://Scenes/game/fish/orangeFish.tscn"),
 	'GreenFish': ResourceLoader.load("res://Scenes/game/fish/greenFish.tscn")
 }
+var plants := {
+	'GreenPlant': ResourceLoader.load("res://Scenes/game/plants/green_plant.tscn")
+}
 
 
 var tank_data: TankData
@@ -40,6 +43,7 @@ func build(tank: TankData) -> void:
 		)
 	spawn_fishes(tank_data)
 	spawn_foods(tank_data)
+	spawn_plants(tank_data)
 	
 # add a collisionshape2d at the coords with fixed width and half heigh
 func add_vertical_wall(x: float, y: float, y_pos: float):
@@ -85,6 +89,10 @@ func _on_spawn_new_object(objectName: String):
 		spawn_fish(null, "GreenFish")
 		return
 	
+	if objectName == "greenPlant":
+		spawn_plant(null, "GreenPlant")
+		return
+	
 	print("Error: ObjectName not defined " + objectName)
 		
 	
@@ -96,15 +104,33 @@ func spawn_foods(tank: TankData):
 	for myFoodIndex in tank.food:
 		spawn_food(tank.food[myFoodIndex])
 			
+func spawn_plants(tank: TankData):
+	for myPlantIndex in tank.plants:
+		spawn_plant(tank.plants[myPlantIndex])
+
 func spawn_food(foodStats: Food):
 	var myFood = spawn_obj(foods[foodStats.type], foodStats.globalPosition)
 	myFood.stats = foodStats
 	
-
 func spawn_flakefood():
 	var spawnLocation = randf_range(100, GameManager.currentLevelWidth - 100)
 	for n in range(1, foodPinch):
 		spawn_obj(flakeFood,Vector2(spawnLocation + randi_range(-30, 30), surface))
+
+func spawn_plant(plantStats: Plant = null, type: String = "GreenPlant"):
+	var myPosition: Vector2
+	var myPlantScene: PackedScene
+	if plantStats:
+		myPosition = plantStats.globalPosition
+		myPlantScene = plants[plantStats.type]
+	else:
+		var spawnLocation = randf_range(100, GameManager.currentLevelWidth - 100)
+		var randomHeight = randf_range(70, 150)
+		myPosition = Vector2(spawnLocation, GameManager.currentLevelHeight - randomHeight)
+		myPlantScene = plants[type]
+	var myPlant = spawn_obj(myPlantScene, myPosition)
+	if plantStats:
+		myPlant.stats = plantStats
 
 func spawn_fish(fishStats: Fish = null, type: String ="OrangeFish"):
 	var myPosition : Vector2

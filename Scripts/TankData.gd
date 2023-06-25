@@ -30,6 +30,12 @@ func add_food(myFood: Food) -> void:
 func remove_food(myFood: Food) -> void:
 	food.erase(myFood.id)
 
+func add_plant(myPlant: Plant) -> void:
+	plants[myPlant.id] = myPlant
+
+func remove_plant(myPlant: Plant) -> void:
+	plants.erase(myPlant.id)
+
 func request_o2(requestedO2 :float) -> float:
 	var returnValue = remove(requestedO2, availableO2)
 	availableO2 = returnValue.y

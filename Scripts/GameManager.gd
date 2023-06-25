@@ -85,7 +85,15 @@ func new_food_resource():
 
 func remove_food_resource(myFood: Food) -> void:
 	currentTankData.remove_food(myFood)
-	
+
+func new_plant_resource(type: String = "GreenPlant"):
+	var myPlantRes = Plant.new(type)
+	currentTankData.add_plant(myPlantRes)
+	return myPlantRes
+
+func remove_plant_resource(myPlant: Plant) -> void:
+	currentTankData.remove_plant(myPlant)
+
 func set_fish(myFish: Fish):
 	currentFish = myFish
 	

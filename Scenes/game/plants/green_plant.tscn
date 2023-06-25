@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bo6t1ed4sxh7t"]
+
+[ext_resource type="Script" path="res://Scenes/game/plants/green_plant.gd" id="1_mvqaq"]
+[ext_resource type="Texture2D" uid="uid://dklmed47lcgmj" path="res://art/plant_1.png" id="2_wxp8h"]
+
+[node name="GreenPlant" type="Node2D"]
+position = Vector2(16, -16)
+script = ExtResource("1_mvqaq")
+type = "GreenPlant"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_wxp8h")
+hframes = 4

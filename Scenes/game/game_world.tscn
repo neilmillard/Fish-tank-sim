@@ -51,16 +51,31 @@ offset_bottom = 67.96
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager"]
 layout_mode = 0
-offset_left = 204.0
+offset_left = 421.0
 offset_top = -14.0
-offset_right = 352.0
+offset_right = 576.0
 offset_bottom = 60.0
 
 [node name="FlakeFoodButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer"]
 layout_mode = 2
 text = "Flake Food"
 
-[node name="SpawnOrangeFishButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer"]
+[node name="SpawnGreenPlantButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer"]
+layout_mode = 2
+text = "GreenPlant"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/InterfaceManager"]
+layout_mode = 0
+offset_left = 581.0
+offset_top = -14.0
+offset_right = 726.0
+offset_bottom = 60.0
+
+[node name="SpawnGreenFishButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer2"]
+layout_mode = 2
+text = "Add Green Fish"
+
+[node name="SpawnOrangeFishButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer2"]
 layout_mode = 2
 text = "Add OrangeFish"
 
@@ -106,18 +121,14 @@ offset_bottom = 26.0
 text = "100"
 label_settings = ExtResource("7_4vf33")
 
-[node name="SpawnGreenFishButton" type="Button" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer"]
-layout_mode = 2
-text = "Add Green Fish"
-
 [node name="ResourceContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 350.0
+offset_left = 230.0
 offset_top = -2.0
-offset_right = 277.0
+offset_right = 162.0
 offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -253,5 +264,6 @@ rotation = 1.68075
 texture = ExtResource("4_j3w7t")
 
 [connection signal="button_down" from="CanvasLayer/InterfaceManager/VBoxContainer/FlakeFoodButton" to="CanvasLayer/InterfaceManager" method="_on_flake_food_button_button_down"]
-[connection signal="button_up" from="CanvasLayer/InterfaceManager/VBoxContainer/SpawnOrangeFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_fish_button_button_up"]
-[connection signal="button_up" from="CanvasLayer/InterfaceManager/Control/FishStateContainer/SpawnGreenFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_green_fish_button_button_up"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/VBoxContainer/SpawnGreenPlantButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_green_plant_button_button_up"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/VBoxContainer2/SpawnGreenFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_green_fish_button_button_up"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/VBoxContainer2/SpawnOrangeFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_fish_button_button_up"]

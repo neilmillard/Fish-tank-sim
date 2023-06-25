@@ -85,3 +85,7 @@ func _on_spawn_fish_button_button_up():
 
 func _on_spawn_green_fish_button_button_up():
 	GameManager.spawn_new_object("greenFish")
+
+
+func _on_spawn_green_plant_button_button_up():
+	GameManager.spawn_new_object("greenPlant")
