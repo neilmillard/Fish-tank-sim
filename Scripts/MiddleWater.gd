@@ -19,7 +19,7 @@ var plants := {
 
 
 var tank_data: TankData
-var surfaceO2TransferEfficiency = 0.0024
+var surfaceO2TransferEfficiency = 0.0020
 var surface: float = 29.0
 var foodPinch: int = 4
 var wallsWidth: float = 60.0

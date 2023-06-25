@@ -1,14 +1,46 @@
-[gd_scene load_steps=3 format=3 uid="uid://bo6t1ed4sxh7t"]
+[gd_scene load_steps=8 format=3 uid="uid://cce1una4cin75"]
 
-[ext_resource type="Script" path="res://Scenes/game/plants/green_plant.gd" id="1_mvqaq"]
+[ext_resource type="Script" path="res://Scenes/game/plants/plant_body.gd" id="1_4h6rl"]
 [ext_resource type="Texture2D" uid="uid://dklmed47lcgmj" path="res://art/plant_1.png" id="2_wxp8h"]
+[ext_resource type="Script" path="res://Scenes/game/state_machine/state_machine.gd" id="3_2m3ju"]
+[ext_resource type="Script" path="res://Scenes/game/plants/plant_idle.gd" id="4_x1quk"]
+[ext_resource type="Script" path="res://Scenes/game/plants/plant_growing.gd" id="5_sao11"]
+[ext_resource type="Script" path="res://Scenes/game/plants/plant_feeding.gd" id="6_5tgab"]
+[ext_resource type="Script" path="res://Scenes/game/plants/plant_dead.gd" id="7_m0opd"]
 
 [node name="GreenPlant" type="Node2D"]
 position = Vector2(16, -16)
-script = ExtResource("1_mvqaq")
+script = ExtResource("1_4h6rl")
 type = "GreenPlant"
+growthThreshold = 100.0
+growthCost = 75.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
+position = Vector2(48.3799, -47.6218)
+scale = Vector2(4, 4)
 texture = ExtResource("2_wxp8h")
 hframes = 4
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
+script = ExtResource("3_2m3ju")
+initialState = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("4_x1quk")
+
+[node name="Growing" type="Node" parent="StateMachine"]
+script = ExtResource("5_sao11")
+
+[node name="Feeding" type="Node" parent="StateMachine"]
+script = ExtResource("6_5tgab")
+
+[node name="Dead" type="Node" parent="StateMachine"]
+script = ExtResource("7_m0opd")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -16.2992
+offset_top = -10.2904
+offset_right = 23.7008
+offset_bottom = 15.7096
+text = "State"

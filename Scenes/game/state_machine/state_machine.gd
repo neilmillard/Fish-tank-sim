@@ -35,11 +35,11 @@ func _on_child_transition(state, newStateName, data={}):
 	
 	var newState: State = states.get(newStateName.to_lower())
 	if !newState:
+		print("Unknown State:" + newStateName)
 		return
 	
 	if currentState:
 		currentState.exit()
 	
-	newState.enter(data)
-	
+	newState.enter(data)	
 	currentState = newState
