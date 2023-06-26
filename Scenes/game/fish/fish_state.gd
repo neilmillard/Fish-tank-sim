@@ -8,7 +8,6 @@ func _ready() -> void:
 	fishBody = owner as FishBody
 	assert(fishBody != null)
 
-func check_preditors(currentState: String):
+func check_preditors():
 	var detection = fishBody.check_environment()
-	if detection == 'flee':
-		emit_signal("Transitioned", currentState, "Fleeing", {"previousState" = currentState})
+	return detection

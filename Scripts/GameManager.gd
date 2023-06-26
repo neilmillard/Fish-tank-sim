@@ -4,7 +4,7 @@ enum State {
 	Play,
 }
 
-signal spawn_new(objectName: String)
+signal spawn_new(objectName: String, position: Vector2)
 signal toggle_game_paused(is_paused: bool)
 signal save_button_pressed()
 signal load_button_pressed()
@@ -106,11 +106,8 @@ func request_o2(requested :float) -> float:
 func charge_o2(amountO2: float):
 	currentTankData.charge_o2(amountO2)
 
-func spawn_new_object(objectName: String):
-	emit_signal("spawn_new", objectName)
-
-func spawn_food(nutrition: Nutrition):
-	pass
+func spawn_new_object(objectName: String, position: Vector2 = Vector2.ZERO):
+	emit_signal("spawn_new", objectName, position)
 
 func spawn_dead_fish():
 	pass

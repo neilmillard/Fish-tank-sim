@@ -14,6 +14,6 @@ func _init(	p_type: String = "GreenPlant",
 			p_storedSugar: float = 0.0):
 	id = randi() % 1000000
 	type = p_type
-	currentHealth = 100
+	currentHealth = p_currentHealth
 	growStage = p_growStage
 	storedSugar = p_storedSugar

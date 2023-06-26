@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cce1una4cin75"]
+[gd_scene load_steps=9 format=3 uid="uid://cce1una4cin75"]
 
 [ext_resource type="Script" path="res://Scenes/game/plants/plant_body.gd" id="1_4h6rl"]
 [ext_resource type="Texture2D" uid="uid://dklmed47lcgmj" path="res://art/plant_1.png" id="2_wxp8h"]
@@ -7,13 +7,14 @@
 [ext_resource type="Script" path="res://Scenes/game/plants/plant_growing.gd" id="5_sao11"]
 [ext_resource type="Script" path="res://Scenes/game/plants/plant_feeding.gd" id="6_5tgab"]
 [ext_resource type="Script" path="res://Scenes/game/plants/plant_dead.gd" id="7_m0opd"]
+[ext_resource type="Script" path="res://Scenes/game/plants/plant_harvest.gd" id="8_lq42m"]
 
 [node name="GreenPlant" type="Node2D"]
 position = Vector2(16, -16)
 script = ExtResource("1_4h6rl")
 type = "GreenPlant"
-growthThreshold = 100.0
-growthCost = 75.0
+growthThreshold = 20.0
+growthCost = 16.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -37,6 +38,9 @@ script = ExtResource("6_5tgab")
 
 [node name="Dead" type="Node" parent="StateMachine"]
 script = ExtResource("7_m0opd")
+
+[node name="Harvest" type="Node" parent="StateMachine"]
+script = ExtResource("8_lq42m")
 
 [node name="Label" type="Label" parent="."]
 offset_left = -16.2992

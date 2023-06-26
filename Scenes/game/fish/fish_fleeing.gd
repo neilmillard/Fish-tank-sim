@@ -8,8 +8,7 @@ var triggeredTimer
 func enter(_msg:={}):
 	previousState = _msg.previousState
 	triggeredTimer = 0.6
-	while fleeDirection == Vector2.ZERO:
-		fleeDirection = fishBody.get_safe_direction()
+	fleeDirection = fishBody.get_safe_direction()
 	set_fish_velocity()
 
 func update(delta: float) -> void:

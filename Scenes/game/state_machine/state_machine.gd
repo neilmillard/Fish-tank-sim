@@ -5,6 +5,7 @@ class_name StateMachine
 
 var currentState: State
 var states: Dictionary = {}
+var stateTimer: float
 
 func _ready():
 	for child in get_children():
@@ -19,6 +20,7 @@ func _ready():
 		currentState = initialState
 	
 func _process(delta):
+	stateTimer += delta
 	if currentState:
 		currentState.update(delta)
 
@@ -27,6 +29,8 @@ func _physics_process(delta):
 		currentState.physics_update(delta)
 
 func _on_child_transition(state, newStateName, data={}):
+	# print(owner.name + "state change:" + state + ">" + newStateName)
+		
 	# ignore transitions not From our currentState
 	if state != currentState.name:
 		print("Child Transitioned from illegal state "+state+"->"+newStateName)
@@ -43,3 +47,4 @@ func _on_child_transition(state, newStateName, data={}):
 	
 	newState.enter(data)	
 	currentState = newState
+	stateTimer = 0.0

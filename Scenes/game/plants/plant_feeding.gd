@@ -11,14 +11,17 @@ func exit():
 
 func update(delta: float) -> void:
 	# grab NO3 -> output O2 and store Sugar
-	var no3Received = GameManager.currentTankData.remove_NO3(delta * plantBody.processingRate)
+	# This is not reality. Photosynthesis creates glucose from 
+	# CO2 and H2O with sunlight energy
+	# NH4 is synthesized from NO3, which creates amino acids from glucose -> protein
+	var no3Received = GameManager.currentTankData.remove_NO3(
+											delta * plantBody.processingRate)
 	if no3Received > 0.0:
 		plantBody.stats.storedSugar += no3Received
 		GameManager.currentTankData.charge_o2(no3Received)
 		fedAmount += no3Received
 	
-	if fedAmount > 1.0 or no3Received == 0.0:
-		print(str(plantBody.stats.storedSugar))
+	if fedAmount > 0.5:
 		emit_signal("Transitioned", "Feeding", "Idle")
 
 func physics_update(_delta: float) -> void:

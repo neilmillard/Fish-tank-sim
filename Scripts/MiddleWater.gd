@@ -4,11 +4,11 @@ class_name MiddleWater
 # This script manages the objects in the middle water Layer
 # Our main concerns are the fish, plants and water quality
 
-var flakeFood : PackedScene = ResourceLoader.load("res://Scenes/game/food/flakeFood.tscn")
 var foods := {
-	'flakeFood': ResourceLoader.load("res://Scenes/game/food/flakeFood.tscn")
+	'flakeFood': ResourceLoader.load("res://Scenes/game/food/flakeFood.tscn"),
+	'PlantFood': ResourceLoader.load("res://Scenes/game/food/plantFood.tscn")
 }
-var fish : PackedScene = ResourceLoader.load("res://Scenes/game/fish/fish.tscn")
+
 var fishes := {
 	'OrangeFish': ResourceLoader.load("res://Scenes/game/fish/orangeFish.tscn"),
 	'GreenFish': ResourceLoader.load("res://Scenes/game/fish/greenFish.tscn")
@@ -76,9 +76,13 @@ func build_navmesh(topLeft: Vector2, bottomRight: Vector2, floorHeight: int):
 	add_child(navRegion2D)
 
 
-func _on_spawn_new_object(objectName: String):
+func _on_spawn_new_object(objectName: String, p_position: Vector2 = Vector2.ZERO):
 	if objectName == "flakeFood":
 		spawn_flakefood()
+		return
+	
+	if objectName == "plantFood":
+		spawn_obj(foods["PlantFood"], p_position)
 		return
 	
 	if objectName == "orangeFish":
@@ -115,7 +119,7 @@ func spawn_food(foodStats: Food):
 func spawn_flakefood():
 	var spawnLocation = randf_range(100, GameManager.currentLevelWidth - 100)
 	for n in range(1, foodPinch):
-		spawn_obj(flakeFood,Vector2(spawnLocation + randi_range(-30, 30), surface))
+		spawn_obj(foods["flakeFood"],Vector2(spawnLocation + randi_range(-30, 30), surface))
 
 func spawn_plant(plantStats: Plant = null, type: String = "GreenPlant"):
 	var myPosition: Vector2

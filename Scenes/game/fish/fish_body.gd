@@ -86,10 +86,14 @@ func _on_debug_timeout():
 	pass
 
 func get_safe_direction():
-	return Vector2(
+	var myDirection = Vector2(
 			randi_range(avoidLeft,avoidRight),
 			randi_range(avoidUp,avoidDown)
 			)
+	if myDirection == Vector2.ZERO:
+		myDirection = Vector2.UP
+	return myDirection
+	
 func is_foe(result) -> bool:
 	return result.collider.collision_layer && result.collider.collision_layer != 1
 
@@ -198,14 +202,14 @@ func check_environment()-> String:
 	
 	return ''
 
-func shoot_physics_ray(direction: Vector2) -> Dictionary:
+func shoot_physics_ray(p_direction: Vector2) -> Dictionary:
 	var space_state = get_world_2d().direct_space_state
-	var query = PhysicsRayQueryParameters2D.create(global_position, global_position + direction)
+	var query = PhysicsRayQueryParameters2D.create(global_position, global_position + p_direction)
 	query.exclude = [self]
 	var result = space_state.intersect_ray(query)
 	if debug:
 		queue_redraw()
-		debugLines.append([global_position, global_position + direction, result != {}])
+		debugLines.append([global_position, global_position + p_direction, result != {}])
 	return result
 	
 func process_lung(delta: float) -> void:

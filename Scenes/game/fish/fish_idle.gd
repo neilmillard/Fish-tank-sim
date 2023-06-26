@@ -12,14 +12,18 @@ func exit():
 
 func update(_delta: float) -> void:
 	# fish will only change from idle, if food, mate or preditor present
-	check_preditors("Idle")
+	if check_preditors() == 'flee':
+		emit_signal("Transitioned", "Idle", "Fleeing", {"previousState" = "Idle"})
+		return
 	if fishBody.myStomach.could_eat():
 		if fishBody.food_is_near():
 			emit_signal("Transitioned", "Idle", "Feeding")
+			return
 		else:
 			emit_signal("Transitioned", "Idle", "Hunting")
-	if fishBody.food_is_near() && fishBody.myStomach.could_eat():
-		emit_signal("Transitioned", "Idle", "Feeding")
+			return
+#	if fishBody.myStomach.storedEnergy > 100.0:
+#		emit_signal("Transitioned", "Idle", "Mating")
 	
 func on_idle_timer_timeout():
 	emit_signal("Transitioned", "Idle", "Swimming", 

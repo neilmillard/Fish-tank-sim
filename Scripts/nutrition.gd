@@ -11,9 +11,11 @@ class_name Nutrition
 @export var processedProteins: float = 0.0
 
 
-func setup(myCarbs: float, myFats: float, myProteins: float, mySize: float):
+func _init(	myCarbs: float = 1.0, 
+			myFats: float = 1.0, 
+			myProteins: float = 1.0, 
+			mySize: float = 1.0):
 	carbs = myCarbs
 	fats = myFats
 	proteins = myProteins
 	size = mySize
-	return self

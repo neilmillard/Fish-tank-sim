@@ -1,6 +1,12 @@
 #PlantIdle
 extends PlantState
 
+# plant creates sugar and proteins in StateFeeding
+# if enough sugars and protein, will grow
+# once max growth, it will create food with carbs and protein
+# plants can create fats, but only usually for seeds
+
+
 func enter(_msg:={}):
 	pass
 
@@ -8,15 +14,22 @@ func exit():
 	pass
 
 func update(_delta: float) -> void:
-	# plant will only change from idle, if food is available
-	# if enough sugars, will grow
 	if plantBody.stats.currentHealth <= 0.0:
 		emit_signal("Transitioned", "Idle", "Dead")
 		return
-	if enough_sugar() and plantBody.stats.growStage < plantBody.maxGrowStage:
-		emit_signal("Transitioned", "Idle", "Growing")
-		return
+	
+	if enough_sugar():
+		if plantBody.stats.growStage < plantBody.maxGrowStage:
+			print(plantBody.name + " Growing: SugarStored:" + str(plantBody.stats.storedSugar))
+			emit_signal("Transitioned", "Idle", "Growing")
+			return
+		else:
+			print(plantBody.name + " Harvest: SugarStored:" + str(plantBody.stats.storedSugar))
+			emit_signal("Transitioned", "Idle", "Harvest")
+			return
+		
 	if available_food():
+		print(plantBody.name + " Feeding: SugarStored:" + str(plantBody.stats.storedSugar))
 		emit_signal("Transitioned", "Idle", "Feeding")
 	
 func physics_update(_delta: float) -> void:

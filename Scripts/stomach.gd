@@ -94,6 +94,9 @@ func get_energy(energyRequired: float) -> float:
 func process_food(delta: float) -> void:
 	# we need storedFood
 	# each call we get processingSpeed * delta as a percent of storedFood
+	# storedEnergy is incremented based on carbEnergy + fatEnergy + proteinEnergy
+	# once processedCarbs > carbs
+	# food is popped off the array
 	if len(storedFood) == 0:
 		return
 	
