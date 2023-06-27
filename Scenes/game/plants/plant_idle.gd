@@ -20,16 +20,13 @@ func update(_delta: float) -> void:
 	
 	if enough_sugar():
 		if plantBody.stats.growStage < plantBody.maxGrowStage:
-			print(plantBody.name + " Growing: SugarStored:" + str(plantBody.stats.storedSugar))
 			emit_signal("Transitioned", "Idle", "Growing")
 			return
 		else:
-			print(plantBody.name + " Harvest: SugarStored:" + str(plantBody.stats.storedSugar))
 			emit_signal("Transitioned", "Idle", "Harvest")
 			return
 		
 	if available_food():
-		print(plantBody.name + " Feeding: SugarStored:" + str(plantBody.stats.storedSugar))
 		emit_signal("Transitioned", "Idle", "Feeding")
 	
 func physics_update(_delta: float) -> void:
