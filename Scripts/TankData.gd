@@ -30,6 +30,23 @@ func add_food(myFood: Food) -> void:
 func remove_food(myFood: Food) -> void:
 	food.erase(myFood.id)
 
+func add_filter(myFilter: Filter) -> void:
+	if myFilter.type == "Gravel":
+		# only allowed one Gravel Filter per tank
+		if get_gravel_filter_stats() != null:
+			return
+	filters[myFilter.id] = myFilter
+	
+
+func remove_filter(myFilter: Filter) -> void:
+	filters.erase(myFilter.id)
+
+func get_gravel_filter_stats() -> Filter:
+	for filter in filters:
+		if filter.type == "Gravel":
+			return filter
+	return null
+
 func add_plant(myPlant: Plant) -> void:
 	plants[myPlant.id] = myPlant
 

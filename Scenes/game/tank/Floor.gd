@@ -15,4 +15,3 @@ func build(tank: TankData) -> void:
 	_collisionShape.shape = _collisionRectangle
 	_collisionShape.position.y = 60
 	_floor.add_child(_collisionShape)
-	

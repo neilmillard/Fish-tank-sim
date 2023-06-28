@@ -83,6 +83,11 @@ func new_food_resource():
 	currentTankData.add_food(myFoodRes)
 	return myFoodRes
 
+func new_filter_resource(type: String):
+	var myFilterRes = Filter.new(type)
+	currentTankData.add_filter(myFilterRes)
+	return myFilterRes
+	
 func remove_food_resource(myFood: Food) -> void:
 	currentTankData.remove_food(myFood)
 

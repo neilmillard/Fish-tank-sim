@@ -17,6 +17,9 @@ var plants := {
 	'GreenPlant': ResourceLoader.load("res://Scenes/game/plants/green_plant.tscn")
 }
 
+var filters := {
+	'Gravel' = ResourceLoader.load("res://Scenes/game/equipment/GravelFilter.tscn")
+}
 
 var tank_data: TankData
 var surfaceO2TransferEfficiency = 0.0020
@@ -44,6 +47,7 @@ func build(tank: TankData) -> void:
 	spawn_fishes(tank_data)
 	spawn_foods(tank_data)
 	spawn_plants(tank_data)
+	spawn_filters(tank_data)
 	
 # add a collisionshape2d at the coords with fixed width and half heigh
 func add_vertical_wall(x: float, y: float, y_pos: float):
@@ -111,6 +115,25 @@ func spawn_foods(tank: TankData):
 func spawn_plants(tank: TankData):
 	for myPlantIndex in tank.plants:
 		spawn_plant(tank.plants[myPlantIndex])
+
+func spawn_filters(tank: TankData):
+	for myFilterIndex in tank.filters:
+		spawn_filter(tank.filters[myFilterIndex])
+
+func update_gravel_filter():
+	$GravelFilter.stats = tank_data.get_gravel_filter_stats()
+
+func spawn_filter(stats: Filter = null, type: String = "Generic"):
+	var myFilterScene: PackedScene
+	var myPosition := Vector2.ZERO
+	if stats:
+		myFilterScene = filters[stats.type]
+		myPosition = stats.globalPosition
+	else:
+		myFilterScene = filters[type]
+	var myFilter = spawn_obj(myFilterScene, myPosition)
+	if stats:
+		myFilter.stats = stats
 
 func spawn_food(foodStats: Food):
 	var myFood = spawn_obj(foods[foodStats.type], foodStats.globalPosition)
