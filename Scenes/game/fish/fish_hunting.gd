@@ -16,6 +16,7 @@ func update(_delta: float) -> void:
 		return
 	if fishBody.food_is_near():
 		emit_signal("Transitioned", "Hunting", "Feeding")
+		return
 		
 func physics_update(delta: float) -> void:
 	fishBody.rotate_to_direction(Vector2(fishBody.velocity.x, 0.0), delta)

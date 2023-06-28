@@ -9,7 +9,7 @@ func update(_delta: float) -> void:
 		fishBody.find_food()
 	
 	if fishBody.nearestFoodPosition == Vector2.ZERO:
-		emit_signal("Transitioned", "Feeding", "Hunting")
+		emit_signal("Transitioned", "Feeding", "Idle")
 
 func physics_update(delta: float) -> void:
 	if fishBody.nearestFoodPosition != Vector2.ZERO:

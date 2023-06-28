@@ -51,7 +51,7 @@ func check_camera_moves(delta: float):
 	camera_focus.position.y = clamp(
 		camera_focus.position.y, 
 		(604 * camera.zoom.y) /2, 
-		GameManager.currentLevelHeight - ((604 * camera.zoom.y) /2)
+		GameManager.currentLevelHeight + 80 - ((604 * camera.zoom.y) /2)
 		)
 
 func update_inventory_display():
