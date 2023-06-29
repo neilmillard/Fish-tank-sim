@@ -221,10 +221,10 @@ func process_food(delta: float) -> void:
 func process_health(delta: float) -> void:
 	# The fish will expend energy on fighting infection
 	var energyRequired
+	stats.currentHealth -= delta
 	if stats.currentHealth < maxHealth:
 		energyRequired = delta * GameManager.infectionEnergy
 	else:
-		stats.currentHealth -= delta
 		energyRequired = delta * GameManager.infectionEnergy / 2.0
 	var energyReceived = myStomach.get_energy(energyRequired)
 	var o2Used = myLung.requestO2(energyReceived)
@@ -237,12 +237,10 @@ func process_health(delta: float) -> void:
 	# poor water quality will assist the growing infection
 	if GameManager.currentTankData.currentNH3 > GameManager.nh3HealthThreshold:
 		stats.currentHealth -= delta / 2.0
-	
-	if stats.currentHealth == 0:
-		# Fish is fish food
-		myStomach.release_food()
-		GameManager.spawn_dead_fish()
-		queue_free()
+
+func kill_fish():
+	GameManager.remove_fish_resource(stats)
+	queue_free()
 
 func calculate_movement(delta):
 	# Water friction init

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://d2ningsghemxy"]
+[gd_scene load_steps=16 format=3 uid="uid://d2ningsghemxy"]
 
 [ext_resource type="Script" path="res://Scenes/game/fish/fish_body.gd" id="1_ppmwa"]
 [ext_resource type="Texture2D" uid="uid://tyus3e1vdqvx" path="res://art/fish_2.png" id="2_8njcv"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://Scenes/game/fish/fish_feeding.gd" id="7_aycnk"]
 [ext_resource type="Script" path="res://Scenes/game/fish/fish_hunting.gd" id="8_5bppq"]
 [ext_resource type="Script" path="res://Scenes/game/fish/fish_mating.gd" id="9_vu25s"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_dead.gd" id="10_md8i6"]
 
 [sub_resource type="Animation" id="Animation_mxa7c"]
 length = 0.001
@@ -152,6 +153,9 @@ script = ExtResource("8_5bppq")
 
 [node name="Mating" type="Node" parent="StateMachine"]
 script = ExtResource("9_vu25s")
+
+[node name="Dead" type="Node" parent="StateMachine"]
+script = ExtResource("10_md8i6")
 
 [node name="Label" type="Label" parent="."]
 offset_left = -19.0

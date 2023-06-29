@@ -20,18 +20,6 @@ const proteinEnergy: float = 1.0
 @export var storedEnergy: float
 
 
-func save():
-	var save_dict = {
-		"capacity": capacity,
-		"processingSpeed": processingSpeed,
-		"processingEfficiency": processingEfficiency,
-		"storedFood": storedFood,
-		"storedWaste": storedWaste,
-		"storedNH3": storedNH3,
-		"storedEnergy": storedEnergy
-		}
-	return save_dict
-
 func _init(p_capacity = 10.0, p_processingSpeed = 0.015, p_processingEfficiency = 0.60):
 	capacity = p_capacity
 	processingSpeed = p_processingSpeed
@@ -63,11 +51,12 @@ func receive_food(nutritionValue: Nutrition) -> void:
 	if has_space_to_eat(nutritionValue.size):
 		storedFood.append(nutritionValue)
 
-func release_food():
-	for nutrition in storedFood:
-		GameManager.spawn_food(nutrition)
-		nutrition.queue_free()
-	
+func release_food() -> Nutrition:
+	if len(storedFood) == 0:
+		return null
+	var myFood = storedFood[0]
+	storedFood.pop_front()
+	return myFood	
 
 func receive_nh3(amount: float) -> void:
 	storedNH3 += amount

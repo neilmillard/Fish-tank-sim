@@ -22,6 +22,9 @@ func update(_delta: float) -> void:
 		else:
 			emit_signal("Transitioned", "Idle", "Hunting")
 			return
+	if fishBody.stats.currentHealth <= 0:
+		emit_signal("Transitioned", "Idle", "Dead")
+		return
 #	if fishBody.myStomach.storedEnergy > 100.0:
 #		emit_signal("Transitioned", "Idle", "Mating")
 	

@@ -11,6 +11,9 @@ func exit():
 	fishBody.idle_timer.stop()
 	
 func update(_delta: float) -> void:
+	if fishBody.stats.currentHealth <= 0:
+		emit_signal("Transitioned", "Hunting", "Dead")
+		return
 	if check_preditors() == 'flee':
 		emit_signal("Transitioned", "Hunting", "Fleeing", {"previousState" = "Hunting"})
 		return

@@ -80,9 +80,17 @@ func build_navmesh(topLeft: Vector2, bottomRight: Vector2, floorHeight: int):
 	add_child(navRegion2D)
 
 
-func _on_spawn_new_object(objectName: String, p_position: Vector2 = Vector2.ZERO):
+func _on_spawn_new_object(
+		objectName: String, 
+		p_position: Vector2 = Vector2.ZERO,
+		p_nutrition: Nutrition = null):
 	if objectName == "flakeFood":
 		spawn_flakefood()
+		return
+	
+	if objectName == "FishFood":
+		var myObj = spawn_obj(foods["flakeFood"], p_position)
+		myObj.nutritionValue = p_nutrition
 		return
 	
 	if objectName == "plantFood":

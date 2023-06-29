@@ -4,7 +4,7 @@ enum State {
 	Play,
 }
 
-signal spawn_new(objectName: String, position: Vector2)
+signal spawn_new(objectName: String, position: Vector2, myNutrition: Nutrition)
 signal toggle_game_paused(is_paused: bool)
 signal save_button_pressed()
 signal load_button_pressed()
@@ -91,6 +91,9 @@ func new_filter_resource(type: String):
 func remove_food_resource(myFood: Food) -> void:
 	currentTankData.remove_food(myFood)
 
+func remove_fish_resource(myFish: Fish) -> void:
+	currentTankData.remove_fish(myFish)
+	
 func new_plant_resource(type: String = "GreenPlant"):
 	var myPlantRes = Plant.new(type)
 	currentTankData.add_plant(myPlantRes)
@@ -111,11 +114,11 @@ func request_o2(requested :float) -> float:
 func charge_o2(amountO2: float):
 	currentTankData.charge_o2(amountO2)
 
-func spawn_new_object(objectName: String, position: Vector2 = Vector2.ZERO):
-	emit_signal("spawn_new", objectName, position)
+func spawn_food(myPosition: Vector2, myNutrition: Nutrition):
+	spawn_new_object("flakeFood", myPosition, myNutrition)
 
-func spawn_dead_fish():
-	pass
+func spawn_new_object(objectName: String, position: Vector2 = Vector2.ZERO, myNutrition: Nutrition = null):
+	emit_signal("spawn_new", objectName, position, myNutrition)
 
 # This function allows us to save and load a text resource in debug builds and a
 # binary resource in the released product.
