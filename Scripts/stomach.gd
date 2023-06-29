@@ -32,7 +32,7 @@ func save():
 		}
 	return save_dict
 
-func _init(p_capacity = 10.0, p_processingSpeed = 0.03, p_processingEfficiency = 0.60):
+func _init(p_capacity = 10.0, p_processingSpeed = 0.015, p_processingEfficiency = 0.60):
 	capacity = p_capacity
 	processingSpeed = p_processingSpeed
 	processingEfficiency = p_processingEfficiency

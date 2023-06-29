@@ -43,5 +43,15 @@ func process_health(delta: float) -> void:
 	if stats.storedSugar > cost:
 		stats.storedSugar -= cost
 	else:
-		stats.currentHealth -= cost
+		stats.currentHealth = stats.currentHealth - (cost - stats.storedSugar)
+		stats.storedSugar = 0.0
 	
+	if stats.currentHealth < maxHealth and stats.storedSugar > 0:
+		if maxHealth - stats.currentHealth < 1:
+			cost = cost * (maxHealth - stats.currentHealth)
+		if stats.storedSugar > cost:
+			stats.storedSugar -= cost
+			stats.currentHealth += cost
+		
+	if stats.currentHealth > maxHealth:
+		stats.currentHealth = maxHealth
