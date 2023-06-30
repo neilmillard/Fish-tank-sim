@@ -14,12 +14,12 @@ func exit():
 	pass
 
 func update(_delta: float) -> void:
-	if plantBody.stats.currentHealth <= 0.0:
+	if myBody.stats.currentHealth <= 0.0:
 		emit_signal("Transitioned", "Idle", "Dead")
 		return
 	
 	if enough_sugar():
-		if plantBody.stats.growStage < plantBody.maxGrowStage:
+		if myBody.stats.growStage < myBody.maxGrowStage:
 			emit_signal("Transitioned", "Idle", "Growing")
 			return
 		else:
@@ -36,4 +36,4 @@ func available_food():
 	return GameManager.currentTankData.currentNO3 > 1.0
 
 func enough_sugar():
-	return plantBody.stats.storedSugar > plantBody.growthThreshold * (plantBody.stats.growStage+1)
+	return myBody.stats.storedSugar > myBody.growthThreshold * (myBody.stats.growStage+1)

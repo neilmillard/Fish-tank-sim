@@ -15,6 +15,7 @@ const CHUNK_WIDTH: int = 320
 const GRAVITY: int = 200
 const MAXGASMULTIPLIER: float = 0.5
 const SAVE_GAME_BASE_PATH = "user://save_file"
+const STOMACH_CAPACITY_BASE: float = 10.0
 
 var debug
 var currentState = State.Play
@@ -29,6 +30,7 @@ var bacteriaGrowthRate: float = 0.04
 var nh3HealthThreshold: float = 40.0
 # infectionEnergy amount of energy to increase health by 1
 var infectionEnergy: float = 0.2
+var growEnergy: float = 0.01
 var waterFriction: float = 0.3
 
 var currentTankData: TankData

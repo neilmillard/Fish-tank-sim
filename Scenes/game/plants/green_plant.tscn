@@ -1,13 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://cce1una4cin75"]
+[gd_scene load_steps=4 format=3 uid="uid://cce1una4cin75"]
 
 [ext_resource type="Script" path="res://Scenes/game/plants/plant_body.gd" id="1_4h6rl"]
 [ext_resource type="Texture2D" uid="uid://dklmed47lcgmj" path="res://art/plant_1.png" id="2_wxp8h"]
-[ext_resource type="Script" path="res://Scenes/game/state_machine/state_machine.gd" id="3_2m3ju"]
-[ext_resource type="Script" path="res://Scenes/game/plants/plant_idle.gd" id="4_x1quk"]
-[ext_resource type="Script" path="res://Scenes/game/plants/plant_growing.gd" id="5_sao11"]
-[ext_resource type="Script" path="res://Scenes/game/plants/plant_feeding.gd" id="6_5tgab"]
-[ext_resource type="Script" path="res://Scenes/game/plants/plant_dead.gd" id="7_m0opd"]
-[ext_resource type="Script" path="res://Scenes/game/plants/plant_harvest.gd" id="8_lq42m"]
+[ext_resource type="PackedScene" uid="uid://bosjescveliu" path="res://Scenes/game/plants/plant_state_machine.tscn" id="3_32ghr"]
 
 [node name="GreenPlant" type="Node2D"]
 position = Vector2(16, -16)
@@ -23,24 +18,7 @@ scale = Vector2(4, 4)
 texture = ExtResource("2_wxp8h")
 hframes = 4
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
-script = ExtResource("3_2m3ju")
-initialState = NodePath("Idle")
-
-[node name="Idle" type="Node" parent="StateMachine"]
-script = ExtResource("4_x1quk")
-
-[node name="Growing" type="Node" parent="StateMachine"]
-script = ExtResource("5_sao11")
-
-[node name="Feeding" type="Node" parent="StateMachine"]
-script = ExtResource("6_5tgab")
-
-[node name="Dead" type="Node" parent="StateMachine"]
-script = ExtResource("7_m0opd")
-
-[node name="Harvest" type="Node" parent="StateMachine"]
-script = ExtResource("8_lq42m")
+[node name="StateMachine" parent="." instance=ExtResource("3_32ghr")]
 
 [node name="Label" type="Label" parent="."]
 offset_left = -16.2992

@@ -12,7 +12,7 @@ func enter(_msg:={}):
 func physics_update(_delta: float) -> void:
 	if direction == Vector2.ZERO:
 		while direction == Vector2.ZERO:
-			direction = fishBody.get_safe_direction()
-	fishBody.direction = direction
-	fishBody.velocity = fishBody.direction.normalized() * fishBody.currentSwimspeed
+			direction = myBody.get_safe_direction()
+	myBody.direction = direction
+	myBody.velocity = myBody.direction.normalized() * myBody.currentSwimspeed
 	emit_signal("Transitioned", "Swimming", previousState)

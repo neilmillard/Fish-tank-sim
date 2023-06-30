@@ -1,14 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://c5nne8v7x3avu"]
+[gd_scene load_steps=9 format=3 uid="uid://c5nne8v7x3avu"]
 
 [ext_resource type="Script" path="res://Scenes/game/fish/fish_body.gd" id="1_h0yt5"]
 [ext_resource type="Texture2D" uid="uid://cormmvthb0itk" path="res://art/fish_1.png" id="2_la8n0"]
-[ext_resource type="Script" path="res://Scenes/game/state_machine/state_machine.gd" id="3_p2em5"]
-[ext_resource type="Script" path="res://Scenes/game/fish/fish_idle.gd" id="4_1yylt"]
-[ext_resource type="Script" path="res://Scenes/game/fish/fish_swimming.gd" id="5_bwct7"]
-[ext_resource type="Script" path="res://Scenes/game/fish/fish_fleeing.gd" id="6_03g5u"]
-[ext_resource type="Script" path="res://Scenes/game/fish/fish_feeding.gd" id="7_tngvw"]
-[ext_resource type="Script" path="res://Scenes/game/fish/fish_hunting.gd" id="8_ki0ob"]
-[ext_resource type="Script" path="res://Scenes/game/fish/fish_mating.gd" id="9_nye4t"]
+[ext_resource type="PackedScene" uid="uid://bhytrggki6xig" path="res://Scenes/game/fish/fish_state_machine.tscn" id="3_03olu"]
 
 [sub_resource type="Animation" id="Animation_mxa7c"]
 length = 0.001
@@ -133,27 +127,7 @@ shape = SubResource("CapsuleShape2D_0hl1j")
 
 [node name="IdleTimer" type="Timer" parent="."]
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
-script = ExtResource("3_p2em5")
-initialState = NodePath("Idle")
-
-[node name="Idle" type="Node" parent="StateMachine"]
-script = ExtResource("4_1yylt")
-
-[node name="Swimming" type="Node" parent="StateMachine"]
-script = ExtResource("5_bwct7")
-
-[node name="Fleeing" type="Node" parent="StateMachine"]
-script = ExtResource("6_03g5u")
-
-[node name="Feeding" type="Node" parent="StateMachine"]
-script = ExtResource("7_tngvw")
-
-[node name="Hunting" type="Node" parent="StateMachine"]
-script = ExtResource("8_ki0ob")
-
-[node name="Mating" type="Node" parent="StateMachine"]
-script = ExtResource("9_nye4t")
+[node name="StateMachine" parent="." instance=ExtResource("3_03olu")]
 
 [node name="Label" type="Label" parent="."]
 offset_left = -19.0

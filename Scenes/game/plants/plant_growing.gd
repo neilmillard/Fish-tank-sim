@@ -12,10 +12,10 @@ func exit():
 func update(delta: float) -> void:
 	growingTimer += delta
 	if growingTimer > 5.0:
-		plantBody.stats.storedSugar -= plantBody.growthCost * (plantBody.stats.growStage+1)
-		plantBody.stats.growStage = min(plantBody.maxGrowStage, 
-									plantBody.stats.growStage + 1)
-		plantBody.sprite2D.frame = plantBody.stats.growStage
+		myBody.stats.storedSugar -= myBody.growthCost * (myBody.stats.growStage+1)
+		myBody.stats.growStage = min(myBody.maxGrowStage, 
+									myBody.stats.growStage + 1)
+		myBody.sprite2D.frame = myBody.stats.growStage
 		emit_signal("Transitioned", "Growing", "Idle")
 
 func physics_update(_delta: float) -> void:

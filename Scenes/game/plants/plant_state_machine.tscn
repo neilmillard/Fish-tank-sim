@@ -1,0 +1,27 @@
+[gd_scene load_steps=7 format=3 uid="uid://bosjescveliu"]
+
+[ext_resource type="Script" path="res://Scenes/game/state_machine/state_machine.gd" id="1_i42pt"]
+[ext_resource type="Script" path="res://Scenes/game/plants/plant_idle.gd" id="2_uya42"]
+[ext_resource type="Script" path="res://Scenes/game/plants/plant_growing.gd" id="3_0isuj"]
+[ext_resource type="Script" path="res://Scenes/game/plants/plant_feeding.gd" id="4_qwi1m"]
+[ext_resource type="Script" path="res://Scenes/game/plants/plant_dead.gd" id="5_30jc8"]
+[ext_resource type="Script" path="res://Scenes/game/plants/plant_harvest.gd" id="6_k0qtb"]
+
+[node name="StateMachine" type="Node" node_paths=PackedStringArray("initialState")]
+script = ExtResource("1_i42pt")
+initialState = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="."]
+script = ExtResource("2_uya42")
+
+[node name="Growing" type="Node" parent="."]
+script = ExtResource("3_0isuj")
+
+[node name="Feeding" type="Node" parent="."]
+script = ExtResource("4_qwi1m")
+
+[node name="Dead" type="Node" parent="."]
+script = ExtResource("5_30jc8")
+
+[node name="Harvest" type="Node" parent="."]
+script = ExtResource("6_k0qtb")

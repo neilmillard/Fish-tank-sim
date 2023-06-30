@@ -25,6 +25,7 @@ func _ready():
 	stats.type = type
 	stats.globalPosition = global_position
 	sprite2D.frame = stats.growStage
+	$StateMachine.parentNode = self
 
 func _process(delta):
 	if fsm && fsm.currentState:

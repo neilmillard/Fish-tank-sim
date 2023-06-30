@@ -12,12 +12,12 @@ func exit():
 func update(delta: float) -> void:
 	harvestTimer += delta
 	if harvestTimer > 4.0:
-		plantBody.stats.storedSugar -= 4.0
+		myBody.stats.storedSugar -= 4.0
 		var offset = Vector2(
 			randf_range(1.0, 130.0),
 			randf_range(-20.0, -70.0)
 		)
-		var newPosition = plantBody.position + offset
+		var newPosition = myBody.position + offset
 		GameManager.spawn_new_object("plantFood", newPosition)
 		emit_signal("Transitioned", "Harvest", "Idle")
 	

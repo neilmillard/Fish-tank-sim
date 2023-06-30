@@ -15,9 +15,9 @@ func update(delta: float) -> void:
 	# CO2 and H2O with sunlight energy
 	# NH4 is synthesized from NO3, which creates amino acids from glucose -> protein
 	var no3Received = GameManager.currentTankData.remove_NO3(
-											delta * plantBody.processingRate)
+											delta * myBody.processingRate)
 	if no3Received > 0.0:
-		plantBody.stats.storedSugar += no3Received
+		myBody.stats.storedSugar += no3Received
 		GameManager.currentTankData.charge_o2(no3Received)
 		fedAmount += no3Received
 	

@@ -13,11 +13,14 @@ enum FeedLevel {
 
 # This fish scene stats
 @export var type: String = "Generic"
+@export var maxSize: float = 2.0
 @export var swimSpeed: int = 60
 @export var fleeSpeed: int = 100
 @export var rotationSpeed = 40.0
 @export var feedLevel: FeedLevel = FeedLevel.Middle
 @export var maxHealth: float = 100
+@export var growthThreshold: float = 40.0
+@export var baseSpriteScale: float = 4.0
 @export var idleFoodDistanceThreshold: float = 400
 
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
@@ -52,6 +55,7 @@ func _ready():
 			stats = GameManager.new_fish_resource()
 	stats.type = type
 	myStomach = stats.myStomach
+	myStomach.capacity = stats.fishSize * GameManager.STOMACH_CAPACITY_BASE
 	myLung = stats.myLung
 	# set so we get collision events from mouse
 	input_pickable = true
@@ -60,6 +64,7 @@ func _ready():
 	animationPlayer.play("SwimRight")
 	start_idle_timer(true)
 	add_debug_timer()
+	$StateMachine.parentNode = self
 
 func _process(delta):
 	if fsm && fsm.currentState:
@@ -69,6 +74,7 @@ func _process(delta):
 	process_food(delta)
 	process_waste(delta)
 	process_health(delta)
+	process_growth(delta)
 
 
 func _physics_process(delta):
@@ -237,6 +243,25 @@ func process_health(delta: float) -> void:
 	# poor water quality will assist the growing infection
 	if GameManager.currentTankData.currentNH3 > GameManager.nh3HealthThreshold:
 		stats.currentHealth -= delta / 2.0
+
+func process_growth(delta: float) -> void:
+	# The fish will grow to maxSize provided it has enough energy
+	if stats.fishSize >= maxSize:
+		return
+	if myStomach.storedEnergy < growthThreshold:
+		return
+	if stats.currentHealth < maxHealth * 0.95:
+		return
+	
+	var energyRequired = delta * GameManager.growEnergy
+	var energyReceived = myStomach.get_energy(energyRequired)
+	var o2Used = myLung.requestO2(energyReceived)
+	myStomach.receive_nh3(energyReceived / 4.0)
+	stats.fishSize += energyReceived
+	scale = Vector2(
+				stats.fishSize * baseSpriteScale, 
+				stats.fishSize * baseSpriteScale
+			)
 
 func kill_fish():
 	GameManager.remove_fish_resource(stats)

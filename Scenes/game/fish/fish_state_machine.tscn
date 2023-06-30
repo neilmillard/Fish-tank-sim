@@ -1,0 +1,35 @@
+[gd_scene load_steps=9 format=3 uid="uid://bhytrggki6xig"]
+
+[ext_resource type="Script" path="res://Scenes/game/state_machine/state_machine.gd" id="1_oe1bo"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_idle.gd" id="2_joi83"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_swimming.gd" id="3_m8m5n"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_fleeing.gd" id="4_o8g87"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_feeding.gd" id="5_cbgxy"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_hunting.gd" id="6_l5owq"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_mating.gd" id="7_7kor0"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_dead.gd" id="8_ea7bg"]
+
+[node name="StateMachine" type="Node" node_paths=PackedStringArray("initialState")]
+script = ExtResource("1_oe1bo")
+initialState = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="."]
+script = ExtResource("2_joi83")
+
+[node name="Swimming" type="Node" parent="."]
+script = ExtResource("3_m8m5n")
+
+[node name="Fleeing" type="Node" parent="."]
+script = ExtResource("4_o8g87")
+
+[node name="Feeding" type="Node" parent="."]
+script = ExtResource("5_cbgxy")
+
+[node name="Hunting" type="Node" parent="."]
+script = ExtResource("6_l5owq")
+
+[node name="Mating" type="Node" parent="."]
+script = ExtResource("7_7kor0")
+
+[node name="Dead" type="Node" parent="."]
+script = ExtResource("8_ea7bg")

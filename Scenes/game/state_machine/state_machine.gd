@@ -6,16 +6,19 @@ class_name StateMachine
 var currentState: State
 var states: Dictionary = {}
 var stateTimer: float
+var parentNode
 
 func _ready():
+	await owner.ready
+
 	for child in get_children():
 		if child is State:
 			states[child.name.to_lower()] = child
 			child.Transitioned.connect(_on_child_transition)
+			child.myBody = parentNode
 	
 	if initialState:
 		# wait for the readys to be complete
-		await owner.ready
 		initialState.enter()
 		currentState = initialState
 	

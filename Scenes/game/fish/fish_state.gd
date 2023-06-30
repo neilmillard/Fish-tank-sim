@@ -1,13 +1,13 @@
 extends State
 class_name FishState
 
-var fishBody: FishBody
+var myBody: FishBody
 
 func _ready() -> void:
+	# wait for stateMachine
 	await owner.ready
-	fishBody = owner as FishBody
-	assert(fishBody != null)
+
 
 func check_preditors():
-	var detection = fishBody.check_environment()
+	var detection = myBody.check_environment()
 	return detection
