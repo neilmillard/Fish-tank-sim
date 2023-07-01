@@ -20,7 +20,7 @@ const proteinEnergy: float = 1.0
 @export var storedEnergy: float
 
 
-func _init(p_capacity = 10.0, p_processingSpeed = 0.015, p_processingEfficiency = 0.60):
+func _init(p_capacity = 10.0, p_processingSpeed = 0.02, p_processingEfficiency = 0.60):
 	capacity = p_capacity
 	processingSpeed = p_processingSpeed
 	processingEfficiency = p_processingEfficiency
@@ -52,11 +52,7 @@ func receive_food(nutritionValue: Nutrition) -> void:
 		storedFood.append(nutritionValue)
 
 func release_food() -> Nutrition:
-	if len(storedFood) == 0:
-		return null
-	var myFood = storedFood[0]
-	storedFood.pop_front()
-	return myFood	
+	return storedFood.pop_front()
 
 func receive_nh3(amount: float) -> void:
 	storedNH3 += amount

@@ -20,7 +20,6 @@ enum FeedLevel {
 @export var feedLevel: FeedLevel = FeedLevel.Middle
 @export var maxHealth: float = 100
 @export var growthThreshold: float = 40.0
-@export var baseSpriteScale: float = 4.0
 @export var idleFoodDistanceThreshold: float = 400
 
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
@@ -60,6 +59,10 @@ func _ready():
 	# set so we get collision events from mouse
 	input_pickable = true
 	currentSwimspeed = swimSpeed
+	scale = Vector2(
+				stats.fishSize, 
+				stats.fishSize
+			)
 	fishFaceRight = true
 	animationPlayer.play("SwimRight")
 	start_idle_timer(true)
@@ -70,6 +73,8 @@ func _process(delta):
 	if fsm && fsm.currentState:
 		label.text = fsm.currentState.name
 	# TODO: effect water chemistry when processing waste
+	if fsm.currentState.name == "Dead":
+		return
 	process_lung(delta)
 	process_food(delta)
 	process_waste(delta)
@@ -228,15 +233,15 @@ func process_health(delta: float) -> void:
 	# The fish will expend energy on fighting infection
 	var energyRequired
 	stats.currentHealth -= delta
-	if stats.currentHealth < maxHealth:
-		energyRequired = delta * GameManager.infectionEnergy
+	if stats.currentHealth < maxHealth * 0.8:
+		energyRequired = delta * GameManager.infectionEnergy * stats.fishSize
 	else:
 		energyRequired = delta * GameManager.infectionEnergy / 2.0
 	var energyReceived = myStomach.get_energy(energyRequired)
 	var o2Used = myLung.requestO2(energyReceived)
 	myStomach.receive_nh3(energyReceived / 4.0)
 	if energyReceived == energyRequired and o2Used == energyReceived:
-		stats.currentHealth += delta
+		stats.currentHealth += delta * 1.1
 	if stats.currentHealth > maxHealth:
 		stats.currentHealth = maxHealth
 	
@@ -259,8 +264,8 @@ func process_growth(delta: float) -> void:
 	myStomach.receive_nh3(energyReceived / 4.0)
 	stats.fishSize += energyReceived
 	scale = Vector2(
-				stats.fishSize * baseSpriteScale, 
-				stats.fishSize * baseSpriteScale
+				stats.fishSize, 
+				stats.fishSize
 			)
 
 func kill_fish():
@@ -357,7 +362,9 @@ func find_food():
 
 func eat_food(foodObject: Node):
 	if foodObject:
-		# hunger can go negative, equiv to the fish storing food in belly
+		# Dead fish cannot eat
+		if fsm.currentState.name == "Dead":
+			return
 		if myStomach.has_space_to_eat(foodObject.nutritionValue.size):
 			myStomach.receive_food(foodObject.eat())
 		nearestFoodPosition = Vector2.ZERO

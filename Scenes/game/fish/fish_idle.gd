@@ -11,6 +11,9 @@ func exit():
 	myBody.idle_timer.stop()
 
 func update(_delta: float) -> void:
+	if myBody.stats.currentHealth <= 0:
+		emit_signal("Transitioned", "Idle", "Dead")
+		return
 	# fish will only change from idle, if food, mate or preditor present
 	if check_preditors() == 'flee':
 		emit_signal("Transitioned", "Idle", "Fleeing", {"previousState" = "Idle"})
@@ -22,9 +25,6 @@ func update(_delta: float) -> void:
 		else:
 			emit_signal("Transitioned", "Idle", "Hunting")
 			return
-	if myBody.stats.currentHealth <= 0:
-		emit_signal("Transitioned", "Idle", "Dead")
-		return
 #	if myBody.myStomach.storedEnergy > 100.0:
 #		emit_signal("Transitioned", "Idle", "Mating")
 	

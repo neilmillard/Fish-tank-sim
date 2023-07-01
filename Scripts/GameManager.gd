@@ -76,7 +76,7 @@ func set_current_level(tankData : TankData):
 	print("setting MaxGas:" + str(tankData.maxGas))
 
 func new_fish_resource(type: String = "OrangeFish"):
-	var myFishRes = Fish.new(type, true, 95.0, 1.0)
+	var myFishRes = Fish.new(type, true, 95.0, 0.5)
 	currentTankData.add_fish(myFishRes)
 	return myFishRes
 
@@ -116,8 +116,8 @@ func request_o2(requested :float) -> float:
 func charge_o2(amountO2: float):
 	currentTankData.charge_o2(amountO2)
 
-func spawn_food(myPosition: Vector2, myNutrition: Nutrition):
-	spawn_new_object("flakeFood", myPosition, myNutrition)
+func spawn_fishfood(myPosition: Vector2, myNutrition: Nutrition):
+	spawn_new_object("FishFood", myPosition, myNutrition)
 
 func spawn_new_object(objectName: String, position: Vector2 = Vector2.ZERO, myNutrition: Nutrition = null):
 	emit_signal("spawn_new", objectName, position, myNutrition)

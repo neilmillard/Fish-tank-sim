@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://c0cnb4lvafvle"]
+[gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://Scripts/MiddleWater.gd" id="1_a4esy"]
+[ext_resource type="Script" path="res://Scenes/game/tank/MiddleWater.gd" id="1_a4esy"]
 
 [node name="MiddleWater" type="Node2D"]
 script = ExtResource("1_a4esy")

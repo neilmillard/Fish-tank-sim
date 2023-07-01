@@ -18,8 +18,9 @@ func update(delta: float) -> void:
 	if timer > 20.0:
 		var myNutrition = myBody.myStomach.release_food()
 		if myNutrition != null:
-			GameManager.spawn_food(myBody.position, myNutrition)
+			GameManager.spawn_fishfood(myBody.position, myNutrition)
 			timer = 0.0
+			print(myBody.name + " Spawned food")
 		else:
 			print(myBody.name + " Time to die")
 			myBody.kill_fish()
