@@ -19,7 +19,8 @@ enum FeedLevel {
 @export var rotationSpeed = 40.0
 @export var feedLevel: FeedLevel = FeedLevel.Middle
 @export var maxHealth: float = 100
-@export var growthThreshold: float = 40.0
+@export var growthThreshold: float = 5.0
+@export var spriteScale: float = 4.0
 @export var idleFoodDistanceThreshold: float = 400
 
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
@@ -59,9 +60,9 @@ func _ready():
 	# set so we get collision events from mouse
 	input_pickable = true
 	currentSwimspeed = swimSpeed
-	scale = Vector2(
-				stats.fishSize, 
-				stats.fishSize
+	$Sprite2D.scale = Vector2(
+				stats.fishSize * spriteScale, 
+				stats.fishSize * spriteScale
 			)
 	fishFaceRight = true
 	animationPlayer.play("SwimRight")
@@ -255,17 +256,18 @@ func process_growth(delta: float) -> void:
 		return
 	if myStomach.storedEnergy < growthThreshold:
 		return
-	if stats.currentHealth < maxHealth * 0.95:
+	if stats.currentHealth < maxHealth * 0.80:
 		return
 	
 	var energyRequired = delta * GameManager.growEnergy
 	var energyReceived = myStomach.get_energy(energyRequired)
 	var o2Used = myLung.requestO2(energyReceived)
 	myStomach.receive_nh3(energyReceived / 4.0)
-	stats.fishSize += energyReceived
-	scale = Vector2(
-				stats.fishSize, 
-				stats.fishSize
+	stats.fishSize += (energyReceived / GameManager.growRatio)
+	print(name + " Scale: " + str($Sprite2D.scale.round()))
+	$Sprite2D.scale = Vector2(
+				stats.fishSize * spriteScale, 
+				stats.fishSize * spriteScale
 			)
 
 func kill_fish():

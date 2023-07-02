@@ -19,7 +19,6 @@ func _input(event):
 func _process(delta):
 	check_camera_moves(delta)
 	update_inventory_display()
-	update_fish_display()
 	if Input.is_action_just_released("MouseLeft"):
 		mousePosGlobal = get_global_mouse_position()
 		if GameManager.currentFish:
@@ -62,14 +61,6 @@ func update_inventory_display():
 	$Control/TankStatsContainer2/NH3Label/NH3Value.text = "%4.2f" % GameManager.currentTankData.get("currentNH3")
 	$Control/TankStatsContainer2/NO2Label/NO2Value.text = "%4.2f" % GameManager.currentTankData.get("currentNO2")
 	$Control/TankStatsContainer2/NO3Label/NO3Value.text = "%4.2f" % GameManager.currentTankData.get("currentNO3")
-	
-func update_fish_display():
-	if GameManager.currentFish != null:
-		$Control/FishStateContainer/HungerLabel/HungerValue.text = str(floor(GameManager.currentFish.myStomach.get_amount_food_stored()))
-		$Control/FishStateContainer/EnergyLabel/EnergyValue.text = str(floor(GameManager.currentFish.myStomach.get_stored_energy()))
-	else:
-		$Control/FishStateContainer/HungerLabel/HungerValue.text = ""
-		$Control/FishStateContainer/EnergyLabel/EnergyValue.text = ""
 
 func _on_flake_food_button_button_down():
 	if GameManager.flakeFood > 0:

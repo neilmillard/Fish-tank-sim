@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bb2611wtuse72"]
+[gd_scene load_steps=9 format=3 uid="uid://bb2611wtuse72"]
 
 [ext_resource type="Script" path="res://Scenes/game/game_world.gd" id="1_ayi5y"]
 [ext_resource type="PackedScene" uid="uid://7pafpo7utcpp" path="res://Scenes/game/tank/underwater.tscn" id="2_yd0gd"]
 [ext_resource type="PackedScene" uid="uid://dm5rs8fx0vnle" path="res://Scenes/menu/pause/pause_menu.tscn" id="3_ru30w"]
 [ext_resource type="Texture2D" uid="uid://c7n0dkn264x0f" path="res://art/flake_1.png" id="4_j3w7t"]
 [ext_resource type="Script" path="res://Scripts/DebugStats.gd" id="5_hgqng"]
+[ext_resource type="Script" path="res://Scenes/game/FishStateContainer.gd" id="5_l8hwt"]
 [ext_resource type="Script" path="res://Scenes/InterfaceManager.gd" id="6_btoso"]
 [ext_resource type="LabelSettings" uid="uid://s5caed4j5v6a" path="res://Resources/new_label_settings.tres" id="7_4vf33"]
 
@@ -28,8 +29,77 @@ offset_right = 250.0
 offset_bottom = 500.0
 script = ExtResource("5_hgqng")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/DebugStats"]
+[node name="Panel" type="Panel" parent="CanvasLayer/DebugStats"]
 layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/DebugStats/Panel"]
+layout_mode = 2
+offset_right = 250.0
+offset_bottom = 500.0
+
+[node name="FishStateContainer" type="VBoxContainer" parent="CanvasLayer/DebugStats/Panel"]
+layout_mode = 2
+offset_right = 250.0
+offset_bottom = 500.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_l8hwt")
+
+[node name="HungerLabel" type="Label" parent="CanvasLayer/DebugStats/Panel/FishStateContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Food:"
+label_settings = ExtResource("7_4vf33")
+
+[node name="HungerValue" type="Label" parent="CanvasLayer/DebugStats/Panel/FishStateContainer/HungerLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "100"
+label_settings = ExtResource("7_4vf33")
+
+[node name="EnergyLabel" type="Label" parent="CanvasLayer/DebugStats/Panel/FishStateContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Energy:"
+label_settings = ExtResource("7_4vf33")
+
+[node name="EnergyValue" type="Label" parent="CanvasLayer/DebugStats/Panel/FishStateContainer/EnergyLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "100"
+label_settings = ExtResource("7_4vf33")
+
+[node name="SizeLabel" type="Label" parent="CanvasLayer/DebugStats/Panel/FishStateContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Size:"
+label_settings = ExtResource("7_4vf33")
+
+[node name="SizeValue" type="Label" parent="CanvasLayer/DebugStats/Panel/FishStateContainer/SizeLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "1.0"
+label_settings = ExtResource("7_4vf33")
+
+[node name="HealthLabel" type="Label" parent="CanvasLayer/DebugStats/Panel/FishStateContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Health:"
+label_settings = ExtResource("7_4vf33")
+
+[node name="HealthValue" type="Label" parent="CanvasLayer/DebugStats/Panel/FishStateContainer/HealthLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "1.0"
+label_settings = ExtResource("7_4vf33")
 
 [node name="InterfaceManager" type="Control" parent="CanvasLayer"]
 layout_mode = 3
@@ -84,42 +154,6 @@ anchors_preset = 0
 offset_top = -5.0
 offset_right = 200.0
 offset_bottom = 47.0
-
-[node name="FishStateContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="HungerLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Food:"
-label_settings = ExtResource("7_4vf33")
-
-[node name="HungerValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer/HungerLabel"]
-layout_mode = 2
-offset_left = 89.0
-offset_right = 189.0
-offset_bottom = 26.0
-text = "100"
-label_settings = ExtResource("7_4vf33")
-
-[node name="EnergyLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Energy:"
-label_settings = ExtResource("7_4vf33")
-
-[node name="EnergyValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/FishStateContainer/EnergyLabel"]
-layout_mode = 2
-offset_left = 89.0
-offset_right = 189.0
-offset_bottom = 26.0
-text = "100"
-label_settings = ExtResource("7_4vf33")
 
 [node name="ResourceContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
 layout_mode = 1
