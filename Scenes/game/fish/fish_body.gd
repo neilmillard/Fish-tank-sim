@@ -264,7 +264,6 @@ func process_growth(delta: float) -> void:
 	var o2Used = myLung.requestO2(energyReceived)
 	myStomach.receive_nh3(energyReceived / 4.0)
 	stats.fishSize += (energyReceived / GameManager.growRatio)
-	print(name + " Scale: " + str($Sprite2D.scale.round()))
 	$Sprite2D.scale = Vector2(
 				stats.fishSize * spriteScale, 
 				stats.fishSize * spriteScale

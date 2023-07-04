@@ -16,6 +16,9 @@ const GRAVITY: int = 200
 const MAXGASMULTIPLIER: float = 0.5
 const SAVE_GAME_BASE_PATH = "user://save_file"
 const STOMACH_CAPACITY_BASE: float = 10.0
+const TANKTEMPDELTA: float = 0.1
+const TANKMINTEMP: float = 14.0
+const TANKMAXTEMP: float = 35.0
 
 var debug
 var currentState = State.Play
@@ -77,6 +80,24 @@ func set_current_level(tankData : TankData):
 	print("setting height: " + str(currentLevelHeight))
 	print("setting width: " + str(currentLevelWidth))
 	print("setting MaxGas:" + str(tankData.maxGas))
+
+func has_heater() -> bool:
+	return currentTankData.heater
+	
+func set_tank_temp(delta: float) -> void:
+	if currentTankData.heater:
+		if currentTankData.currentTemp != currentTankData.targetTemp:
+			if currentTankData.currentTemp > currentTankData.targetTemp:
+				currentTankData.currentTemp -= delta * TANKTEMPDELTA
+			else:
+				currentTankData.currentTemp += delta * TANKTEMPDELTA
+
+func set_tank_target_temp(diff: float) -> void:
+	currentTankData.targetTemp += diff
+	currentTankData.targetTemp = clamp(currentTankData.targetTemp, TANKMINTEMP, TANKMAXTEMP)
+	
+func get_tank_temp() -> float:
+	return currentTankData.currentTemp
 
 func new_fish_resource(type: String = "OrangeFish"):
 	var myFishRes = Fish.new(type, true, 95.0, 0.5)

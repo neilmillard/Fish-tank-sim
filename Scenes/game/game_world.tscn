@@ -104,183 +104,215 @@ label_settings = ExtResource("7_4vf33")
 [node name="InterfaceManager" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 0
-offset_top = 586.0
+offset_top = 563.0
 offset_right = 1150.0
 offset_bottom = 650.0
 script = ExtResource("6_btoso")
 
 [node name="Panel" type="Panel" parent="CanvasLayer/InterfaceManager"]
 layout_mode = 1
-anchors_preset = -1
-anchor_top = -0.14
-anchor_bottom = -0.14
-offset_left = -1.0
-offset_top = -8.04
-offset_right = 1150.0
-offset_bottom = 67.96
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager"]
-layout_mode = 0
-offset_left = 421.0
-offset_top = -14.0
-offset_right = 576.0
-offset_bottom = 60.0
+[node name="HCont" type="HBoxContainer" parent="CanvasLayer/InterfaceManager/Panel"]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
 
-[node name="FlakeFoodButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="FlakeFoodButton" type="Button" parent="CanvasLayer/InterfaceManager/Panel/HCont/VBoxContainer"]
 layout_mode = 2
 text = "Flake Food"
 
-[node name="SpawnGreenPlantButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer"]
+[node name="SpawnGreenPlantButton" type="Button" parent="CanvasLayer/InterfaceManager/Panel/HCont/VBoxContainer"]
 layout_mode = 2
 text = "GreenPlant"
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/InterfaceManager"]
-layout_mode = 0
-offset_left = 581.0
-offset_top = -14.0
-offset_right = 726.0
-offset_bottom = 60.0
-
-[node name="SpawnGreenFishButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer2"]
+[node name="ResourceContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont"]
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
-text = "Add Green Fish"
 
-[node name="SpawnOrangeFishButton" type="Button" parent="CanvasLayer/InterfaceManager/VBoxContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont/ResourceContainer"]
 layout_mode = 2
-text = "Add OrangeFish"
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_bottom = 2
 
-[node name="Control" type="Control" parent="CanvasLayer/InterfaceManager"]
-anchors_preset = 0
-offset_top = -5.0
-offset_right = 200.0
-offset_bottom = 47.0
-
-[node name="ResourceContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 230.0
-offset_top = -2.0
-offset_right = 162.0
-offset_bottom = 2.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="FlakeFoodLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/ResourceContainer"]
+[node name="FlakeFoodLabel" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/ResourceContainer/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "FlakeFood:"
+vertical_alignment = 1
 
-[node name="FlakeFoodValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/ResourceContainer/FlakeFoodLabel"]
+[node name="FlakeFoodValue" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/ResourceContainer/MarginContainer/FlakeFoodLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
+vertical_alignment = 1
 
-[node name="LiveFoodLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/ResourceContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont/ResourceContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_bottom = 2
+
+[node name="LiveFoodLabel" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/ResourceContainer/MarginContainer2"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "LiveFood:"
+vertical_alignment = 1
 
-[node name="LiveFoodValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/ResourceContainer/LiveFoodLabel"]
+[node name="LiveFoodValue" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/ResourceContainer/MarginContainer2/LiveFoodLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
+vertical_alignment = 1
 
-[node name="TankStatsContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 740.0
-offset_top = -2.0
-offset_right = 657.0
-offset_bottom = 2.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
 
-[node name="TankO2Label" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer"]
+[node name="SpawnGreenFishButton" type="Button" parent="CanvasLayer/InterfaceManager/Panel/HCont/VBoxContainer2"]
+layout_mode = 2
+text = "Add Green Fish"
+
+[node name="SpawnOrangeFishButton" type="Button" parent="CanvasLayer/InterfaceManager/Panel/HCont/VBoxContainer2"]
+layout_mode = 2
+text = "Add OrangeFish"
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 2
+
+[node name="TankTemp" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="HBoxCont" type="HBoxContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp"]
+layout_mode = 2
+
+[node name="TankTempLabel" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp/HBoxCont"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Tank Temp: "
+vertical_alignment = 1
+
+[node name="TankTempValue" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp/HBoxCont"]
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+text = "88"
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp"]
+layout_mode = 2
+
+[node name="TankTempUp" type="Button" parent="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+"
+
+[node name="TargetTemp" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "88"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TankTempDown" type="Button" parent="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "-"
+
+[node name="TankStatsContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+
+[node name="TankO2Label" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Tank O2:"
 
-[node name="TankO2Value" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer/TankO2Label"]
+[node name="TankO2Value" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer/TankO2Label"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
 
-[node name="BactLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer"]
+[node name="BactLabel" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Ammonia:"
 
-[node name="BactValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer/BactLabel"]
+[node name="BactValue" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer/BactLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "0.0"
 
-[node name="WasteLabel" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer"]
+[node name="WasteLabel" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Waste:"
 
-[node name="WasteValue" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer/WasteLabel"]
+[node name="WasteValue" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer/WasteLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "0.0"
 
-[node name="TankStatsContainer2" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 890.0
-offset_top = -17.0
-offset_right = 807.0
-offset_bottom = 17.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="TankStatsContainer2" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
 
-[node name="NH3Label" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2"]
+[node name="NH3Label" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Ammonia:"
 
-[node name="NH3Value" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2/NH3Label"]
+[node name="NH3Value" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2/NH3Label"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "0.0"
 
-[node name="NO2Label" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2"]
+[node name="NO2Label" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "NO2:"
 
-[node name="NO2Value" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2/NO2Label"]
+[node name="NO2Value" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2/NO2Label"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
 
-[node name="NO3Label" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2"]
+[node name="NO3Label" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "NO3:"
 
-[node name="NO3Value" type="Label" parent="CanvasLayer/InterfaceManager/Control/TankStatsContainer2/NO3Label"]
+[node name="NO3Value" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2/NO3Label"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0
@@ -297,7 +329,9 @@ visible = false
 rotation = 1.68075
 texture = ExtResource("4_j3w7t")
 
-[connection signal="button_down" from="CanvasLayer/InterfaceManager/VBoxContainer/FlakeFoodButton" to="CanvasLayer/InterfaceManager" method="_on_flake_food_button_button_down"]
-[connection signal="button_up" from="CanvasLayer/InterfaceManager/VBoxContainer/SpawnGreenPlantButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_green_plant_button_button_up"]
-[connection signal="button_up" from="CanvasLayer/InterfaceManager/VBoxContainer2/SpawnGreenFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_green_fish_button_button_up"]
-[connection signal="button_up" from="CanvasLayer/InterfaceManager/VBoxContainer2/SpawnOrangeFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_fish_button_button_up"]
+[connection signal="button_down" from="CanvasLayer/InterfaceManager/Panel/HCont/VBoxContainer/FlakeFoodButton" to="CanvasLayer/InterfaceManager" method="_on_flake_food_button_button_down"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/VBoxContainer/SpawnGreenPlantButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_green_plant_button_button_up"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/VBoxContainer2/SpawnGreenFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_green_fish_button_button_up"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/VBoxContainer2/SpawnOrangeFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_fish_button_button_up"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp/HBoxContainer/TankTempUp" to="CanvasLayer/InterfaceManager" method="_on_tank_temp_up_button_up"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp/HBoxContainer/TankTempDown" to="CanvasLayer/InterfaceManager" method="_on_tank_temp_down_button_up"]

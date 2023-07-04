@@ -11,6 +11,7 @@ extends Resource
 
 @export var heater: bool
 @export var currentTemp: float
+@export var targetTemp: float = 20.0
 
 var maxGas: float
 @export var fish := {}

@@ -25,6 +25,7 @@ func _process(delta):
 			GameManager.currentCameraTarget = GameManager.currentFish
 		else:
 			GameManager.currentCameraTarget = null
+
 		
 func check_camera_moves(delta: float):
 	if GameManager.currentCameraTarget:
@@ -54,14 +55,21 @@ func check_camera_moves(delta: float):
 		)
 
 func update_inventory_display():
-	$Control/ResourceContainer/FlakeFoodLabel/FlakeFoodValue.text = str(GameManager.flakeFood)
-	$Control/ResourceContainer/LiveFoodLabel/LiveFoodValue.text = str(GameManager.liveFood)
-	$Control/TankStatsContainer/TankO2Label/TankO2Value.text = str(floor(GameManager.currentTankData.get("availableO2")))
-	$Control/TankStatsContainer/WasteLabel/WasteValue.text = "%4.2f" % GameManager.currentTankData.get("currentWaste")
-	$Control/TankStatsContainer2/NH3Label/NH3Value.text = "%4.2f" % GameManager.currentTankData.get("currentNH3")
-	$Control/TankStatsContainer2/NO2Label/NO2Value.text = "%4.2f" % GameManager.currentTankData.get("currentNO2")
-	$Control/TankStatsContainer2/NO3Label/NO3Value.text = "%4.2f" % GameManager.currentTankData.get("currentNO3")
+	$Panel/HCont/ResourceContainer/MarginContainer/FlakeFoodLabel/FlakeFoodValue.text = str(GameManager.flakeFood)
+	$Panel/HCont/ResourceContainer/MarginContainer2/LiveFoodLabel/LiveFoodValue.text = str(GameManager.liveFood)
+	$Panel/HCont/MarginContainer/TankTemp/HBoxContainer/TargetTemp.text = "%2.0f" % GameManager.currentTankData.get("targetTemp")
+	if GameManager.has_heater():
+		$Panel/HCont/MarginContainer/TankTemp/HBoxCont/TankTempValue.text = "%4.2f" % GameManager.currentTankData.get("currentTemp")
+	else:
+		$Panel/HCont/MarginContainer/TankTemp/HBoxCont/TankTempValue.text = "NA"
 
+	# Tank Chemistry
+	$Panel/HCont/TankStatsContainer/TankO2Label/TankO2Value.text = str(floor(GameManager.currentTankData.get("availableO2")))
+	$Panel/HCont/TankStatsContainer/WasteLabel/WasteValue.text = "%4.2f" % GameManager.currentTankData.get("currentWaste")
+	$Panel/HCont/TankStatsContainer2/NH3Label/NH3Value.text = "%4.2f" % GameManager.currentTankData.get("currentNH3")
+	$Panel/HCont/TankStatsContainer2/NO2Label/NO2Value.text = "%4.2f" % GameManager.currentTankData.get("currentNO2")
+	$Panel/HCont/TankStatsContainer2/NO3Label/NO3Value.text = "%4.2f" % GameManager.currentTankData.get("currentNO3")
+	
 func _on_flake_food_button_button_down():
 	if GameManager.flakeFood > 0:
 		GameManager.flakeFood -= 1
@@ -80,3 +88,11 @@ func _on_spawn_green_fish_button_button_up():
 
 func _on_spawn_green_plant_button_button_up():
 	GameManager.spawn_new_object("greenPlant")
+
+
+func _on_tank_temp_up_button_up():
+	GameManager.set_tank_target_temp(1.0)
+
+
+func _on_tank_temp_down_button_up():
+	GameManager.set_tank_target_temp(-1.0)

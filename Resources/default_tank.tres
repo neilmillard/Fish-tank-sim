@@ -6,7 +6,8 @@
 [sub_resource type="Resource" id="Resource_2gtwp"]
 script = ExtResource("6_66wpl")
 id = 1
-type = "GravelFilter"
+type = "Gravel"
+globalPosition = Vector2(0, 0)
 currentBacteriaSomonas = 5.0
 currentBacteriaBacter = 1.0
 
@@ -19,8 +20,9 @@ currentWaste = 0.0
 currentNH3 = 0.0
 currentNO2 = 0.0
 currentNO3 = 0.0
-heater = false
-currentTemp = 0.0
+heater = true
+currentTemp = 20.0
+targetTemp = 20.0
 fish = {}
 food = {}
 plants = {}

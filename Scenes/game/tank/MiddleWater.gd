@@ -6,7 +6,8 @@ class_name MiddleWater
 
 var foods := {
 	'flakeFood': ResourceLoader.load("res://Scenes/game/food/flakeFood.tscn"),
-	'PlantFood': ResourceLoader.load("res://Scenes/game/food/plantFood.tscn")
+	'PlantFood': ResourceLoader.load("res://Scenes/game/food/plantFood.tscn"),
+	'plantFood': ResourceLoader.load("res://Scenes/game/food/plantFood.tscn")
 }
 
 var fishes := {
@@ -32,7 +33,7 @@ func _ready():
 
 func _process(delta):
 	calc_O2_surface_transfer(delta)
-	pass
+	GameManager.set_tank_temp(delta)
 
 
 func build(tank: TankData) -> void:
