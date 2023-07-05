@@ -8,6 +8,7 @@ signal spawn_new(objectName: String, position: Vector2, myNutrition: Nutrition)
 signal toggle_game_paused(is_paused: bool)
 signal save_button_pressed()
 signal load_button_pressed()
+signal goto_main()
 
 
 const CHUNK_HEIGHT: int = 128
@@ -69,6 +70,9 @@ func save_button():
 func load_button():
 	emit_signal("load_button_pressed")
 	
+func quit_game_pressed():
+	emit_signal("goto_main")
+
 func set_debug_overlay(debugOverlay):
 	debug = debugOverlay
 

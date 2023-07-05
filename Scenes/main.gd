@@ -1,6 +1,9 @@
 extends Node
 var game_world : Node2D
 
+func _ready():
+	open_main_menu()
+	
 func _on_Game_starting(game_scene : PackedScene):
 	print("on_Game_starting")
 	#Wait until the main menu is done doing its thing, (Playing its sound effect) 
@@ -16,11 +19,10 @@ func _on_Game_starting(game_scene : PackedScene):
 	game_world.connect('end_game', Callable(self, 'open_main_menu'))
 	
 func open_main_menu():
-	#Fade out of game
-	game_world.queue_free()
+	if game_world:
+		game_world.queue_free()
 	
 	#Fade in to main menu
-	var main_menu = load("res://Scenes/menu/MainMenu.tscn").instance()
+	var main_menu = load("res://Scenes/menu/MainMenu.tscn").instantiate()
 	add_child(main_menu)
 	main_menu.connect("starting", Callable(self, "_on_Game_starting"))
-

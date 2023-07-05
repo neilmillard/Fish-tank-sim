@@ -76,7 +76,7 @@ layout_mode = 2
 focus_mode = 0
 theme_override_fonts/font = ExtResource("2_8k8g1")
 theme_override_font_sizes/font_size = 50
-text = "Exit"
+text = "Quit Game"
 
 [connection signal="pressed" from="Panel/VBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]

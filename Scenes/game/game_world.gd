@@ -9,6 +9,7 @@ func _ready():
 	# Lets load up the tank
 	_load_tank()
 	GameManager.connect("load_button_pressed", _on_load_game_button_pressed)
+	GameManager.connect("goto_main", Callable(self, "_on_goto_main"))
 
 func _on_goto_main():
 	emit_signal("end_game")
@@ -16,7 +17,6 @@ func _on_goto_main():
 func _load_tank():
 	current_tank = start_tank.instantiate()
 	$Tanks.add_child(current_tank)
-	# current_tank.connect("goto_main", Callable(self, "_on_goto_main"))
 
 func _on_load_game_button_pressed():
 	current_tank.queue_free()
