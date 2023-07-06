@@ -16,6 +16,8 @@ extends Node2D
 @onready var sprite2D = $Sprite2D
 @onready var fsm = $StateMachine
 
+var growthRate: float = 0.0
+
 func _ready():
 	if !stats:
 		if type.length() > 0:
@@ -32,7 +34,7 @@ func _process(delta):
 		label.text = fsm.currentState.name
 	# TODO: effect water chemistry
 	process_health(delta)
-
+	growthRate = GameManager.temperatureModifer(28.0, 10.0)
 
 func _physics_process(_delta):
 	pass

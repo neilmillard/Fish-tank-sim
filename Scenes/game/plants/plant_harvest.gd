@@ -10,7 +10,7 @@ func exit():
 	pass
 
 func update(delta: float) -> void:
-	harvestTimer += delta
+	harvestTimer += delta * myBody.growthRate
 	if harvestTimer > 4.0:
 		myBody.stats.storedSugar -= 4.0
 		var offset = Vector2(

@@ -10,7 +10,7 @@ func exit():
 	pass
 
 func update(delta: float) -> void:
-	growingTimer += delta
+	growingTimer += delta * myBody.growthRate
 	if growingTimer > 5.0:
 		myBody.stats.storedSugar -= myBody.growthCost * (myBody.stats.growStage+1)
 		myBody.stats.growStage = min(myBody.maxGrowStage, 
