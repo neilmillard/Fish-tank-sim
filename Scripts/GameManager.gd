@@ -87,7 +87,21 @@ func set_current_level(tankData : TankData):
 
 func has_heater() -> bool:
 	return currentTankData.heater
-	
+
+func temperatureModifer(optimumTemp: float, toleranceRange: float) -> float:
+	# This returns a modifer based on the tank temperature
+	# if temp == optimumTemp return 1.0
+	# if temp within range return 1.0 -> 0.0.
+	# if outside range return 0.0
+	var temperature = get_tank_temp()
+	if optimumTemp == temperature:
+		return 1.0
+	var diff = abs(temperature - optimumTemp)
+	var modifier = 0.0
+	if diff < toleranceRange:
+		modifier = 1 - (diff / toleranceRange )**2
+	return modifier
+
 func set_tank_temp(delta: float) -> void:
 	if currentTankData.heater:
 		if currentTankData.currentTemp != currentTankData.targetTemp:

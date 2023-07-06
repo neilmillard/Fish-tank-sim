@@ -29,8 +29,8 @@ func _init(p_capacity = 10.0, p_processingSpeed = 0.017, p_processingEfficiency 
 	storedNH3 = 0.0
 	storedEnergy = 18.0
 
-func _process(delta: float) -> void:
-	process_food(delta)
+func _process(delta: float, preferredTemp: float, tempTolerance: float) -> void:
+	process_food(delta, preferredTemp, tempTolerance)
 	
 func get_amount_food_stored():
 	var foodSize = 0.0
@@ -76,18 +76,21 @@ func get_energy(energyRequired: float) -> float:
 	storedEnergy -= energyRequired
 	return energyRequired
 	
-func process_food(delta: float) -> void:
+func process_food(delta: float, preferredTemp: float, tempTolerance: float) -> void:
 	# we need storedFood
 	# each call we get processingSpeed * delta as a percent of storedFood
 	# storedEnergy is incremented based on carbEnergy + fatEnergy + proteinEnergy
 	# once processedCarbs > carbs
 	# food is popped off the array
+	# if temp is below optimum, processing is slower
 	if len(storedFood) == 0:
 		return
 	
 	var currentNutrition = storedFood[0]
 	var processAmount: float = 1.0 / currentNutrition.size
-	var processingPercent = processAmount * (processingSpeed) * delta
+	var processingSpeedStomach = ( processingSpeed * 
+						GameManager.temperatureModifer(preferredTemp, tempTolerance) )
+	var processingPercent = processAmount * (processingSpeedStomach) * delta
 	var carbs = minf(currentNutrition.carbs, currentNutrition.carbs * processingPercent)
 	var fats = minf(currentNutrition.fats, currentNutrition.fats * processingPercent)
 	var proteins = minf(currentNutrition.proteins, currentNutrition.proteins * processingPercent)

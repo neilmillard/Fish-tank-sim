@@ -28,8 +28,9 @@ func _process(delta):
 	processNO2(delta)
 
 func growBacteria(delta: float) -> void:
-	stats.currentBacteriaBacter = minf(maxBacteria, stats.currentBacteriaBacter + (delta * stats.currentBacteriaBacter * bacteriaGrowthRate))
-	stats.currentBacteriaSomonas = minf(maxBacteria, stats.currentBacteriaSomonas + (delta * stats.currentBacteriaSomonas * bacteriaGrowthRate))
+	var growthRate = GameManager.temperatureModifer(28.0, 10.0)
+	stats.currentBacteriaBacter = minf(maxBacteria, stats.currentBacteriaBacter + (delta * stats.currentBacteriaBacter * bacteriaGrowthRate * growthRate))
+	stats.currentBacteriaSomonas = minf(maxBacteria, stats.currentBacteriaSomonas + (delta * stats.currentBacteriaSomonas * bacteriaGrowthRate * growthRate))
 
 func processWaste(delta: float) -> void:
 	var amount = delta * GameManager.wasteDecayRate * 1.0

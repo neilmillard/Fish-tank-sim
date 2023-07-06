@@ -16,12 +16,14 @@ enum FeedLevel {
 @export var maxSize: float = 2.0
 @export var swimSpeed: int = 60
 @export var fleeSpeed: int = 100
-@export var rotationSpeed = 40.0
+@export var rotationSpeed: float = 40.0
 @export var feedLevel: FeedLevel = FeedLevel.Middle
 @export var maxHealth: float = 100
 @export var growthThreshold: float = 5.0
 @export var spriteScale: float = 4.0
 @export var idleFoodDistanceThreshold: float = 400
+@export var preferredTemp: float = 25.0
+@export var toleranceRange: float = 8.0
 
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
 @onready var navagent: NavigationAgent2D = $NavigationAgent
@@ -228,7 +230,7 @@ func process_lung(delta: float) -> void:
 	myLung._process(delta)
 
 func process_food(delta: float) -> void:
-	myStomach._process(delta)
+	myStomach._process(delta, preferredTemp, toleranceRange)
 
 func process_health(delta: float) -> void:
 	# The fish will expend energy on fighting infection
