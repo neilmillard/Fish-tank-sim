@@ -44,6 +44,8 @@ var avoidUp: int = -1
 var avoidDown: int = -1
 var avoidLeft: int = -1
 var avoidRight: int = -1
+var healthBar: ProgressBar
+var healthBarStyleBox: StyleBox
 
 var _timer = null
 var debug := true
@@ -70,6 +72,7 @@ func _ready():
 	animationPlayer.play("SwimRight")
 	start_idle_timer(true)
 	add_debug_timer()
+	add_health_bar()
 	$StateMachine.parentNode = self
 
 func _process(delta):
@@ -98,6 +101,26 @@ func _draw():
 
 func _on_debug_timeout():
 	pass
+
+func add_health_bar() -> void:
+	healthBar = ProgressBar.new()
+	healthBar.show_percentage = false
+	healthBarStyleBox = StyleBoxFlat.new()
+	healthBar.add_theme_stylebox_override("fill", healthBarStyleBox)
+	healthBar.position = Vector2(-30.0, -80.0)
+	healthBar.size = Vector2(60.0, 10.0)
+	healthBar.max_value = maxHealth
+	add_child(healthBar)
+	
+
+func set_health_bar() -> void:
+	healthBar.value = stats.currentHealth
+	var bg_color = Color(0.2, 1.0, 0)
+	if healthBar.value < maxHealth / 2:
+		bg_color = Color(1.0, 0.0, 0)
+	var sb = healthBar.get_theme_stylebox("fill")
+	sb.bg_color = bg_color
+	
 
 func get_safe_direction():
 	var myDirection = Vector2(
@@ -251,6 +274,7 @@ func process_health(delta: float) -> void:
 	# poor water quality will assist the growing infection
 	if GameManager.currentTankData.currentNH3 > GameManager.nh3HealthThreshold:
 		stats.currentHealth -= delta / 2.0
+	set_health_bar()
 
 func process_growth(delta: float) -> void:
 	# The fish will grow to maxSize provided it has enough energy
