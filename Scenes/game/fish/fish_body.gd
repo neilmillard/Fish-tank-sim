@@ -28,7 +28,8 @@ enum FeedLevel {
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
 @onready var navagent: NavigationAgent2D = $NavigationAgent
 @onready var label = $Label
-@onready var fsm = $StateMachine
+@onready var fsm : StateMachine = $StateMachine
+@onready var thought : Thought = $Thought
 
 @onready var idle_timer = $IdleTimer
 var fishFaceRight: bool
@@ -78,7 +79,7 @@ func _ready():
 func _process(delta):
 	if fsm && fsm.currentState:
 		label.text = fsm.currentState.name
-	# TODO: effect water chemistry when processing waste
+	
 	if fsm.currentState.name == "Dead":
 		return
 	process_lung(delta)
@@ -115,6 +116,10 @@ func add_health_bar() -> void:
 
 func set_health_bar() -> void:
 	healthBar.value = stats.currentHealth
+	if healthBar.value < maxHealth * 0.8:
+		healthBar.show()
+	if healthBar.value > maxHealth * 0.8:
+		healthBar.hide()
 	var bg_color = Color(0.2, 1.0, 0)
 	if healthBar.value < maxHealth / 2:
 		bg_color = Color(1.0, 0.0, 0)
@@ -368,8 +373,7 @@ func rotate_to_direction(newDirection: Vector2, delta: float) -> void:
 		rotation_degrees -= angleDelta 
 	else:
 		rotation_degrees += angleDelta
-
-
+	
 func start_idle_timer(shorter: bool = true):
 	if !idleTimerRunning:
 		idleTimerRunning = true
@@ -440,3 +444,6 @@ func add_debug_timer():
 	_timer.set_one_shot(false) # so it loops
 	_timer.start()
 
+func _on_state_machine_state_changed():
+	thought.start_thought(fsm.currentState.name)
+	

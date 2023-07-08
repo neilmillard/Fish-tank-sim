@@ -1,8 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://c5nne8v7x3avu"]
+[gd_scene load_steps=10 format=3 uid="uid://c5nne8v7x3avu"]
 
 [ext_resource type="Script" path="res://Scenes/game/fish/fish_body.gd" id="1_h0yt5"]
 [ext_resource type="Texture2D" uid="uid://cormmvthb0itk" path="res://art/fish_1.png" id="2_la8n0"]
 [ext_resource type="PackedScene" uid="uid://bhytrggki6xig" path="res://Scenes/game/fish/fish_state_machine.tscn" id="3_03olu"]
+[ext_resource type="PackedScene" uid="uid://4fj4lbl0navp" path="res://Scenes/game/thought.tscn" id="4_cqs5d"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0hl1j"]
+radius = 24.0
+height = 70.0
 
 [sub_resource type="Animation" id="Animation_mxa7c"]
 length = 0.001
@@ -96,10 +101,6 @@ _data = {
 "SwimRight": SubResource("Animation_cvmth")
 }
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0hl1j"]
-radius = 24.0
-height = 70.0
-
 [node name="GreenFish" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 5
@@ -114,6 +115,10 @@ scale = Vector2(4, 4)
 texture = ExtResource("2_la8n0")
 hframes = 4
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_0hl1j")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_6ekwv")
@@ -121,13 +126,13 @@ libraries = {
 
 [node name="NavigationAgent" type="NavigationAgent2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-rotation = 1.5708
-shape = SubResource("CapsuleShape2D_0hl1j")
-
 [node name="IdleTimer" type="Timer" parent="."]
 
 [node name="StateMachine" parent="." instance=ExtResource("3_03olu")]
+
+[node name="Thought" parent="." instance=ExtResource("4_cqs5d")]
+position = Vector2(53, -65)
+scale = Vector2(4, 4)
 
 [node name="Label" type="Label" parent="."]
 offset_left = -19.0
@@ -139,3 +144,4 @@ text = "State"
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="timeout" from="IdleTimer" to="." method="_on_idle_timer_timeout"]
+[connection signal="StateChanged" from="StateMachine" to="." method="_on_state_machine_state_changed"]
