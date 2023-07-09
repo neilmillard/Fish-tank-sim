@@ -255,12 +255,12 @@ offset_right = 189.0
 offset_bottom = 26.0
 text = "100"
 
-[node name="BactLabel" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer"]
+[node name="FoodQuantLabel" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Ammonia:"
+text = "TankFood:"
 
-[node name="BactValue" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer/BactLabel"]
+[node name="FoodQuantValue" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer/FoodQuantLabel"]
 layout_mode = 2
 offset_left = 89.0
 offset_right = 189.0

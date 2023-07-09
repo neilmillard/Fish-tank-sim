@@ -117,17 +117,17 @@ func set_tank_target_temp(diff: float) -> void:
 func get_tank_temp() -> float:
 	return currentTankData.currentTemp
 
-func new_fish_resource(type: String = "OrangeFish"):
+func new_fish_resource(type: String = "OrangeFish") -> Fish:
 	var myFishRes = Fish.new(type, true, 95.0, 0.5)
 	currentTankData.add_fish(myFishRes)
 	return myFishRes
 
-func new_food_resource():
+func new_food_resource() -> Food:
 	var myFoodRes = Food.new()
 	currentTankData.add_food(myFoodRes)
 	return myFoodRes
 
-func new_filter_resource(type: String):
+func new_filter_resource(type: String) -> Filter:
 	var myFilterRes = Filter.new(type)
 	currentTankData.add_filter(myFilterRes)
 	return myFilterRes
@@ -135,10 +135,15 @@ func new_filter_resource(type: String):
 func remove_food_resource(myFood: Food) -> void:
 	currentTankData.remove_food(myFood)
 
+func currentFoodInTank() -> float:
+	var quant: float = 0.0
+	return len(currentTankData.food)
+	
+
 func remove_fish_resource(myFish: Fish) -> void:
 	currentTankData.remove_fish(myFish)
 	
-func new_plant_resource(type: String = "GreenPlant"):
+func new_plant_resource(type: String = "GreenPlant") -> Plant:
 	var myPlantRes = Plant.new(type)
 	currentTankData.add_plant(myPlantRes)
 	return myPlantRes

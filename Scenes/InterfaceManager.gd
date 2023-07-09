@@ -66,6 +66,7 @@ func update_inventory_display():
 	# Tank Chemistry
 	$Panel/HCont/TankStatsContainer/TankO2Label/TankO2Value.text = str(floor(GameManager.currentTankData.get("availableO2")))
 	$Panel/HCont/TankStatsContainer/WasteLabel/WasteValue.text = "%4.2f" % GameManager.currentTankData.get("currentWaste")
+	$Panel/HCont/TankStatsContainer/FoodQuantLabel/FoodQuantValue.text = "%4.0f" % GameManager.currentFoodInTank()
 	$Panel/HCont/TankStatsContainer2/NH3Label/NH3Value.text = "%4.2f" % GameManager.currentTankData.get("currentNH3")
 	$Panel/HCont/TankStatsContainer2/NO2Label/NO2Value.text = "%4.2f" % GameManager.currentTankData.get("currentNO2")
 	$Panel/HCont/TankStatsContainer2/NO3Label/NO3Value.text = "%4.2f" % GameManager.currentTankData.get("currentNO3")
