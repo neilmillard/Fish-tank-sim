@@ -30,8 +30,9 @@ enum FeedLevel {
 @onready var label = $Label
 @onready var fsm : StateMachine = $StateMachine
 @onready var thought : Thought = $Thought
-
+@onready var interactionArea : InteractionArea = $InteractionArea2D
 @onready var idle_timer = $IdleTimer
+
 var fishFaceRight: bool
 var fishState: String = ""
 var currentSwimspeed: float
@@ -65,7 +66,7 @@ func _ready():
 	# set so we get collision events from mouse
 	input_pickable = true
 	currentSwimspeed = swimSpeed
-	$Sprite2D.scale = Vector2(
+	$CollisionShape2D.scale = Vector2(
 				stats.fishSize * spriteScale, 
 				stats.fishSize * spriteScale
 			)
@@ -75,10 +76,13 @@ func _ready():
 	add_debug_timer()
 	add_health_bar()
 	$StateMachine.parentNode = self
+	if interactionArea:
+		interactionArea.parentNode = self
 
 func _process(delta):
 	if fsm && fsm.currentState:
-		label.text = fsm.currentState.name
+		if label:
+			label.text = fsm.currentState.name
 	
 	if fsm.currentState.name == "Dead":
 		return
@@ -87,7 +91,7 @@ func _process(delta):
 	process_waste(delta)
 	process_health(delta)
 	process_growth(delta)
-
+	scale_fish()
 
 func _physics_process(delta):
 	calculate_movement(delta)
@@ -136,11 +140,20 @@ func get_safe_direction():
 		myDirection = Vector2.UP
 	return myDirection
 	
-func is_foe(result) -> bool:
-	return result.collider.collision_layer && result.collider.collision_layer != 1
+func is_foe(collider: Node2D) -> bool:
+	if collider.collision_layer:
+		if collider.collision_layer == GameManager.FISH:
+			if collider.has_method("could_eat"):
+				return collider.could_eat()
+	return false
 
-func is_wall(result) -> bool:
-	return result.collider.collision_layer && result.collider.collision_layer == 1
+func is_wall(collider) -> bool:
+	if collider.collision_layer:
+		if collider.collision_layer == GameManager.WALLS:
+			return true
+		if collider.collision_layer == GameManager.FLOOR:
+			return true
+	return false
 
 func check_raycast_result(result, new_result) -> Dictionary:
 	new_result = {
@@ -149,9 +162,9 @@ func check_raycast_result(result, new_result) -> Dictionary:
 	if result:
 		new_result['move'] = 0
 		if result.collider:
-			if is_foe(result):
+			if is_foe(result.collider):
 				new_result['flee'] = true
-			if is_wall(result):
+			if is_wall(result.collider):
 				new_result['wall'] = true
 	return new_result
 
@@ -160,7 +173,10 @@ func check_raycast_result(result, new_result) -> Dictionary:
 # flee is true if we should flee, otherwise flee is false
 # flee should only be true for fish same size or bigger
 # flee should not be true for walls
-func check_environment()-> String:
+# TODO: We will update this to check the interactions array instead
+# on_area_entered will add an item to the array, which we can check
+# for location and type.
+func check_environment() -> String:
 	var rayLength = 50.0 * stats.fishSize
 	var result
 	var check_result
@@ -172,6 +188,18 @@ func check_environment()-> String:
 	avoidRight = 1
 	avoidDown = 1
 	avoidLeft = -1
+	
+	if interactionArea:
+		var bodies = interactionArea.bodies
+		var layer : int
+		if bodies.size() >= 1:
+			for body in bodies:
+				if(body.get_collision_layer_value(GameManager.WALLS)):
+					print("Body %s is wall" % body)
+				if(body.get_collision_layer_value(GameManager.FISH)):
+					print("Body %s is fish" % body)
+				if(body.get_collision_layer_value(GameManager.FLOOR)):
+					print("Body %s is floor" % body)
 	
 	result = shoot_physics_ray(Vector2.UP * rayLength)
 	check_result = check_raycast_result(result,{})
@@ -295,10 +323,18 @@ func process_growth(delta: float) -> void:
 	var o2Used = myLung.requestO2(energyReceived)
 	myStomach.receive_nh3(energyReceived / 4.0)
 	stats.fishSize += (energyReceived / GameManager.growRatio)
-	$Sprite2D.scale = Vector2(
+
+func scale_fish():
+	var myScale = Vector2(
 				stats.fishSize * spriteScale, 
 				stats.fishSize * spriteScale
 			)
+	$Sprite2D.scale = myScale
+	var collshape = $CollisionShape2D
+	collshape.scale = Vector2(stats.fishSize, stats.fishSize)
+	if interactionArea:
+		interactionArea.set_size(stats.fishSize)
+	
 
 func kill_fish():
 	GameManager.remove_fish_resource(stats)
@@ -390,6 +426,9 @@ func find_food():
 			navagent.set_target_position(nearestFoodPosition)
 	else:
 		direction = Vector2.ZERO
+
+func could_eat() -> bool:
+	return myStomach.could_eat()
 
 func eat_food(foodObject: Node):
 	if foodObject:

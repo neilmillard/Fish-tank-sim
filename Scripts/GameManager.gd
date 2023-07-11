@@ -21,6 +21,12 @@ const TANKTEMPDELTA: float = 0.1
 const TANKMINTEMP: float = 14.0
 const TANKMAXTEMP: float = 35.0
 
+# Layers
+const WALLS = 1
+const FISH = 2
+const FOOD = 3
+const FLOOR = 4
+
 var debug
 var currentState = State.Play
 var currentLevelWidth: int = 2400

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/UnderwaterProcedural.gd" id="1_ilmkv"]
 [ext_resource type="PackedScene" uid="uid://dr7yr46m6ebpw" path="res://Scenes/game/tank/BackgroundFarTerrain.tscn" id="2_8wyk3"]
-[ext_resource type="PackedScene" uid="uid://c0cnb4lvafvle" path="res://Scenes/game/tank/middle_water.tscn" id="2_rcjv1"]
+[ext_resource type="PackedScene" path="res://Scenes/game/tank/middle_water.tscn" id="2_rcjv1"]
 [ext_resource type="PackedScene" uid="uid://cmsxq0rjabw6a" path="res://Scenes/game/tank/Floor.tscn" id="3_xf8mu"]
 
 [node name="Underwater" type="Node2D"]

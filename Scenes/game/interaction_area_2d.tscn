@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://ck4jn75q1rs5r"]
+
+[ext_resource type="Script" path="res://Scenes/game/interaction_area_2d.gd" id="1_tbmpp"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_418ua"]
+radius = 40.0
+height = 120.0
+
+[node name="InteractionArea2D" type="Area2D"]
+collision_layer = 0
+collision_mask = 11
+script = ExtResource("1_tbmpp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_418ua")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
