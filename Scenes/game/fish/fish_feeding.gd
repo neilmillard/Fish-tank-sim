@@ -12,6 +12,9 @@ func update(_delta: float) -> void:
 		emit_signal("Transitioned", "Feeding", "Idle")
 
 func physics_update(delta: float) -> void:
+	if check_preditors() == 'flee':
+		emit_signal("Transitioned", "Hunting", "Fleeing", {"previousState" = "Hunting"})
+		return
 	if myBody.nearestFoodPosition != Vector2.ZERO:
 		if myBody.navagent.is_navigation_finished():
 			reset_food_finder()

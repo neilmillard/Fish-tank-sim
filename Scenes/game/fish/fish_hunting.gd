@@ -14,15 +14,15 @@ func update(_delta: float) -> void:
 	if myBody.stats.currentHealth <= 0:
 		emit_signal("Transitioned", "Hunting", "Dead")
 		return
-	if check_preditors() == 'flee':
-		emit_signal("Transitioned", "Hunting", "Fleeing", {"previousState" = "Hunting"})
-		return
 	if myBody.food_is_near():
 		emit_signal("Transitioned", "Hunting", "Feeding")
 		return
 		
 func physics_update(delta: float) -> void:
 	myBody.rotate_to_direction(Vector2(myBody.velocity.x, 0.0), delta)
+	if check_preditors() == 'flee':
+		emit_signal("Transitioned", "Hunting", "Fleeing", {"previousState" = "Hunting"})
+		return
 
 func on_idle_timer_timeout():
 	var someFood = myBody.get_nearest_food()

@@ -15,9 +15,6 @@ func update(_delta: float) -> void:
 		emit_signal("Transitioned", "Idle", "Dead")
 		return
 	# fish will only change from idle, if food, mate or preditor present
-	if check_preditors() == 'flee':
-		emit_signal("Transitioned", "Idle", "Fleeing", {"previousState" = "Idle"})
-		return
 	if myBody.myStomach.could_eat():
 		if myBody.food_is_near():
 			emit_signal("Transitioned", "Idle", "Feeding")
@@ -36,4 +33,6 @@ func on_idle_timer_timeout():
 
 func physics_update(delta: float) -> void:
 	myBody.rotate_to_direction(Vector2(myBody.velocity.x, 0.0), delta)
-	
+	if check_preditors() == 'flee':
+		emit_signal("Transitioned", "Idle", "Fleeing", {"previousState" = "Idle"})
+		return

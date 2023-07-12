@@ -168,6 +168,23 @@ func check_raycast_result(result, new_result) -> Dictionary:
 				new_result['wall'] = true
 	return new_result
 
+func is_preditor(otherFish: FishBody) -> bool:
+	if stats.fishSize < otherFish.stats.fishSize / 2.0:
+		return true
+	if stats.fishSize < otherFish.stats.fishSize && otherFish.myStomach.could_eat():
+		return true
+	return false
+
+func is_mate(otherFish: FishBody) -> bool:
+	if stats.isMale != otherFish.stats.isMale && stats.type == stats.type:
+		# possible mate
+		if otherFish.fsm.currentState.name == "Mating":
+			return true
+		else:
+			return false
+	else:
+		return false
+
 # throw out some rays so fish can tell what is around it.
 # we populate the allowed directions used by 
 # flee is true if we should flee, otherwise flee is false
@@ -189,88 +206,39 @@ func check_environment() -> String:
 	avoidDown = 1
 	avoidLeft = -1
 	
-	if interactionArea:
-		var bodies = interactionArea.bodies
-		var layer : int
-		if bodies.size() >= 1:
-			for body in bodies:
-				if(body.get_collision_layer_value(GameManager.WALLS)):
-					print("Body %s is wall" % body)
-				if(body.get_collision_layer_value(GameManager.FISH)):
-					print("Body %s is fish" % body)
-				if(body.get_collision_layer_value(GameManager.FLOOR)):
-					print("Body %s is floor" % body)
-	
-	result = shoot_physics_ray(Vector2.UP * rayLength)
-	check_result = check_raycast_result(result,{})
-	if check_result['move'] == 0:
-		result_vectors.append(0)
-	
-	# Right Up
-	result = shoot_physics_ray(Vector2(1, -1) * rayLength * 1.2)
-	check_result = check_raycast_result(result,check_result)
-	if check_result['move'] == 0:
-		result_vectors.append(1)
-	
-	result = shoot_physics_ray(Vector2.RIGHT * rayLength)
-	check_result = check_raycast_result(result,check_result)
-	if check_result['move'] == 0:
-		result_vectors.append(2)
-	
-	# Right Down
-	result = shoot_physics_ray(Vector2(1, 1) * rayLength * 1.2)
-	check_result = check_raycast_result(result,check_result)
-	if check_result['move'] == 0:
-		result_vectors.append(3)
-	
-	result = shoot_physics_ray(Vector2.DOWN * rayLength)
-	check_result = check_raycast_result(result,check_result)
-	if check_result['move'] == 0:
-		result_vectors.append(4)
-	
-	# Left Down
-	result = shoot_physics_ray(Vector2(-1, 1) * rayLength * 1.2)
-	check_result = check_raycast_result(result,check_result)
-	if check_result['move'] == 0:
-		result_vectors.append(5)
-		
-	result = shoot_physics_ray(Vector2.LEFT * rayLength)
-	check_result = check_raycast_result(result,check_result)
-	if check_result['move'] == 0:
-		result_vectors.append(6)
-	
-	# Left Up
-	result = shoot_physics_ray(Vector2(-1, -1) * rayLength * 1.2)
-	check_result = check_raycast_result(result,check_result)
-	if check_result['move'] == 0:
-		result_vectors.append(7)
-	
-	if (7 in result_vectors or 
-		0 in result_vectors or
-		1 in result_vectors):
-			avoidUp = 0
-	
-	if (1 in result_vectors or 
-		2 in result_vectors or
-		3 in result_vectors):
-			avoidRight = 0
-	
-	if (3 in result_vectors or 
-		4 in result_vectors or
-		5 in result_vectors):
-			avoidDown = 0
-	
-	if (5 in result_vectors or 
-		6 in result_vectors or
-		7 in result_vectors):
-			avoidLeft = 0
-	
-	if check_result.has('flee'):
-		return 'flee'
-	if check_result.has('wall'):
-		return 'wall'
-	
+	var bodies = interactionArea.bodies
+	var locationDiff : Vector2
+	var layer : int
+	if bodies.size() >= 1:
+		for body in bodies:
+			if(body.get_collision_layer_value(GameManager.WALLS)):
+				locationDiff =  body.position - position
+				if locationDiff.x < 0:
+					avoidLeft = 0
+				else:
+					avoidRight = 0
+			if(body.get_collision_layer_value(GameManager.FISH)):
+				locationDiff =  body.position - position
+				if is_preditor(body):
+					if locationDiff.x < 0:
+						avoidLeft = 0
+					else:
+						avoidRight = 0
+					if locationDiff.y < 0:
+						avoidUp = 0
+					else:
+						avoidDown = 0
+					return 'flee'
+				if is_mate(body):
+					return 'mate'
+			if(body.get_collision_layer_value(GameManager.FLOOR)):
+				locationDiff =  body.position - position
+				if locationDiff.y < 0:
+					avoidUp = 0
+				else:
+					avoidDown = 0
 	return ''
+
 
 func shoot_physics_ray(p_direction: Vector2) -> Dictionary:
 	var space_state = get_world_2d().direct_space_state

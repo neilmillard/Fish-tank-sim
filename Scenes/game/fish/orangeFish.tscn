@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://d2ningsghemxy"]
+[gd_scene load_steps=11 format=3 uid="uid://d2ningsghemxy"]
 
 [ext_resource type="Script" path="res://Scenes/game/fish/fish_body.gd" id="1_ppmwa"]
 [ext_resource type="Texture2D" uid="uid://tyus3e1vdqvx" path="res://art/fish_2.png" id="2_8njcv"]
 [ext_resource type="PackedScene" uid="uid://bhytrggki6xig" path="res://Scenes/game/fish/fish_state_machine.tscn" id="3_hh8jq"]
 [ext_resource type="PackedScene" uid="uid://4fj4lbl0navp" path="res://Scenes/game/thought.tscn" id="4_tk2sp"]
+[ext_resource type="PackedScene" uid="uid://ck4jn75q1rs5r" path="res://Scenes/game/interaction_area_2d.tscn" id="5_dag5w"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0hl1j"]
 radius = 24.0
@@ -133,12 +134,7 @@ libraries = {
 position = Vector2(53, -65)
 scale = Vector2(4, 4)
 
-[node name="Label" type="Label" parent="."]
-offset_left = -19.0
-offset_top = 22.0
-offset_right = 21.0
-offset_bottom = 48.0
-text = "State"
+[node name="InteractionArea2D" parent="." instance=ExtResource("5_dag5w")]
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
