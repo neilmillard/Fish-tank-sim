@@ -28,4 +28,4 @@ func physics_update(_delta: float) -> void:
 
 func set_fish_velocity():
 	myBody.direction = fleeDirection
-	myBody.velocity = myBody.direction.normalized() * myBody.fleeSpeed
+	myBody.velocity = myBody.direction.normalized() * myBody.myCharacter.fleeSpeed

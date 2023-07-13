@@ -1,29 +1,10 @@
 extends CharacterBody2D
 class_name FishBody
 
-enum FeedLevel {
-	Top,
-	Middle,
-	Bottom,
-}
-
 @export var stats: Fish
 @export var myStomach: Stomach
 @export var myLung: Lung
-
-# This fish scene stats
-@export var type: String = "Generic"
-@export var maxSize: float = 2.0
-@export var swimSpeed: int = 60
-@export var fleeSpeed: int = 100
-@export var rotationSpeed: float = 40.0
-@export var feedLevel: FeedLevel = FeedLevel.Middle
-@export var maxHealth: float = 100
-@export var growthThreshold: float = 5.0
-@export var spriteScale: float = 4.0
-@export var idleFoodDistanceThreshold: float = 400
-@export var preferredTemp: float = 25.0
-@export var toleranceRange: float = 8.0
+@export var myCharacter: FishCharacter
 
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
 @onready var navagent: NavigationAgent2D = $NavigationAgent
@@ -54,21 +35,16 @@ var debug := true
 var debugLines = []
 
 func _ready():
-	if !stats:
-		if type.length() > 0:
-			stats = GameManager.new_fish_resource(type)
-		else:
-			stats = GameManager.new_fish_resource()
-	stats.type = type
+	$Sprite2D.texture = myCharacter.get_sprite()
 	myStomach = stats.myStomach
 	myStomach.capacity = stats.fishSize * GameManager.STOMACH_CAPACITY_BASE
 	myLung = stats.myLung
 	# set so we get collision events from mouse
 	input_pickable = true
-	currentSwimspeed = swimSpeed
+	currentSwimspeed = myCharacter.swimSpeed
 	$CollisionShape2D.scale = Vector2(
-				stats.fishSize * spriteScale, 
-				stats.fishSize * spriteScale
+				stats.fishSize * myCharacter.spriteScale, 
+				stats.fishSize * myCharacter.spriteScale
 			)
 	fishFaceRight = true
 	animationPlayer.play("SwimRight")
@@ -114,18 +90,18 @@ func add_health_bar() -> void:
 	healthBar.add_theme_stylebox_override("fill", healthBarStyleBox)
 	healthBar.position = Vector2(-30.0, -80.0)
 	healthBar.size = Vector2(60.0, 10.0)
-	healthBar.max_value = maxHealth
+	healthBar.max_value = myCharacter.maxHealth
 	add_child(healthBar)
 	
 
 func set_health_bar() -> void:
 	healthBar.value = stats.currentHealth
-	if healthBar.value < maxHealth * 0.8:
+	if healthBar.value < myCharacter.maxHealth * 0.8:
 		healthBar.show()
-	if healthBar.value > maxHealth * 0.8:
+	if healthBar.value > myCharacter.maxHealth * 0.8:
 		healthBar.hide()
 	var bg_color = Color(0.2, 1.0, 0)
-	if healthBar.value < maxHealth / 2:
+	if healthBar.value < myCharacter.maxHealth / 2:
 		bg_color = Color(1.0, 0.0, 0)
 	var sb = healthBar.get_theme_stylebox("fill")
 	sb.bg_color = bg_color
@@ -254,13 +230,13 @@ func process_lung(delta: float) -> void:
 	myLung._process(delta)
 
 func process_food(delta: float) -> void:
-	myStomach._process(delta, preferredTemp, toleranceRange)
+	myStomach._process(delta, myCharacter.preferredTemp, myCharacter.toleranceRange)
 
 func process_health(delta: float) -> void:
 	# The fish will expend energy on fighting infection
 	var energyRequired
 	stats.currentHealth -= delta
-	if stats.currentHealth < maxHealth * 0.8:
+	if stats.currentHealth < myCharacter.maxHealth * 0.8:
 		energyRequired = delta * GameManager.infectionEnergy * stats.fishSize
 	else:
 		energyRequired = delta * GameManager.infectionEnergy / 2.0
@@ -269,8 +245,8 @@ func process_health(delta: float) -> void:
 	myStomach.receive_nh3(energyReceived / 4.0)
 	if energyReceived == energyRequired and o2Used == energyReceived:
 		stats.currentHealth += delta * 1.1
-	if stats.currentHealth > maxHealth:
-		stats.currentHealth = maxHealth
+	if stats.currentHealth > myCharacter.maxHealth:
+		stats.currentHealth = myCharacter.maxHealth
 	
 	# poor water quality will assist the growing infection
 	if GameManager.currentTankData.currentNH3 > GameManager.nh3HealthThreshold:
@@ -279,11 +255,11 @@ func process_health(delta: float) -> void:
 
 func process_growth(delta: float) -> void:
 	# The fish will grow to maxSize provided it has enough energy
-	if stats.fishSize >= maxSize:
+	if stats.fishSize >= myCharacter.maxSize:
 		return
-	if myStomach.storedEnergy < growthThreshold:
+	if myStomach.storedEnergy < myCharacter.growthThreshold:
 		return
-	if stats.currentHealth < maxHealth * 0.80:
+	if stats.currentHealth < myCharacter.maxHealth * 0.80:
 		return
 	
 	var energyRequired = delta * GameManager.growEnergy
@@ -294,8 +270,8 @@ func process_growth(delta: float) -> void:
 
 func scale_fish():
 	var myScale = Vector2(
-				stats.fishSize * spriteScale, 
-				stats.fishSize * spriteScale
+				stats.fishSize * myCharacter.spriteScale, 
+				stats.fishSize * myCharacter.spriteScale
 			)
 	$Sprite2D.scale = myScale
 	var collshape = $CollisionShape2D
@@ -333,7 +309,7 @@ func use_muscle_energy(delta: float) -> void:
 	# energy is needed to accelerate
 	var velocityDiff =  velocity.length_squared() - oldVelocity.length_squared()
 	if velocityDiff > 0:
-		var energyRequired = (velocityDiff / swimSpeed) * delta * stats.fishSize
+		var energyRequired = (velocityDiff / myCharacter.swimSpeed) * delta * stats.fishSize
 		var energyReceived = myStomach.get_energy(energyRequired)
 		var o2Used = myLung.requestO2(energyReceived)
 		# stash waste in the stomach (well sorta kidneys bladder)
@@ -359,7 +335,7 @@ func update_animation():
 
 func process_waste(delta: float) -> void:
 	# lets get rid of waste if we are moving
-	if(abs(velocity.x)) > swimSpeed / 10.0:
+	if(abs(velocity.x)) > myCharacter.swimSpeed / 10.0:
 		GameManager.currentTankData.add_waste(myStomach.flush_waste(1.0 * delta))
 		var nh3Flushed = GameManager.currentTankData.add_nh3(myStomach.flush_nh3(1.0 * delta))
 		myStomach.flush_nh3(nh3Flushed, true)
@@ -368,11 +344,11 @@ func process_waste(delta: float) -> void:
 func rotate_to_target(target, delta):
 	direction = target.global_position - global_position
 	var angleTo = transform.x.angle_to(direction)
-	transform.rotated(sign(angleTo) * min(delta * rotationSpeed, abs(angleTo)))
+	transform.rotated(sign(angleTo) * min(delta * myCharacter.rotationSpeed, abs(angleTo)))
 
 func rotate_to_direction(newDirection: Vector2, delta: float) -> void:
 	var angleTo = transform.x.angle_to(newDirection)
-	var angleDelta = sign(angleTo) * min(delta * rotationSpeed, abs(angleTo))
+	var angleDelta = sign(angleTo) * min(delta * myCharacter.rotationSpeed, abs(angleTo))
 	if velocity.x < 0:
 		rotation_degrees -= angleDelta 
 	else:
@@ -424,7 +400,7 @@ func preditor_is_near():
 func food_is_near():
 	var food = get_nearest_food()
 	if food:
-		if food.position.distance_to(position) < idleFoodDistanceThreshold:
+		if food.position.distance_to(position) < myCharacter.idleFoodDistanceThreshold:
 			return true
 	return false
 

@@ -1,10 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://bcg7pav6l6tuh"]
+[gd_scene load_steps=10 format=3 uid="uid://biiu70leqvjnv"]
 
-[ext_resource type="Script" path="res://Scenes/game/fish/fish_body.gd" id="1_h0yt5"]
-[ext_resource type="Texture2D" uid="uid://cormmvthb0itk" path="res://art/fish_1.png" id="2_la8n0"]
-[ext_resource type="PackedScene" uid="uid://bhytrggki6xig" path="res://Scenes/game/fish/fish_state_machine.tscn" id="3_03olu"]
-[ext_resource type="PackedScene" uid="uid://4fj4lbl0navp" path="res://Scenes/game/thought.tscn" id="4_cqs5d"]
-[ext_resource type="PackedScene" uid="uid://ck4jn75q1rs5r" path="res://Scenes/game/interaction_area_2d.tscn" id="5_1ij72"]
+[ext_resource type="Script" path="res://Scenes/game/fish/fish_body.gd" id="1_qdnwp"]
+[ext_resource type="PackedScene" uid="uid://bhytrggki6xig" path="res://Scenes/game/fish/fish_state_machine.tscn" id="3_yvff2"]
+[ext_resource type="PackedScene" uid="uid://4fj4lbl0navp" path="res://Scenes/game/thought.tscn" id="4_qif16"]
+[ext_resource type="PackedScene" uid="uid://ck4jn75q1rs5r" path="res://Scenes/game/interaction_area_2d.tscn" id="5_r6ps8"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0hl1j"]
 radius = 24.0
@@ -102,15 +101,14 @@ _data = {
 "SwimRight": SubResource("Animation_cvmth")
 }
 
-[node name="GreenFish" type="CharacterBody2D"]
+[node name="Fish" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 5
-script = ExtResource("1_h0yt5")
+script = ExtResource("1_qdnwp")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 scale = Vector2(4, 4)
-texture = ExtResource("2_la8n0")
 hframes = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -126,13 +124,13 @@ libraries = {
 
 [node name="IdleTimer" type="Timer" parent="."]
 
-[node name="StateMachine" parent="." instance=ExtResource("3_03olu")]
+[node name="StateMachine" parent="." instance=ExtResource("3_yvff2")]
 
-[node name="Thought" parent="." instance=ExtResource("4_cqs5d")]
+[node name="Thought" parent="." instance=ExtResource("4_qif16")]
 position = Vector2(53, -65)
 scale = Vector2(4, 4)
 
-[node name="InteractionArea2D" parent="." instance=ExtResource("5_1ij72")]
+[node name="InteractionArea2D" parent="." instance=ExtResource("5_r6ps8")]
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="FishCharacter" load_steps=2 format=3 uid="uid://b7b4phbiyie7w"]
+
+[ext_resource type="Script" path="res://Resources/fish/FishCharacter.gd" id="1_qukcw"]
+
+[resource]
+script = ExtResource("1_qukcw")
+type = "GreenFish"
+maxSize = 2.0
+swimSpeed = 60
+fleeSpeed = 80
+rotationSpeed = 40.0
+maxHealth = 100.0
+growthThreshold = 5.0
+spriteScale = 4.0
+idleFoodDistanceThreshold = 400.0
+preferredTemp = 25.0
+toleranceRange = 8.0

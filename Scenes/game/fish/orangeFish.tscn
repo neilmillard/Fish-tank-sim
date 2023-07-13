@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://d2ningsghemxy"]
+[gd_scene load_steps=11 format=3 uid="uid://c7gv8q7wxk584"]
 
 [ext_resource type="Script" path="res://Scenes/game/fish/fish_body.gd" id="1_ppmwa"]
 [ext_resource type="Texture2D" uid="uid://tyus3e1vdqvx" path="res://art/fish_2.png" id="2_8njcv"]
@@ -106,8 +106,6 @@ _data = {
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_ppmwa")
-type = "OrangeFish"
-feedLevel = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1

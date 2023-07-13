@@ -10,9 +10,10 @@ var foods := {
 	'plantFood': ResourceLoader.load("res://Scenes/game/food/plantFood.tscn")
 }
 
+var myFishScene = ResourceLoader.load("res://Scenes/game/fish/Fish.tscn")
 var fishes := {
-	'OrangeFish': ResourceLoader.load("res://Scenes/game/fish/orangeFish.tscn"),
-	'GreenFish': ResourceLoader.load("res://Scenes/game/fish/greenFish.tscn")
+	'OrangeFish': ResourceLoader.load("res://Resources/fish/OrangeFishCharacter.tres"),
+	'GreenFish': ResourceLoader.load("res://Resources/fish/GreenFishCharacter.tres")
 }
 var plants := {
 	'GreenPlant': ResourceLoader.load("res://Scenes/game/plants/green_plant.tscn")
@@ -170,18 +171,21 @@ func spawn_plant(plantStats: Plant = null, type: String = "GreenPlant"):
 
 func spawn_fish(fishStats: Fish = null, type: String ="OrangeFish"):
 	var myPosition : Vector2
-	var myFishScene : PackedScene
+	var myFishCharacter : FishCharacter
 	if fishStats:
 		myPosition = fishStats.globalPosition
-		myFishScene = fishes[fishStats.type]
+		myFishCharacter = fishes[fishStats.type]
 	else:
-		myFishScene = fishes[type]
+		myFishCharacter = fishes[type]
 		myPosition = Vector2(randf_range(50,GameManager.currentLevelWidth - 100),
 							randf_range(50, 300))
 	
 	var myFish = spawn_obj(myFishScene, myPosition)
 	if fishStats:
 		myFish.stats = fishStats
+	else:
+		myFish.stats = GameManager.new_fish_resource(type)
+	myFish.myCharacter = myFishCharacter
 	
 func spawn_obj(obj : PackedScene, where : Vector2) -> Node2D:
 	var myObject = obj.instantiate()

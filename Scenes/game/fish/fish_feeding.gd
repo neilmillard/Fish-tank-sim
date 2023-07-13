@@ -2,7 +2,7 @@
 extends FishState
 
 func enter(_msg:={}):
-	myBody.currentSwimspeed = myBody.swimSpeed
+	myBody.currentSwimspeed = myBody.myCharacter.swimSpeed
 
 func update(_delta: float) -> void:
 	if myBody.nearestFoodPosition == Vector2.ZERO:
@@ -21,7 +21,7 @@ func physics_update(delta: float) -> void:
 			return
 		else:
 			# if we are nearly at the destination (food) let's check if it moved
-			if myBody.navagent.distance_to_target() < myBody.swimSpeed:
+			if myBody.navagent.distance_to_target() < myBody.currentSwimspeed:
 				myBody.find_food()
 			var targetpos = myBody.navagent.get_next_path_position()
 			if (targetpos == null):

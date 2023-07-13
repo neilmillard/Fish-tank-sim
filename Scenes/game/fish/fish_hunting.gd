@@ -3,7 +3,7 @@ extends FishState
 
 
 func enter(_msg:={}):
-	myBody.currentSwimspeed = myBody.swimSpeed / 2.0
+	myBody.currentSwimspeed = myBody.myCharacter.swimSpeed / 2.0
 	myBody.start_idle_timer(false)
 
 func exit():
