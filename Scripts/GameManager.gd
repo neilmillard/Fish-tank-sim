@@ -163,7 +163,6 @@ func remove_food_resource(myFood: Food) -> void:
 	currentTankData.remove_food(myFood)
 
 func currentFoodInTank() -> float:
-	var quant: float = 0.0
 	return len(currentTankData.food)
 	
 

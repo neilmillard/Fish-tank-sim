@@ -43,7 +43,7 @@ func open() -> void:
 func close() -> void:
 	animationPlayer.play("close")
 
-func _on_animation_player_animation_finished(anim_name):
+func _on_animation_player_animation_finished(_anim_name):
 	if state == ThoughtStates.Opening:
 		icon.texture = sprite
 		state = ThoughtStates.Open

@@ -1,6 +1,6 @@
 extends VBoxContainer
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	update_fish_display()
 	
 func update_fish_display():

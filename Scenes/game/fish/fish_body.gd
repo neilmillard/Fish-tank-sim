@@ -148,10 +148,6 @@ func is_mate(otherFish: FishBody) -> bool:
 # on_area_entered will add an item to the array, which we can check
 # for location and type.
 func check_environment() -> String:
-	var rayLength = 50.0 * stats.fishSize
-	var result
-	var check_result
-	var result_vectors = []
 	if debug:
 		debugLines = []
 		
@@ -162,7 +158,6 @@ func check_environment() -> String:
 	
 	var bodies = interactionArea.bodies
 	var locationDiff : Vector2
-	var layer : int
 	if bodies.size() >= 1:
 		for body in bodies:
 			if(body.get_collision_layer_value(GameManager.WALLS)):
@@ -242,7 +237,7 @@ func process_growth(delta: float) -> void:
 	
 	var energyRequired = delta * GameManager.growEnergy
 	var energyReceived = myStomach.get_energy(energyRequired)
-	var o2Used = myLung.requestO2(energyReceived)
+	var _o2Used = myLung.requestO2(energyReceived)
 	myStomach.receive_nh3(energyReceived / 4.0)
 	stats.fishSize += (energyReceived / GameManager.growRatio)
 
