@@ -27,6 +27,25 @@ const FISH = 2
 const FOOD = 3
 const FLOOR = 4
 
+# Resources
+const BASE_PATH := "res://Resources"
+const CHARACTER = "Character.tres"
+var foods := {
+	'flakeFood': ResourceLoader.load("res://Scenes/game/food/flakeFood.tscn"),
+	'PlantFood': ResourceLoader.load("res://Scenes/game/food/plantFood.tscn"),
+	'plantFood': ResourceLoader.load("res://Scenes/game/food/plantFood.tscn")
+}
+
+var myFishScene = ResourceLoader.load("res://Scenes/game/fish/Fish.tscn")
+var fishes := {}
+var plants := {
+	'GreenPlant': ResourceLoader.load("res://Scenes/game/plants/green_plant.tscn")
+}
+
+var filters := {
+	'Gravel' = ResourceLoader.load("res://Scenes/game/equipment/GravelFilter.tscn")
+}
+
 var debug
 var currentState = State.Play
 var currentLevelWidth: int = 2400
@@ -66,6 +85,8 @@ var gamePaused: bool = false:
 		get_tree().paused = gamePaused
 		emit_signal("toggle_game_paused", gamePaused)
 
+func _ready() -> void:
+	_find_entities_in(BASE_PATH)
 
 func trigger_game_paused():
 	gamePaused = !gamePaused
@@ -189,3 +210,24 @@ func move_save_file():
 
 	DirAccess.rename_absolute(save_path, backup_path)
 	
+func _find_entities_in(path: String) -> void:
+	var directory := DirAccess.open(path)
+
+	if directory:
+		var error := directory.list_dir_begin()
+		if error != OK:
+			print("Library Error: %s" % error)
+			return
+
+		var filename := directory.get_next()
+
+		while filename != "":
+			if directory.current_is_dir():
+				_find_entities_in("%s/%s" % [directory.get_current_dir(), filename])
+			else:
+				if filename.ends_with(CHARACTER):
+					fishes[filename.replace(CHARACTER, "")] = load(
+						"%s/%s" % [directory.get_current_dir(), filename]
+					)
+				
+			filename = directory.get_next()

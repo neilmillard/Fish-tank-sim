@@ -3,26 +3,6 @@ class_name MiddleWater
 
 # This script manages the objects in the middle water Layer
 # Our main concerns are the fish, plants and water quality
-
-var foods := {
-	'flakeFood': ResourceLoader.load("res://Scenes/game/food/flakeFood.tscn"),
-	'PlantFood': ResourceLoader.load("res://Scenes/game/food/plantFood.tscn"),
-	'plantFood': ResourceLoader.load("res://Scenes/game/food/plantFood.tscn")
-}
-
-var myFishScene = ResourceLoader.load("res://Scenes/game/fish/Fish.tscn")
-var fishes := {
-	'OrangeFish': ResourceLoader.load("res://Resources/fish/OrangeFishCharacter.tres"),
-	'GreenFish': ResourceLoader.load("res://Resources/fish/GreenFishCharacter.tres")
-}
-var plants := {
-	'GreenPlant': ResourceLoader.load("res://Scenes/game/plants/green_plant.tscn")
-}
-
-var filters := {
-	'Gravel' = ResourceLoader.load("res://Scenes/game/equipment/GravelFilter.tscn")
-}
-
 var tank_data: TankData
 var surfaceO2TransferEfficiency = 0.0020
 var surface: float = 29.0
@@ -91,12 +71,12 @@ func _on_spawn_new_object(
 		return
 	
 	if objectName == "FishFood":
-		var myObj = spawn_obj(foods["flakeFood"], p_position)
+		var myObj = spawn_obj(GameManager.foods["flakeFood"], p_position)
 		myObj.nutritionValue = p_nutrition
 		return
 	
 	if objectName == "plantFood":
-		spawn_obj(foods["PlantFood"], p_position)
+		spawn_obj(GameManager.foods["PlantFood"], p_position)
 		return
 	
 	if objectName == "orangeFish":
@@ -137,34 +117,34 @@ func spawn_filter(stats: Filter = null, type: String = "Generic"):
 	var myFilterScene: PackedScene
 	var myPosition := Vector2.ZERO
 	if stats:
-		myFilterScene = filters[stats.type]
+		myFilterScene = GameManager.filters[stats.type]
 		myPosition = stats.globalPosition
 	else:
-		myFilterScene = filters[type]
+		myFilterScene = GameManager.filters[type]
 	var myFilter = spawn_obj(myFilterScene, myPosition)
 	if stats:
 		myFilter.stats = stats
 
 func spawn_food(foodStats: Food):
-	var myFood = spawn_obj(foods[foodStats.type], foodStats.globalPosition)
+	var myFood = spawn_obj(GameManager.foods[foodStats.type], foodStats.globalPosition)
 	myFood.stats = foodStats
 	
 func spawn_flakefood():
 	var spawnLocation = randf_range(100, GameManager.currentLevelWidth - 100)
 	for n in range(1, foodPinch):
-		spawn_obj(foods["flakeFood"],Vector2(spawnLocation + randi_range(-30, 30), surface))
+		spawn_obj(GameManager.foods["flakeFood"],Vector2(spawnLocation + randi_range(-30, 30), surface))
 
 func spawn_plant(plantStats: Plant = null, type: String = "GreenPlant"):
 	var myPosition: Vector2
 	var myPlantScene: PackedScene
 	if plantStats:
 		myPosition = plantStats.globalPosition
-		myPlantScene = plants[plantStats.type]
+		myPlantScene = GameManager.plants[plantStats.type]
 	else:
 		var spawnLocation = randf_range(100, GameManager.currentLevelWidth - 100)
 		var randomHeight = randf_range(70, 150)
 		myPosition = Vector2(spawnLocation, GameManager.currentLevelHeight - randomHeight)
-		myPlantScene = plants[type]
+		myPlantScene = GameManager.plants[type]
 	var myPlant = spawn_obj(myPlantScene, myPosition)
 	if plantStats:
 		myPlant.stats = plantStats
@@ -174,13 +154,13 @@ func spawn_fish(fishStats: Fish = null, type: String ="OrangeFish"):
 	var myFishCharacter : FishCharacter
 	if fishStats:
 		myPosition = fishStats.globalPosition
-		myFishCharacter = fishes[fishStats.type]
+		myFishCharacter = GameManager.fishes[fishStats.type]
 	else:
-		myFishCharacter = fishes[type]
+		myFishCharacter = GameManager.fishes[type]
 		myPosition = Vector2(randf_range(50,GameManager.currentLevelWidth - 100),
 							randf_range(50, 300))
 	
-	var myFish = spawn_obj(myFishScene, myPosition)
+	var myFish = spawn_obj(GameManager.myFishScene, myPosition)
 	if fishStats:
 		myFish.stats = fishStats
 	else:
