@@ -5,7 +5,7 @@ var timer: float
 
 func enter(_msg:={}):
 	myBody.currentSwimspeed = 0
-	myBody.velocity = Vector2.ZERO
+	myBody.velocity = Vector2.DOWN * 10.0
 	myBody.animationPlayer.play("SwimLeft")
 	myBody.animationPlayer.stop()
 	timer = 0.0
@@ -20,9 +20,7 @@ func update(delta: float) -> void:
 		if myNutrition != null:
 			GameManager.spawn_fishfood(myBody.position, myNutrition)
 			timer = 0.0
-			print(myBody.name + " Spawned food")
 		else:
-			print(myBody.name + " Time to die")
 			myBody.kill_fish()
 			
 func physics_update(delta: float) -> void:

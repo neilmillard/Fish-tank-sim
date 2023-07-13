@@ -8,7 +8,6 @@ class_name FishBody
 
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
 @onready var navagent: NavigationAgent2D = $NavigationAgent
-@onready var label = $Label
 @onready var fsm : StateMachine = $StateMachine
 @onready var thought : Thought = $Thought
 @onready var interactionArea : InteractionArea = $InteractionArea2D
@@ -56,10 +55,6 @@ func _ready():
 		interactionArea.parentNode = self
 
 func _process(delta):
-	if fsm && fsm.currentState:
-		if label:
-			label.text = fsm.currentState.name
-	
 	if fsm.currentState.name == "Dead":
 		return
 	process_lung(delta)
@@ -116,12 +111,6 @@ func get_safe_direction():
 		myDirection = Vector2.UP
 	return myDirection
 	
-func is_foe(collider: Node2D) -> bool:
-	if collider.collision_layer:
-		if collider.collision_layer == GameManager.FISH:
-			if collider.has_method("could_eat"):
-				return collider.could_eat()
-	return false
 
 func is_wall(collider) -> bool:
 	if collider.collision_layer:
@@ -131,20 +120,9 @@ func is_wall(collider) -> bool:
 			return true
 	return false
 
-func check_raycast_result(result, new_result) -> Dictionary:
-	new_result = {
-		'move': 1,
-	}
-	if result:
-		new_result['move'] = 0
-		if result.collider:
-			if is_foe(result.collider):
-				new_result['flee'] = true
-			if is_wall(result.collider):
-				new_result['wall'] = true
-	return new_result
-
 func is_preditor(otherFish: FishBody) -> bool:
+	if otherFish.fsm.currentState.name.to_lower() == "dead":
+		return false
 	if stats.fishSize < otherFish.stats.fishSize / 2.0:
 		return true
 	if stats.fishSize < otherFish.stats.fishSize && otherFish.myStomach.could_eat():
@@ -285,6 +263,9 @@ func kill_fish():
 	queue_free()
 
 func calculate_movement(delta):
+	if fsm.currentState.name == "Dead":
+		move_and_collide(velocity * delta)
+		return
 	# Water friction init
 	if velocity.length() > 0:
 		velocity = velocity - (velocity * GameManager.waterFriction * delta)
@@ -322,6 +303,10 @@ func use_muscle_energy(delta: float) -> void:
 				stats.currentHealth -= delta
 
 func update_animation():
+	if fsm.currentState.name == "Dead":
+		if animationPlayer.is_playing():
+			animationPlayer.stop()
+		return
 	if velocity.x < 0:
 		if fishFaceRight == true:
 			fishFaceRight = false
