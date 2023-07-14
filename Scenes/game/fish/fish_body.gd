@@ -207,12 +207,9 @@ func process_food(delta: float) -> void:
 
 func process_health(delta: float) -> void:
 	# The fish will expend energy on fighting infection
-	var energyRequired
 	stats.currentHealth -= delta
-	if stats.currentHealth < myCharacter.maxHealth * 0.8:
-		energyRequired = delta * GameManager.infectionEnergy * stats.fishSize
-	else:
-		energyRequired = delta * GameManager.infectionEnergy / 2.0
+	var healthRatio = 1 - (stats.currentHealth / myCharacter.maxHealth)
+	var energyRequired = delta * GameManager.infectionEnergy * stats.fishSize * healthRatio
 	var energyReceived = myStomach.get_energy(energyRequired)
 	var o2Used = myLung.requestO2(energyReceived)
 	myStomach.receive_nh3(energyReceived / 4.0)
@@ -415,5 +412,15 @@ func add_debug_timer():
 	_timer.start()
 
 func _on_state_machine_state_changed():
-	thought.start_thought(fsm.currentState.name)
+	var myThought = fsm.currentState.name
+	if randi_range(0,10) > 5:
+		var modifier = GameManager.temperatureModifer(myCharacter.preferredTemp, 
+												myCharacter.toleranceRange)
+		if modifier < 0.25:
+			if myCharacter.preferredTemp > GameManager.get_tank_temp():
+				myThought = "Cold"
+			else:
+				myThought = "Hot"
+				
+	thought.start_thought(myThought)
 	

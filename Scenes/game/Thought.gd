@@ -11,7 +11,10 @@ enum ThoughtStates {
 var bubbleShowTime :float = 4.0
 var thoughts := {
 	'Mating': ResourceLoader.load("res://art/heart_icon.png"),
-	'Hunting': ResourceLoader.load("res://art/food_icon.png")
+	'Hunting': ResourceLoader.load("res://art/food_icon.png"),
+	'Cold': ResourceLoader.load("res://art/cold_icon.png"),
+	'Hot': ResourceLoader.load("res://art/hot_icon.png")
+
 }
 
 var state :ThoughtStates

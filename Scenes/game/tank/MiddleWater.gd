@@ -156,15 +156,13 @@ func spawn_fish(fishStats: Fish = null, type: String ="OrangeFish"):
 		myPosition = fishStats.globalPosition
 		myFishCharacter = GameManager.fishes[fishStats.type]
 	else:
+		fishStats = GameManager.new_fish_resource(type)
 		myFishCharacter = GameManager.fishes[type]
 		myPosition = Vector2(randf_range(50,GameManager.currentLevelWidth - 100),
 							randf_range(50, 300))
 	
 	var myFish = spawn_obj(GameManager.myFishScene, myPosition)
-	if fishStats:
-		myFish.stats = fishStats
-	else:
-		myFish.stats = GameManager.new_fish_resource(type)
+	myFish.stats = fishStats
 	myFish.myCharacter = myFishCharacter
 	
 func spawn_obj(obj : PackedScene, where : Vector2) -> Node2D:

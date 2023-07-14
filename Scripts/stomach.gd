@@ -20,7 +20,7 @@ const proteinEnergy: float = 1.0
 @export var storedEnergy: float
 
 
-func _init(p_capacity = 10.0, p_processingSpeed = 0.019, p_processingEfficiency = 0.60):
+func _init(p_capacity = 10.0, p_processingSpeed = 0.02, p_processingEfficiency = 0.60):
 	capacity = p_capacity
 	processingSpeed = p_processingSpeed
 	processingEfficiency = p_processingEfficiency

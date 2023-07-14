@@ -145,7 +145,8 @@ func get_tank_temp() -> float:
 	return currentTankData.currentTemp
 
 func new_fish_resource(type: String = "OrangeFish") -> Fish:
-	var myFishRes = Fish.new(type, true, 95.0, 0.5)
+	var isMale = randf() > 0.5
+	var myFishRes = Fish.new(type, isMale, 95.0, 0.5)
 	currentTankData.add_fish(myFishRes)
 	return myFishRes
 
