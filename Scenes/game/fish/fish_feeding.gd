@@ -2,7 +2,7 @@
 extends FishState
 
 func enter(_msg:={}):
-	myBody.currentSwimspeed = myBody.myCharacter.swimSpeed
+	myBody.currentSwimspeed = myBody.get_current_swimSpeed()
 
 func update(_delta: float) -> void:
 	if myBody.nearestFoodPosition == Vector2.ZERO:

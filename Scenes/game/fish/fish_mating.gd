@@ -2,4 +2,4 @@
 extends FishState
 
 func enter(_msg:={}):
-	myBody.currentSwimspeed = myBody.myCharacter.swimSpeed / 2.0
+	myBody.currentSwimspeed = myBody.get_current_swimSpeed() / 2.0

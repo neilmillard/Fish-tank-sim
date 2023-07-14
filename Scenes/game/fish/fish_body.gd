@@ -345,7 +345,7 @@ func start_idle_timer(shorter: bool = true):
 
 func find_food():
 	if food_is_near():
-		nearestFoodPosition = get_nearest_food().global_position
+		nearestFoodPosition = get_nearest_food(position).global_position
 		if nearestFoodPosition != Vector2.ZERO:
 			navagent.set_target_position(nearestFoodPosition)
 	else:
@@ -363,14 +363,21 @@ func eat_food(foodObject: Node):
 			myStomach.receive_food(foodObject.eat())
 		nearestFoodPosition = Vector2.ZERO
 
-func get_nearest_food():
+func get_current_swimSpeed():
+	var modifier = GameManager.temperatureModifer(myCharacter.preferredTemp, 
+												myCharacter.toleranceRange)
+	var speed = (myCharacter.swimSpeed / 2.0 +
+				myCharacter.swimSpeed * modifier / 2.0)
+	return speed
+
+func get_nearest_food(from: Vector2):
 	var resources = get_tree().get_nodes_in_group("food")
 	if resources.is_empty():
 		# No food found
 		return null
 	var food = resources[0]
 	for i in resources:
-		if i.position.distance_to(position) < food.position.distance_to(position):
+		if i.position.distance_to(from) < food.position.distance_to(from):
 			food = i
 	return food
 
@@ -378,7 +385,7 @@ func preditor_is_near():
 	return false
 
 func food_is_near():
-	var food = get_nearest_food()
+	var food = get_nearest_food(position)
 	if food:
 		if food.position.distance_to(position) < myCharacter.idleFoodDistanceThreshold:
 			return true

@@ -3,7 +3,7 @@ extends FishState
 
 
 func enter(_msg:={}):
-	myBody.currentSwimspeed = myBody.myCharacter.swimSpeed / 2.0
+	myBody.currentSwimspeed = myBody.get_current_swimSpeed() / 2.0
 	myBody.start_idle_timer(false)
 
 func exit():
@@ -25,7 +25,7 @@ func physics_update(delta: float) -> void:
 		return
 
 func on_idle_timer_timeout():
-	var someFood = myBody.get_nearest_food()
+	var someFood = myBody.get_nearest_food(myBody.global_position)
 	var direction = Vector2.ZERO
 	if someFood:
 		direction = myBody.global_position.direction_to(someFood.global_position)
