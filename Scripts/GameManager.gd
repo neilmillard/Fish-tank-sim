@@ -196,6 +196,13 @@ func spawn_fishfood(myPosition: Vector2, myNutrition: Nutrition):
 func spawn_new_object(objectName: String, position: Vector2 = Vector2.ZERO, myNutrition: Nutrition = null):
 	emit_signal("spawn_new", objectName, position, myNutrition)
 
+func get_fish_mates(type: String, isMale: bool) -> Array[Fish]:
+	var mates: Array[Fish] = []
+	for _fish in currentTankData.fish:
+		if currentTankData.fish[_fish].type == type && currentTankData.fish[_fish].isMale == isMale:
+			mates.append(currentTankData.fish[_fish])
+	return mates
+
 # This function allows us to save and load a text resource in debug builds and a
 # binary resource in the released product.
 func get_save_path() -> String:

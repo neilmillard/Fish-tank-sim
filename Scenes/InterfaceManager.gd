@@ -74,21 +74,21 @@ func update_inventory_display():
 func _on_flake_food_button_button_down():
 	if GameManager.flakeFood > 0:
 		GameManager.flakeFood -= 1
-		GameManager.spawn_new_object("flakeFood")
+		GameManager.spawn_new_object("FlakeFood")
 		
 
 
 func _on_spawn_fish_button_button_up():
-	GameManager.spawn_new_object("orangeFish")
+	GameManager.spawn_new_object("OrangeFish")
 	
 
 
 func _on_spawn_green_fish_button_button_up():
-	GameManager.spawn_new_object("greenFish")
+	GameManager.spawn_new_object("GreenFish")
 
 
 func _on_spawn_green_plant_button_button_up():
-	GameManager.spawn_new_object("greenPlant")
+	GameManager.spawn_new_object("GreenPlant")
 
 
 func _on_tank_temp_up_button_up():

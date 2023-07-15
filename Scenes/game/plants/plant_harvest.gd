@@ -18,7 +18,7 @@ func update(delta: float) -> void:
 			randf_range(-20.0, -70.0)
 		)
 		var newPosition = myBody.position + offset
-		GameManager.spawn_new_object("plantFood", newPosition)
+		GameManager.spawn_new_object("PlantFood", newPosition)
 		emit_signal("Transitioned", "Harvest", "Idle")
 	
 func physics_update(_delta: float) -> void:

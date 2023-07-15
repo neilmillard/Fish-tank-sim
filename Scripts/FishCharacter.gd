@@ -11,6 +11,11 @@ class_name FishCharacter extends Resource
 @export var idleFoodDistanceThreshold: float = 400
 @export var preferredTemp: float = 25.0
 @export var toleranceRange: float = 8.0
+@export var matingEnergyThreshold: float = 50.0
+@export var mateSize: float = 1.8
+@export var growBabyTime: float = 5.0
+@export var minChildren: int = 2
+@export var maxChildren: int = 5
 
 func get_sprite() -> CompressedTexture2D:
 	return ResourceLoader.load("res://Resources/fish/%s.png" % type)

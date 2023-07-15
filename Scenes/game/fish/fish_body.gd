@@ -28,8 +28,10 @@ var avoidLeft: int = -1
 var avoidRight: int = -1
 var healthBar: ProgressBar
 var healthBarStyleBox: StyleBox
+var potentialMate: FishBody
 
 var _timer = null
+var _growBabyTimer = null
 var debug := true
 var debugLines = []
 
@@ -133,12 +135,11 @@ func is_mate(otherFish: FishBody) -> bool:
 	if stats.isMale != otherFish.stats.isMale && stats.type == stats.type:
 		# possible mate
 		if otherFish.fsm.currentState.name == "Mating":
+			potentialMate = otherFish
 			return true
-		else:
-			return false
-	else:
-		return false
-
+	potentialMate = null
+	return false
+	
 # throw out some rays so fish can tell what is around it.
 # we populate the allowed directions used by 
 # flee is true if we should flee, otherwise flee is false
@@ -360,6 +361,15 @@ func eat_food(foodObject: Node):
 			myStomach.receive_food(foodObject.eat())
 		nearestFoodPosition = Vector2.ZERO
 
+func get_stored_energy() -> float:
+	return myStomach.storedEnergy
+
+## returns storedEnergy threshold required to enter mating
+func over_mating_threshold() -> float:
+	var enoughEnergy = get_stored_energy() > myCharacter.matingEnergyThreshold
+	var oldEnough = stats.fishSize > myCharacter.mateSize
+	return enoughEnergy && oldEnough && !stats.isExpecting
+
 func get_current_swimSpeed():
 	var modifier = GameManager.temperatureModifer(myCharacter.preferredTemp, 
 												myCharacter.toleranceRange)
@@ -423,4 +433,41 @@ func _on_state_machine_state_changed():
 				myThought = "Hot"
 				
 	thought.start_thought(myThought)
-	
+
+func mate(otherFish: FishBody = null):
+	if potentialMate:
+		if stats.isMale:
+			var _matingEnergy = myStomach.get_energy(5.0)
+			potentialMate.mate(self)
+			return
+	if otherFish && !stats.isMale:
+		if !_growBabyTimer:
+			grow_baby()
+
+func grow_baby():
+	stats.isExpecting = true
+	_growBabyTimer = Timer.new()
+	add_child(_growBabyTimer)
+	_growBabyTimer.connect("timeout", Callable(self, "_on_grow_baby_timeout"))
+	_growBabyTimer.set_wait_time(myCharacter.growBabyTime)
+	_growBabyTimer.set_one_shot(true)
+	_growBabyTimer.start()
+	print("%s Growing a baby" % name)
+
+func _on_grow_baby_timeout():
+	stats.isExpecting = false
+	_growBabyTimer.queue_free()
+	var _babyEnergy = myStomach.get_energy(40.0)
+	# TODO: maybe more that one, smaller and less energy on spawn
+	var childrenDropped = randi_range(myCharacter.minChildren, myCharacter.maxChildren)
+	print("%s Baby spawn %i" % [name, childrenDropped])
+	for i in range(childrenDropped):
+		GameManager.spawn_new_object(stats.type, Vector2(position.x, position.y + 10*i))
+
+func get_nearest_mates(detectionDistance: float) -> Array[Fish]:
+	var fishes = GameManager.get_fish_mates(stats.type, !stats.isMale)
+	var mates : Array[Fish] = []
+	for fish in fishes:
+		if fish.globalPosition.distance_to(position) < detectionDistance:
+			mates.append(fish)
+	return mates

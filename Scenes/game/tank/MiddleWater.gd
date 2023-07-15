@@ -66,7 +66,7 @@ func _on_spawn_new_object(
 		objectName: String, 
 		p_position: Vector2 = Vector2.ZERO,
 		p_nutrition: Nutrition = null):
-	if objectName == "flakeFood":
+	if objectName == "FlakeFood":
 		spawn_flakefood()
 		return
 	
@@ -75,20 +75,20 @@ func _on_spawn_new_object(
 		myObj.nutritionValue = p_nutrition
 		return
 	
-	if objectName == "plantFood":
+	if objectName == "PlantFood":
 		spawn_obj(GameManager.foods["PlantFood"], p_position)
 		return
 	
-	if objectName == "orangeFish":
-		spawn_fish(null, "OrangeFish")
+	if objectName == "OrangeFish":
+		spawn_fish(null, objectName, p_position)
 		return
 	
-	if objectName == "greenFish":
-		spawn_fish(null, "GreenFish")
+	if objectName == "GreenFish":
+		spawn_fish(null, objectName, p_position)
 		return
 	
-	if objectName == "greenPlant":
-		spawn_plant(null, "GreenPlant")
+	if objectName == "GreenPlant":
+		spawn_plant(null, objectName)
 		return
 	
 	print("Error: ObjectName not defined " + objectName)
@@ -149,8 +149,7 @@ func spawn_plant(plantStats: Plant = null, type: String = "GreenPlant"):
 	if plantStats:
 		myPlant.stats = plantStats
 
-func spawn_fish(fishStats: Fish = null, type: String ="OrangeFish"):
-	var myPosition : Vector2
+func spawn_fish(fishStats: Fish = null, type: String ="OrangeFish", myPosition: Vector2 = Vector2.ZERO):	
 	var myFishCharacter : FishCharacter
 	if fishStats:
 		myPosition = fishStats.globalPosition
@@ -158,7 +157,8 @@ func spawn_fish(fishStats: Fish = null, type: String ="OrangeFish"):
 	else:
 		fishStats = GameManager.new_fish_resource(type)
 		myFishCharacter = GameManager.fishes[type]
-		myPosition = Vector2(randf_range(50,GameManager.currentLevelWidth - 100),
+		if myPosition == Vector2.ZERO:
+			myPosition = Vector2(randf_range(50,GameManager.currentLevelWidth - 100),
 							randf_range(50, 300))
 	
 	var myFish = spawn_obj(GameManager.myFishScene, myPosition)

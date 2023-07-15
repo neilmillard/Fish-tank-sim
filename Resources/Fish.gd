@@ -10,6 +10,7 @@ extends Resource
 @export var myLung: Lung
 @export var myStomach: Stomach
 @export var globalPosition: Vector2
+@export var isExpecting: bool
 
 func _init(p_type = "OrangeFish", p_isMale = true, p_currentHealth = 95.0, p_fishSize = 1.0):
 	id = randi() % 1000000
@@ -19,3 +20,4 @@ func _init(p_type = "OrangeFish", p_isMale = true, p_currentHealth = 95.0, p_fis
 	fishSize = p_fishSize
 	myLung = Lung.new()
 	myStomach = Stomach.new()
+	isExpecting = false

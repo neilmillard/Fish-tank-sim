@@ -22,8 +22,8 @@ func update(_delta: float) -> void:
 		else:
 			emit_signal("Transitioned", "Idle", "Hunting")
 			return
-#	if myBody.myStomach.storedEnergy > 100.0:
-#		emit_signal("Transitioned", "Idle", "Mating")
+	if myBody.over_mating_threshold():
+		emit_signal("Transitioned", "Idle", "Mating")
 	
 func on_idle_timer_timeout():
 	emit_signal("Transitioned", "Idle", "Swimming", 

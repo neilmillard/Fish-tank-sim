@@ -101,6 +101,20 @@ offset_bottom = 26.0
 text = "1.0"
 label_settings = ExtResource("7_4vf33")
 
+[node name="SexLabel" type="Label" parent="CanvasLayer/DebugStats/Panel/FishStateContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "IsMale:"
+label_settings = ExtResource("7_4vf33")
+
+[node name="SexValue" type="Label" parent="CanvasLayer/DebugStats/Panel/FishStateContainer/SexLabel"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "1.0"
+label_settings = ExtResource("7_4vf33")
+
 [node name="InterfaceManager" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 0
