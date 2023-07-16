@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3 uid="uid://cl72fytgnk388"]
+
+[ext_resource type="Texture2D" uid="uid://yjgy6b56d2f4" path="res://art/TestBench.png" id="1_4r8r3"]
+[ext_resource type="Texture2D" uid="uid://etp2wld0i1j6" path="res://art/TestTube.png" id="2_skieq"]
+[ext_resource type="Script" path="res://Scenes/game/equipment/TestTube.gd" id="3_ulsok"]
+
+[node name="TestBench" type="Node2D"]
+
+[node name="TestBench" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(176, 123)
+texture = ExtResource("1_4r8r3")
+
+[node name="TestTubepH" type="Sprite2D" parent="TestBench"]
+texture_filter = 1
+position = Vector2(-144, -47)
+scale = Vector2(2, 2)
+texture = ExtResource("2_skieq")
+offset = Vector2(7, 30)
+script = ExtResource("3_ulsok")
+
+[node name="TestTubeNH3" type="Sprite2D" parent="TestBench"]
+texture_filter = 1
+position = Vector2(-64, -47)
+scale = Vector2(2, 2)
+texture = ExtResource("2_skieq")
+offset = Vector2(7, 30)
+script = ExtResource("3_ulsok")
+
+[node name="TestTubeNO2" type="Sprite2D" parent="TestBench"]
+texture_filter = 1
+position = Vector2(16, -47)
+scale = Vector2(2, 2)
+texture = ExtResource("2_skieq")
+offset = Vector2(7, 30)
+script = ExtResource("3_ulsok")
+
+[node name="TestTubeNO3" type="Sprite2D" parent="TestBench"]
+texture_filter = 1
+position = Vector2(96, -47)
+scale = Vector2(2, 2)
+texture = ExtResource("2_skieq")
+offset = Vector2(7, 30)
+script = ExtResource("3_ulsok")
