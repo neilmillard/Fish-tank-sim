@@ -29,6 +29,7 @@ var avoidRight: int = -1
 var healthBar: ProgressBar
 var healthBarStyleBox: StyleBox
 var potentialMate: FishBody
+var mated := {}
 
 var _timer = null
 var _growBabyTimer = null
@@ -127,17 +128,24 @@ func is_preditor(otherFish: FishBody) -> bool:
 		return false
 	if stats.fishSize < otherFish.stats.fishSize / 2.0:
 		return true
-	if stats.fishSize < otherFish.stats.fishSize && otherFish.myStomach.could_eat():
+	if stats.fishSize < otherFish.stats.fishSize and otherFish.myStomach.could_eat():
 		return true
 	return false
 
-func is_mate(otherFish: FishBody) -> bool:
-	if stats.isMale != otherFish.stats.isMale && stats.type == stats.type:
+func is_mate_ready(otherFish: FishBody) -> bool:
+	if is_mate(otherFish.stats):
 		# possible mate
 		if otherFish.fsm.currentState.name == "Mating":
 			potentialMate = otherFish
 			return true
 	potentialMate = null
+	return false
+
+func is_mate(otherFish: Fish) -> bool:
+	if (stats.isMale != otherFish.isMale 
+		and stats.type == otherFish.type ):
+			if otherFish.fishSize >= myCharacter.mateSize:
+				return true
 	return false
 	
 # throw out some rays so fish can tell what is around it.
@@ -179,7 +187,7 @@ func check_environment() -> String:
 					else:
 						avoidDown = 0
 					return 'flee'
-				if is_mate(body):
+				if is_mate_ready(body):
 					return 'mate'
 			if(body.get_collision_layer_value(GameManager.FLOOR)):
 				locationDiff =  body.position - position
@@ -333,7 +341,7 @@ func rotate_to_direction(newDirection: Vector2, delta: float) -> void:
 		rotation_degrees += angleDelta
 	
 func start_idle_timer(shorter: bool = true):
-	if !idleTimerRunning:
+	if not idleTimerRunning:
 		idleTimerRunning = true
 		var maxWait = 6.0
 		if shorter:
@@ -368,7 +376,7 @@ func get_stored_energy() -> float:
 func over_mating_threshold() -> float:
 	var enoughEnergy = get_stored_energy() > myCharacter.matingEnergyThreshold
 	var oldEnough = stats.fishSize > myCharacter.mateSize
-	return enoughEnergy && oldEnough && !stats.isExpecting
+	return enoughEnergy and oldEnough and not stats.isExpecting
 
 func get_current_swimSpeed():
 	var modifier = GameManager.temperatureModifer(myCharacter.preferredTemp, 
@@ -434,14 +442,31 @@ func _on_state_machine_state_changed():
 				
 	thought.start_thought(myThought)
 
+func expire_mated():
+	var timeLimit = myCharacter.growBabyTime * 1000  # Time limit in milliseconds
+	var currentTime = Time.get_ticks_msec()
+	var itemsToRemove = []
+	
+	for key in mated:
+		var item = mated[key]
+		var timestamp = item
+		var timeDifference = currentTime - timestamp
+
+		if timeDifference > timeLimit:
+			itemsToRemove.append(key)
+
+	for item_key in itemsToRemove:
+		mated.erase(item_key)
+
 func mate(otherFish: FishBody = null):
 	if potentialMate:
 		if stats.isMale:
-			var _matingEnergy = myStomach.get_energy(5.0)
+			var _matingEnergy = myStomach.get_energy(20.0)
+			mated[potentialMate.stats.id] = Time.get_ticks_msec()
 			potentialMate.mate(self)
 			return
-	if otherFish && !stats.isMale:
-		if !_growBabyTimer:
+	if otherFish and not stats.isMale:
+		if not _growBabyTimer:
 			grow_baby()
 
 func grow_baby():
@@ -460,14 +485,19 @@ func _on_grow_baby_timeout():
 	var _babyEnergy = myStomach.get_energy(40.0)
 	# TODO: maybe more that one, smaller and less energy on spawn
 	var childrenDropped = randi_range(myCharacter.minChildren, myCharacter.maxChildren)
-	print("%s Baby spawn %i" % [name, childrenDropped])
+	print("%s Baby spawn %s" % [name, childrenDropped])
 	for i in range(childrenDropped):
 		GameManager.spawn_new_object(stats.type, Vector2(position.x, position.y + 10*i))
 
 func get_nearest_mates(detectionDistance: float) -> Array[Fish]:
-	var fishes = GameManager.get_fish_mates(stats.type, !stats.isMale)
+	var fishes = GameManager.get_fish_mates(stats.type, not stats.isMale)
 	var mates : Array[Fish] = []
 	for fish in fishes:
 		if fish.globalPosition.distance_to(position) < detectionDistance:
 			mates.append(fish)
 	return mates
+
+func has_mated(fish: Fish) -> bool:
+	if fish.id in mated:
+		return true
+	return false

@@ -199,7 +199,7 @@ func spawn_new_object(objectName: String, position: Vector2 = Vector2.ZERO, myNu
 func get_fish_mates(type: String, isMale: bool) -> Array[Fish]:
 	var mates: Array[Fish] = []
 	for _fish in currentTankData.fish:
-		if currentTankData.fish[_fish].type == type && currentTankData.fish[_fish].isMale == isMale:
+		if currentTankData.fish[_fish].type == type and currentTankData.fish[_fish].isMale == isMale:
 			mates.append(currentTankData.fish[_fish])
 	return mates
 

@@ -30,7 +30,7 @@ func _ready():
 	$StateMachine.parentNode = self
 
 func _process(delta):
-	if fsm && fsm.currentState:
+	if fsm and fsm.currentState:
 		label.text = fsm.currentState.name
 	# TODO: effect water chemistry
 	process_health(delta)

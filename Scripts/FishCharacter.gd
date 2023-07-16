@@ -13,7 +13,7 @@ class_name FishCharacter extends Resource
 @export var toleranceRange: float = 8.0
 @export var matingEnergyThreshold: float = 50.0
 @export var mateSize: float = 1.8
-@export var growBabyTime: float = 5.0
+@export var growBabyTime: float = 300.0
 @export var minChildren: int = 2
 @export var maxChildren: int = 5
 

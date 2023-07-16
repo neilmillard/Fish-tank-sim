@@ -14,7 +14,7 @@ func exit():
 	myBody.idle_timer.stop()
 
 func update(delta: float) -> void:
-	if !myBody.over_mating_threshold() || matingTimer > matingTimeout:
+	if not myBody.over_mating_threshold() or matingTimer > matingTimeout:
 		emit_signal("Transitioned", "Mating", "Idle")		
 	matingTimer += delta
 
@@ -28,8 +28,9 @@ func physics_update(delta: float) -> void:
 		
 func on_idle_timer_timeout():
 	var someMate = get_nearest_mate()
+	myBody.expire_mated()
 	var direction = Vector2.ZERO
-	if myBody.stats.isMale && someMate:
+	if myBody.stats.isMale and someMate:
 		direction = myBody.global_position.direction_to(someMate.globalPosition)
 	emit_signal("Transitioned", "Mating", "Swimming", 
 				{"direction" = direction, "previousState" = "Mating"})
@@ -42,6 +43,13 @@ func get_nearest_mate() -> Fish:
 		return null
 	var mate = mates[0]
 	for i in mates:
+		if myBody.has_mated(i):
+			break
+		if not myBody.is_mate(i):
+			break
 		if i.globalPosition.distance_to(myBody.position) < mate.globalPosition.distance_to(myBody.position):
 			mate = i
-	return mate
+	if myBody.has_mated(mate):
+		return null
+	else:
+		return mate

@@ -18,7 +18,7 @@ func _ready():
 		stats.rotTimerDuration = rotTime
 	stats.type = type
 	stats.globalPosition = global_position
-	if !stats.sinking && doesFloat && position.y < 50:
+	if !stats.sinking and doesFloat and position.y < 50:
 		add_sink_timer()
 	else:
 		start_sink()
@@ -32,9 +32,9 @@ func _physics_process(delta):
 		if position.y > GameManager.currentLevelHeight - GameManager.floorHeight:
 			stats.move_direction = Vector2.ZERO
 		stats.globalPosition = global_position
-	if sinkTimer && !sinkTimer.is_stopped():
+	if sinkTimer and !sinkTimer.is_stopped():
 		stats.sinkTimerDuration = sinkTimer.get_time_left()
-	if rotTimer && !rotTimer.is_stopped():
+	if rotTimer and !rotTimer.is_stopped():
 		stats.rotTimerDuration = rotTimer.get_time_left()
 
 func add_rot_timer():
