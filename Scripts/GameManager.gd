@@ -5,6 +5,7 @@ enum State {
 }
 
 signal spawn_new(objectName: String, position: Vector2, myNutrition: Nutrition)
+signal run_test_button_pressed()
 signal toggle_game_paused(is_paused: bool)
 signal save_button_pressed()
 signal load_button_pressed()
@@ -56,7 +57,7 @@ var ammoniaProcessRate: float = 0.002
 var nitriteProcessRate: float = 0.0016
 # bacteria growth rate, real = double in 13hrs
 var bacteriaGrowthRate: float = 0.04
-var nh3HealthThreshold: float = 40.0
+var nh3PpmHealthThreshold: float = 0.06 # 6%
 # infectionEnergy amount of energy to increase health by 1
 var infectionEnergy: float = 0.2
 # How much energy required to grow (fish)
@@ -99,6 +100,9 @@ func load_button():
 	
 func quit_game_pressed():
 	emit_signal("goto_main")
+
+func run_water_test():
+	emit_signal("run_test_button_pressed")
 
 func set_debug_overlay(debugOverlay):
 	debug = debugOverlay
@@ -189,6 +193,19 @@ func request_o2(requested :float) -> float:
 
 func charge_o2(amountO2: float):
 	currentTankData.charge_o2(amountO2)
+
+func get_nh3_ppm() -> float:
+	# This will be something like 40.0 / 800.0 = 1/20 = 5%
+	var ppm = currentTankData.currentNH3 / currentTankData.maxGas
+	return ppm
+
+func get_no2_ppm() -> float:
+	var ppm = currentTankData.currentNO2 / currentTankData.maxGas
+	return ppm
+
+func get_no3_ppm() -> float:
+	var ppm = currentTankData.currentNO3 / currentTankData.maxGas
+	return ppm
 
 func spawn_fishfood(myPosition: Vector2, myNutrition: Nutrition):
 	spawn_new_object("FishFood", myPosition, myNutrition)

@@ -97,3 +97,7 @@ func _on_tank_temp_up_button_up():
 
 func _on_tank_temp_down_button_up():
 	GameManager.set_tank_target_temp(-1.0)
+
+
+func _on_water_test_button_button_down():
+	GameManager.run_water_test()

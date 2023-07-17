@@ -7,9 +7,9 @@ extends Node2D
 @export var type: String = "Generic"
 @export var maxHealth: float = 100
 @export var maxGrowStage: float = 3
-@export var processingRate: float = 1
-@export var growthThreshold: float = 1000.0
-@export var growthCost: float = 500.0
+@export var processingRate: float = 0.1
+@export var growthThreshold: float = 200.0
+@export var growthCost: float = 100.0
 @export var livingCost: float = 0.01
 
 @onready var label = $Label

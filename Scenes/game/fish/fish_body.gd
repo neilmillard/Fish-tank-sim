@@ -228,7 +228,7 @@ func process_health(delta: float) -> void:
 		stats.currentHealth = myCharacter.maxHealth
 	
 	# poor water quality will assist the growing infection
-	if GameManager.currentTankData.currentNH3 > GameManager.nh3HealthThreshold:
+	if GameManager.get_nh3_ppm() > GameManager.nh3PpmHealthThreshold:
 		stats.currentHealth -= delta / 2.0
 	set_health_bar()
 
@@ -376,7 +376,8 @@ func get_stored_energy() -> float:
 func over_mating_threshold() -> float:
 	var enoughEnergy = get_stored_energy() > myCharacter.matingEnergyThreshold
 	var oldEnough = stats.fishSize > myCharacter.mateSize
-	return enoughEnergy and oldEnough and not stats.isExpecting
+	var healthy = stats.currentHealth > 0.8 * myCharacter.maxHealth
+	return enoughEnergy and oldEnough and healthy and not stats.isExpecting
 
 func get_current_swimSpeed():
 	var modifier = GameManager.temperatureModifer(myCharacter.preferredTemp, 

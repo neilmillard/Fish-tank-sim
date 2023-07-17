@@ -38,6 +38,9 @@ func on_idle_timer_timeout():
 	myBody.start_idle_timer(true)
 
 func get_nearest_mate() -> Fish:
+	if not myBody.over_mating_threshold():
+		emit_signal("Transitioned", "Mating", "Idle")
+		return
 	var mates = myBody.get_nearest_mates(400.0)
 	if mates.is_empty():
 		return null

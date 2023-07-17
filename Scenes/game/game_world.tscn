@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://bb2611wtuse72"]
+[gd_scene load_steps=10 format=3 uid="uid://bb2611wtuse72"]
 
 [ext_resource type="Script" path="res://Scenes/game/game_world.gd" id="1_ayi5y"]
 [ext_resource type="PackedScene" uid="uid://7pafpo7utcpp" path="res://Scenes/game/tank/underwater.tscn" id="2_yd0gd"]
 [ext_resource type="PackedScene" uid="uid://dm5rs8fx0vnle" path="res://Scenes/menu/pause/pause_menu.tscn" id="3_ru30w"]
+[ext_resource type="PackedScene" uid="uid://cl72fytgnk388" path="res://Scenes/game/equipment/test_bench.tscn" id="4_8dbbw"]
 [ext_resource type="Texture2D" uid="uid://c7n0dkn264x0f" path="res://art/flake_1.png" id="4_j3w7t"]
 [ext_resource type="Script" path="res://Scripts/DebugStats.gd" id="5_hgqng"]
 [ext_resource type="Script" path="res://Scenes/game/FishStateContainer.gd" id="5_l8hwt"]
@@ -18,8 +19,13 @@ start_tank = ExtResource("2_yd0gd")
 process_mode = 1
 
 [node name="PauseLayer" type="CanvasLayer" parent="."]
+layer = 100
 
 [node name="PauseMenu" parent="PauseLayer" instance=ExtResource("3_ru30w")]
+
+[node name="ReportLayer" type="CanvasLayer" parent="."]
+
+[node name="TestBench" parent="ReportLayer" instance=ExtResource("4_8dbbw")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 100
@@ -253,6 +259,18 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "-"
 
+[node name="Reports" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+
+[node name="WaterTestButton" type="Button" parent="CanvasLayer/InterfaceManager/Panel/HCont/Reports"]
+layout_mode = 2
+text = "Run Water Test"
+
+[node name="SpareButton" type="Button" parent="CanvasLayer/InterfaceManager/Panel/HCont/Reports"]
+layout_mode = 2
+text = "Spare"
+
 [node name="TankStatsContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont"]
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
@@ -349,3 +367,5 @@ texture = ExtResource("4_j3w7t")
 [connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/VBoxContainer2/SpawnOrangeFishButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_fish_button_button_up"]
 [connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp/HBoxContainer/TankTempUp" to="CanvasLayer/InterfaceManager" method="_on_tank_temp_up_button_up"]
 [connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp/HBoxContainer/TankTempDown" to="CanvasLayer/InterfaceManager" method="_on_tank_temp_down_button_up"]
+[connection signal="button_down" from="CanvasLayer/InterfaceManager/Panel/HCont/Reports/WaterTestButton" to="CanvasLayer/InterfaceManager" method="_on_water_test_button_button_down"]
+[connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/Reports/SpareButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_green_plant_button_button_up"]
