@@ -43,9 +43,9 @@ func remove_filter(myFilter: Filter) -> void:
 	filters.erase(myFilter.id)
 
 func get_gravel_filter_stats() -> Filter:
-	for filter in filters:
-		if filter.type == "Gravel":
-			return filter
+	for idx in filters:
+		if filters[idx].type == "Gravel":
+			return filters[idx]
 	return null
 
 func add_plant(myPlant: Plant) -> void:
@@ -122,3 +122,14 @@ func remove_NO3(amount: float) -> float:
 	currentNO3 = returnValue.y
 	return returnValue.x
 	
+func water_change(percent: float):
+	# removes a percentage of bacteria
+	# water gas
+	# waste (until we clean filter button)
+	var filter = get_gravel_filter_stats()
+	filter.water_change(percent)
+	
+	currentNH3 -= currentNH3 * percent
+	currentNO2 -= currentNO2 * percent
+	currentNO3 -= currentNO3 * (percent / 2.0)
+	currentWaste -= currentWaste * percent

@@ -207,6 +207,9 @@ func get_no3_ppm() -> float:
 	var ppm = currentTankData.currentNO3 / currentTankData.maxGas
 	return ppm
 
+func water_change() -> void:
+	currentTankData.water_change(0.2)
+
 func spawn_fishfood(myPosition: Vector2, myNutrition: Nutrition):
 	spawn_new_object("FishFood", myPosition, myNutrition)
 

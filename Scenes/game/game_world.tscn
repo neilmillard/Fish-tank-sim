@@ -267,9 +267,9 @@ layout_mode = 2
 layout_mode = 2
 text = "Run Water Test"
 
-[node name="SpareButton" type="Button" parent="CanvasLayer/InterfaceManager/Panel/HCont/Reports"]
+[node name="WaterChangeButton" type="Button" parent="CanvasLayer/InterfaceManager/Panel/HCont/Reports"]
 layout_mode = 2
-text = "Spare"
+text = "Water Change"
 
 [node name="TankStatsContainer" type="VBoxContainer" parent="CanvasLayer/InterfaceManager/Panel/HCont"]
 custom_minimum_size = Vector2(130, 0)
@@ -368,4 +368,4 @@ texture = ExtResource("4_j3w7t")
 [connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp/HBoxContainer/TankTempUp" to="CanvasLayer/InterfaceManager" method="_on_tank_temp_up_button_up"]
 [connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/MarginContainer/TankTemp/HBoxContainer/TankTempDown" to="CanvasLayer/InterfaceManager" method="_on_tank_temp_down_button_up"]
 [connection signal="button_down" from="CanvasLayer/InterfaceManager/Panel/HCont/Reports/WaterTestButton" to="CanvasLayer/InterfaceManager" method="_on_water_test_button_button_down"]
-[connection signal="button_up" from="CanvasLayer/InterfaceManager/Panel/HCont/Reports/SpareButton" to="CanvasLayer/InterfaceManager" method="_on_spawn_green_plant_button_button_up"]
+[connection signal="button_down" from="CanvasLayer/InterfaceManager/Panel/HCont/Reports/WaterChangeButton" to="CanvasLayer/InterfaceManager" method="_on_water_change_button_button_down"]

@@ -101,3 +101,7 @@ func _on_tank_temp_down_button_up():
 
 func _on_water_test_button_button_down():
 	GameManager.run_water_test()
+
+
+func _on_water_change_button_button_down():
+	GameManager.water_change()
