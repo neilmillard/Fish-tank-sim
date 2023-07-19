@@ -170,6 +170,8 @@ func remove_food_resource(myFood: Food) -> void:
 func currentFoodInTank() -> float:
 	return len(currentTankData.food)
 	
+func currentFishInTank() -> float:
+	return len(currentTankData.fish)
 
 func remove_fish_resource(myFish: Fish) -> void:
 	currentTankData.remove_fish(myFish)

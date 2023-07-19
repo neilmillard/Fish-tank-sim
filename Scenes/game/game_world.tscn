@@ -275,15 +275,15 @@ text = "Water Change"
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 
-[node name="TankO2Label" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer"]
+[node name="FishCountLabel" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Tank O2:"
+text = "Population:"
 
-[node name="TankO2Value" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer/TankO2Label"]
+[node name="FishCountValue" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer/FishCountLabel"]
 layout_mode = 2
 offset_left = 89.0
-offset_right = 189.0
+offset_right = 130.0
 offset_bottom = 26.0
 text = "100"
 
@@ -315,6 +315,18 @@ text = "0.0"
 custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 
+[node name="TankO2Label" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Tank O2:"
+
+[node name="TankO2Value" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2/TankO2Label"]
+layout_mode = 2
+offset_left = 89.0
+offset_right = 189.0
+offset_bottom = 26.0
+text = "100"
+
 [node name="NH3Label" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2"]
 layout_mode = 2
 size_flags_horizontal = 0
@@ -326,18 +338,6 @@ offset_left = 89.0
 offset_right = 189.0
 offset_bottom = 26.0
 text = "0.0"
-
-[node name="NO2Label" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "NO2:"
-
-[node name="NO2Value" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2/NO2Label"]
-layout_mode = 2
-offset_left = 89.0
-offset_right = 189.0
-offset_bottom = 26.0
-text = "100"
 
 [node name="NO3Label" type="Label" parent="CanvasLayer/InterfaceManager/Panel/HCont/TankStatsContainer2"]
 layout_mode = 2

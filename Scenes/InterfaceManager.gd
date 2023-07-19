@@ -1,6 +1,8 @@
 extends Control
 
 const CAMERA_SPEED = 200
+const COLOR_CRITICAL = Color(0.95, 0.25, 0.25)
+const COLOR_WARNING = Color(0.7, 0.7, 0.1)
 
 @onready var camera_focus = $"../../Camera_Focus"
 @onready var camera = $"../../Camera_Focus/Camera2D"
@@ -64,12 +66,23 @@ func update_inventory_display():
 		$Panel/HCont/MarginContainer/TankTemp/HBoxCont/TankTempValue.text = "NA"
 
 	# Tank Chemistry
-	$Panel/HCont/TankStatsContainer/TankO2Label/TankO2Value.text = str(floor(GameManager.currentTankData.get("availableO2")))
+	$Panel/HCont/TankStatsContainer/FishCountLabel/FishCountValue.text = "%4.0f" % GameManager.currentFishInTank()
 	$Panel/HCont/TankStatsContainer/WasteLabel/WasteValue.text = "%4.2f" % GameManager.currentTankData.get("currentWaste")
 	$Panel/HCont/TankStatsContainer/FoodQuantLabel/FoodQuantValue.text = "%4.0f" % GameManager.currentFoodInTank()
+	$Panel/HCont/TankStatsContainer2/TankO2Label/TankO2Value.text = str(floor(GameManager.currentTankData.get("availableO2")))
 	$Panel/HCont/TankStatsContainer2/NH3Label/NH3Value.text = "%4.2f" % GameManager.currentTankData.get("currentNH3")
-	$Panel/HCont/TankStatsContainer2/NO2Label/NO2Value.text = "%4.2f" % GameManager.currentTankData.get("currentNO2")
 	$Panel/HCont/TankStatsContainer2/NO3Label/NO3Value.text = "%4.2f" % GameManager.currentTankData.get("currentNO3")
+	
+	# Warnings
+	if GameManager.get_nh3_ppm() > GameManager.nh3PpmHealthThreshold:
+		$Panel/HCont/TankStatsContainer2/NH3Label/NH3Value.add_theme_color_override("font_color", COLOR_CRITICAL)
+	else:
+		$Panel/HCont/TankStatsContainer2/NH3Label/NH3Value.remove_theme_color_override("font_color")
+	
+	if GameManager.currentFishInTank() > GameManager.currentFoodInTank():
+		$Panel/HCont/TankStatsContainer/FoodQuantLabel/FoodQuantValue.add_theme_color_override("font_color", COLOR_WARNING)
+	else:
+		$Panel/HCont/TankStatsContainer/FoodQuantLabel/FoodQuantValue.remove_theme_color_override("font_color")
 	
 func _on_flake_food_button_button_down():
 	if GameManager.flakeFood > 0:

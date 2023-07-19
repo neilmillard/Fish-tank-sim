@@ -4,7 +4,7 @@ class_name FishCharacter extends Resource
 @export var maxSize: float = 2.0
 @export var swimSpeed: int = 60
 @export var fleeSpeed: int = 100
-@export var rotationSpeed: float = 40.0
+@export var rotationSpeed: float = 80.0
 @export var maxHealth: float = 100.0
 @export var growthThreshold: float = 5.0
 @export var spriteScale: float = 4.0

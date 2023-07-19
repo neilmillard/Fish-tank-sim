@@ -110,8 +110,16 @@ func get_safe_direction():
 			randi_range(avoidLeft,avoidRight),
 			randi_range(avoidUp,avoidDown)
 			)
+	if direction.x > avoidLeft and direction.x < avoidRight:
+		myDirection.x = direction.x
+	if direction.y > avoidUp and direction.y < avoidUp:
+		myDirection.y = direction.y
+	
 	if myDirection == Vector2.ZERO:
-		myDirection = Vector2.UP
+		if position.y > GameManager.currentLevelHeight:
+			myDirection = Vector2.UP
+		else:
+			myDirection = Vector2.DOWN
 	return myDirection
 	
 
@@ -333,6 +341,8 @@ func rotate_to_target(target, delta):
 	transform.rotated(sign(angleTo) * min(delta * myCharacter.rotationSpeed, abs(angleTo)))
 
 func rotate_to_direction(newDirection: Vector2, delta: float) -> void:
+	if newDirection.x == 0:
+		newDirection.x = 1
 	var angleTo = transform.x.angle_to(newDirection)
 	var angleDelta = sign(angleTo) * min(delta * myCharacter.rotationSpeed, abs(angleTo))
 	if velocity.x < 0:

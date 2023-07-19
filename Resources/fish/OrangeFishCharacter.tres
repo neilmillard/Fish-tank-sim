@@ -1,19 +1,22 @@
-[gd_resource type="Resource" script_class="FishCharacter" load_steps=3 format=3 uid="uid://ditt2agvksk0f"]
+[gd_resource type="Resource" script_class="FishCharacter" load_steps=2 format=3 uid="uid://ditt2agvksk0f"]
 
 [ext_resource type="Script" path="res://Scripts/FishCharacter.gd" id="1_b3clx"]
-[ext_resource type="Texture2D" uid="uid://cnet5s6bcgj4k" path="res://Resources/fish/OrangeFish.png" id="2_jlms7"]
 
 [resource]
 script = ExtResource("1_b3clx")
 type = "OrangeFish"
-sprite = ExtResource("2_jlms7")
 maxSize = 2.0
 swimSpeed = 60
 fleeSpeed = 100
-rotationSpeed = 40.0
+rotationSpeed = 80.0
 maxHealth = 100.0
 growthThreshold = 5.0
 spriteScale = 4.0
 idleFoodDistanceThreshold = 400.0
 preferredTemp = 25.0
 toleranceRange = 8.0
+matingEnergyThreshold = 50.0
+mateSize = 1.8
+growBabyTime = 300.0
+minChildren = 2
+maxChildren = 5

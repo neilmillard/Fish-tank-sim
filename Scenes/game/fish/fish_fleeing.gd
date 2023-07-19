@@ -7,15 +7,17 @@ var triggeredTimer
 
 func enter(_msg:={}):
 	previousState = _msg.previousState
-	triggeredTimer = 0.6
+	if previousState == "Swimming":
+		previousState == "Idle"
+	triggeredTimer = 0.4
 	fleeDirection = myBody.get_safe_direction()
 	set_fish_velocity()
 
 func update(delta: float) -> void:
 	triggeredTimer -= delta
-	myBody.rotate_to_direction(myBody.direction, delta)
 
-func physics_update(_delta: float) -> void:
+func physics_update(delta: float) -> void:
+	myBody.rotate_to_direction(myBody.direction, delta)
 	var detection = myBody.check_environment()
 	if detection != 'flee' and triggeredTimer < 0.0:
 		emit_signal("Transitioned", "Fleeing", previousState)
