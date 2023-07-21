@@ -5,6 +5,7 @@ extends Area2D
 @export var type: String
 @export var doesFloat: bool = true
 @export var sinkTime: float = 50
+@export var doesSwim: bool = false
 @export var move_speed : float = 10
 @export var rotTime: float = 4000
 
@@ -18,19 +19,21 @@ func _ready():
 		stats.rotTimerDuration = rotTime
 	stats.type = type
 	stats.globalPosition = global_position
-	if !stats.sinking and doesFloat and position.y < 50:
+	if !stats.moving and doesFloat and position.y < 50:
 		add_sink_timer()
 	else:
-		start_sink()
+		start_move()
 	
 	add_rot_timer()
 
 func _physics_process(delta):
-	if stats.sinking:
+	if stats.moving:
+		if doesSwim:
+			pick_swim_direction()
 		# Move and Slide function uses velocity of character body to move character on map
 		position += stats.move_direction * move_speed * delta
 		if position.y > GameManager.currentLevelHeight - GameManager.floorHeight:
-			stats.move_direction = Vector2.ZERO
+			stats.move_direction.y = 0.0
 		stats.globalPosition = global_position
 	if sinkTimer and !sinkTimer.is_stopped():
 		stats.sinkTimerDuration = sinkTimer.get_time_left()
@@ -60,13 +63,37 @@ func eat():
 	GameManager.remove_food_resource(stats)
 	return nutritionValue.duplicate()
 	
-func start_sink():
-	stats.sinking = true
-	stats.move_direction = Vector2.DOWN
+func pick_swim_direction():
+	var myDirection = stats.move_direction
+	if myDirection == Vector2.ZERO:
+		if stats.globalPosition.y < 60:
+			myDirection.y = 1.0
+	if stats.globalPosition.x < 50:
+		if myDirection.x < 0.0:
+			myDirection.x = 0.0
+		elif myDirection.x == 0.0:
+			myDirection.x = 1.0
+	if stats.globalPosition.x > GameManager.currentLevelWidth - 50:
+		if myDirection.x > 0.0:
+			myDirection.x = 0.0
+		elif myDirection.x == 0.0:
+			myDirection.x = -1.0
+	
+	if position.y > GameManager.currentLevelHeight - GameManager.floorHeight:
+		myDirection.y = -1.0
+		
+	stats.move_direction = myDirection
+	
+func start_move():
+	stats.moving = true
+	if doesSwim:
+		pick_swim_direction()
+	else:
+		stats.move_direction = Vector2.DOWN
 	
 func _on_sink_timer_timeout():
-	if !stats.sinking:
-		start_sink()
+	if !stats.moving:
+		start_move()
 
 func _on_rot_timer_timeout():
 	# TODO:
