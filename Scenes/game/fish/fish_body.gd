@@ -375,7 +375,7 @@ func eat_food(foodObject: Node):
 		# Dead fish cannot eat
 		if fsm.currentState.name == "Dead":
 			return
-		if myStomach.has_space_to_eat(foodObject.nutritionValue.size):
+		if myStomach.has_space_to_eat(foodObject.myCharacter.nutritionValue.size):
 			myStomach.receive_food(foodObject.eat())
 		nearestFoodPosition = Vector2.ZERO
 

@@ -125,14 +125,29 @@ func spawn_filter(stats: Filter = null, type: String = "Generic"):
 	if stats:
 		myFilter.stats = stats
 
-func spawn_food(foodStats: Food):
-	var myFood = spawn_obj(GameManager.foods[foodStats.type], foodStats.globalPosition)
+func spawn_food(foodStats: Food, type: String ="FlakeFood", myPosition: Vector2 = Vector2.ZERO):
+	var myFoodCharacter : FoodCharacter
+	
+	if foodStats:
+		myPosition = foodStats.globalPosition
+		myFoodCharacter = GameManager.foods[foodStats.type]
+		
+	else:
+		foodStats = GameManager.new_food_resource(type)
+		foodStats.globalPosition = myPosition
+		myFoodCharacter = GameManager.foods[type]
+		foodStats.sinkTimerDuration = myFoodCharacter.sinkTime
+		foodStats.rotTimerDuration = myFoodCharacter.rotTime
+		
+	var myFood = spawn_obj(GameManager.myFoodScene, myPosition)
 	myFood.stats = foodStats
+	myFood.myCharacter = myFoodCharacter
 	
 func spawn_flakefood():
 	var spawnLocation = randf_range(100, GameManager.currentLevelWidth - 100)
 	for n in range(1, foodPinch):
-		spawn_obj(GameManager.foods["flakeFood"],Vector2(spawnLocation + randi_range(-30, 30), surface))
+		spawn_food(null,"FlakeFood",Vector2(spawnLocation + randi_range(-30, 30), surface))
+#		spawn_obj(GameManager.foods["flakeFood"],Vector2(spawnLocation + randi_range(-30, 30), surface))
 
 func spawn_plant(plantStats: Plant = null, type: String = "GreenPlant"):
 	var myPosition: Vector2

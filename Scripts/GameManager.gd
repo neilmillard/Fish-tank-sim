@@ -31,13 +31,9 @@ const FLOOR = 4
 # Resources
 const BASE_PATH := "res://Resources"
 const CHARACTER = "Character.tres"
-var foods := {
-	'flakeFood': ResourceLoader.load("res://Scenes/game/food/flakeFood.tscn"),
-	'PlantFood': ResourceLoader.load("res://Scenes/game/food/plantFood.tscn"),
-	'plantFood': ResourceLoader.load("res://Scenes/game/food/plantFood.tscn")
-}
-
+var myFoodScene = ResourceLoader.load("res://Scenes/game/food/Food.tscn")
 var myFishScene = ResourceLoader.load("res://Scenes/game/fish/Fish.tscn")
+var foods := {}
 var fishes := {}
 var plants := {
 	'GreenPlant': ResourceLoader.load("res://Scenes/game/plants/green_plant.tscn")
@@ -154,8 +150,8 @@ func new_fish_resource(type: String = "OrangeFish") -> Fish:
 	currentTankData.add_fish(myFishRes)
 	return myFishRes
 
-func new_food_resource() -> Food:
-	var myFoodRes = Food.new()
+func new_food_resource(type: String ="FlakeFood") -> Food:
+	var myFoodRes = Food.new(type)
 	currentTankData.add_food(myFoodRes)
 	return myFoodRes
 
@@ -254,8 +250,12 @@ func _find_entities_in(path: String) -> void:
 			if directory.current_is_dir():
 				_find_entities_in("%s/%s" % [directory.get_current_dir(), filename])
 			else:
-				if filename.ends_with(CHARACTER):
+				if filename.ends_with("Fish" + CHARACTER):
 					fishes[filename.replace(CHARACTER, "")] = load(
+						"%s/%s" % [directory.get_current_dir(), filename]
+					)
+				if filename.ends_with("Food" + CHARACTER):
+					foods[filename.replace(CHARACTER, "")] = load(
 						"%s/%s" % [directory.get_current_dir(), filename]
 					)
 				

@@ -1,20 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://cvplseuj47e66"]
+[gd_scene load_steps=4 format=3 uid="uid://duwvgs7uq5ed1"]
 
-[ext_resource type="Script" path="res://Scripts/food.gd" id="1_5su1c"]
-[ext_resource type="Texture2D" uid="uid://c7n0dkn264x0f" path="res://art/flake_1.png" id="2_q87a5"]
+[ext_resource type="Script" path="res://Scripts/food.gd" id="1_ogkm6"]
+[ext_resource type="Texture2D" uid="uid://c7n0dkn264x0f" path="res://art/flake_1.png" id="2_vwif4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jrsht"]
 size = Vector2(8, 4)
 
-[node name="flakeFood" type="Area2D" groups=["Persist", "food"]]
+[node name="Food" type="Area2D" groups=["Persist", "food"]]
 collision_layer = 4
 collision_mask = 11
-script = ExtResource("1_5su1c")
+script = ExtResource("1_ogkm6")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 scale = Vector2(4, 4)
-texture = ExtResource("2_q87a5")
+texture = ExtResource("2_vwif4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-4, -6)

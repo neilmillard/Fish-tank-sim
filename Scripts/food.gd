@@ -1,37 +1,27 @@
 extends Area2D
 
-@export var nutritionValue: Nutrition
 @export var stats: Food
-@export var type: String
-@export var doesFloat: bool = true
-@export var sinkTime: float = 50
-@export var doesSwim: bool = false
-@export var move_speed : float = 10
-@export var rotTime: float = 4000
+@export var myCharacter: FoodCharacter
 
 var sinkTimer: Timer
 var rotTimer: Timer
 
 func _ready():
-	if !stats:
-		stats = GameManager.new_food_resource()
-		stats.sinkTimerDuration = sinkTime
-		stats.rotTimerDuration = rotTime
-	stats.type = type
-	stats.globalPosition = global_position
-	if !stats.moving and doesFloat and position.y < 50:
-		add_sink_timer()
-	else:
+	if myCharacter.doesFloat and position.y < 50:
+		if !stats.moving:
+			add_sink_timer()
+		else:
+			start_move()
+	if !myCharacter.doesFloat:
 		start_move()
-	
 	add_rot_timer()
 
 func _physics_process(delta):
 	if stats.moving:
-		if doesSwim:
+		if myCharacter.doesSwim:
 			pick_swim_direction()
 		# Move and Slide function uses velocity of character body to move character on map
-		position += stats.move_direction * move_speed * delta
+		position += stats.move_direction * myCharacter.move_speed * delta
 		if position.y > GameManager.currentLevelHeight - GameManager.floorHeight:
 			stats.move_direction.y = 0.0
 		stats.globalPosition = global_position
@@ -61,7 +51,7 @@ func add_sink_timer():
 func eat():
 	queue_free()
 	GameManager.remove_food_resource(stats)
-	return nutritionValue.duplicate()
+	return myCharacter.nutritionValue.duplicate()
 	
 func pick_swim_direction():
 	var myDirection = stats.move_direction
@@ -86,7 +76,7 @@ func pick_swim_direction():
 	
 func start_move():
 	stats.moving = true
-	if doesSwim:
+	if myCharacter.doesSwim:
 		pick_swim_direction()
 	else:
 		stats.move_direction = Vector2.DOWN
@@ -97,7 +87,7 @@ func _on_sink_timer_timeout():
 
 func _on_rot_timer_timeout():
 	# TODO:
-	GameManager.currentTankData.add_waste(nutritionValue.size)
+	GameManager.currentTankData.add_waste(myCharacter.nutritionValue.size)
 	queue_free()
 
 func _on_body_entered(body):

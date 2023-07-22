@@ -1,18 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://c66kdryvfqxm8"]
+[gd_scene load_steps=4 format=3 uid="uid://c66kdryvfqxm8"]
 
 [ext_resource type="Script" path="res://Scripts/food.gd" id="1_08ps4"]
-[ext_resource type="Script" path="res://Scripts/nutrition.gd" id="2_egkek"]
 [ext_resource type="Texture2D" uid="uid://c4dv4d37t0xc5" path="res://art/planttFood_1.png" id="3_bj1aj"]
-
-[sub_resource type="Resource" id="Resource_abyhu"]
-script = ExtResource("2_egkek")
-carbs = 1.0
-fats = 0.0
-proteins = 1.0
-size = 1.0
-processedCarbs = 0.0
-processedFats = 0.0
-processedProteins = 0.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jrsht"]
 size = Vector2(8, 8)
@@ -22,11 +11,6 @@ texture_filter = 1
 collision_layer = 4
 collision_mask = 11
 script = ExtResource("1_08ps4")
-nutritionValue = SubResource("Resource_abyhu")
-type = "plantFood"
-doesFloat = false
-sinkTime = 0.0
-move_speed = 0.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1

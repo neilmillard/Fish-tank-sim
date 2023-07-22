@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="FoodCharacter" load_steps=4 format=3 uid="uid://b2fig14ppw6s4"]
+
+[ext_resource type="Script" path="res://Scripts/FoodCharacter.gd" id="1_0vg4x"]
+[ext_resource type="Script" path="res://Scripts/nutrition.gd" id="1_87v1i"]
+
+[sub_resource type="Resource" id="Resource_6w67y"]
+script = ExtResource("1_87v1i")
+carbs = 1.0
+fats = 0.0
+proteins = 1.0
+size = 1.0
+processedCarbs = 0.0
+processedFats = 0.0
+processedProteins = 0.0
+
+[resource]
+script = ExtResource("1_0vg4x")
+type = "PlantFood"
+doesFloat = false
+sinkTime = 50.0
+doesSwim = false
+move_speed = 10.0
+rotTime = 4000.0
+nutritionValue = SubResource("Resource_6w67y")
