@@ -71,10 +71,17 @@ func _on_spawn_new_object(
 		return
 	
 	if objectName == "FishFood":
+		print("called spawn_new_object with FishFood")
+		return
 		var myObj = spawn_obj(GameManager.foods["flakeFood"], p_position)
 		myObj.nutritionValue = p_nutrition
 		return
-	
+		
+	if objectName in GameManager.foods:
+		var spawnLocation = randf_range(100, GameManager.currentLevelWidth - 100)
+		spawn_food(null,objectName,Vector2(spawnLocation + randi_range(-30, 30), surface))
+		return
+		
 	if objectName == "PlantFood":
 		spawn_obj(GameManager.foods["PlantFood"], p_position)
 		return

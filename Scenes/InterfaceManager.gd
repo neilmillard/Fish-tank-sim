@@ -90,7 +90,11 @@ func _on_flake_food_button_button_down():
 		GameManager.spawn_new_object("FlakeFood")
 		
 
-
+func _on_brine_shrimp_food_button_button_down():
+	if GameManager.liveFood > 0:
+		GameManager.liveFood -= 1
+		GameManager.spawn_new_object("BrineShrimpFood")
+	
 func _on_spawn_fish_button_button_up():
 	GameManager.spawn_new_object("OrangeFish")
 	
@@ -118,3 +122,4 @@ func _on_water_test_button_button_down():
 
 func _on_water_change_button_button_down():
 	GameManager.water_change()
+

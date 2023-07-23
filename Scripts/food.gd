@@ -7,12 +7,16 @@ var sinkTimer: Timer
 var rotTimer: Timer
 
 func _ready():
+	$Sprite2D.texture = myCharacter.get_sprite()
+	if myCharacter.animSprite:
+		$Sprite2D.hframes = 3
+		$AnimationPlayer.play("swim")
 	if myCharacter.doesFloat and position.y < 50:
 		if !stats.moving:
 			add_sink_timer()
 		else:
 			start_move()
-	if !myCharacter.doesFloat:
+	if myCharacter.doesSwim:
 		start_move()
 	add_rot_timer()
 
@@ -20,7 +24,8 @@ func _physics_process(delta):
 	if stats.moving:
 		if myCharacter.doesSwim:
 			pick_swim_direction()
-		# Move and Slide function uses velocity of character body to move character on map
+		# Move and Slide function uses velocity of character body to 
+		# move character on map
 		position += stats.move_direction * myCharacter.move_speed * delta
 		if position.y > GameManager.currentLevelHeight - GameManager.floorHeight:
 			stats.move_direction.y = 0.0
@@ -58,19 +63,17 @@ func pick_swim_direction():
 	if myDirection == Vector2.ZERO:
 		if stats.globalPosition.y < 60:
 			myDirection.y = 1.0
+		myDirection.x = randf_range(-0.9, 1.0)
 	if stats.globalPosition.x < 50:
 		if myDirection.x < 0.0:
-			myDirection.x = 0.0
-		elif myDirection.x == 0.0:
-			myDirection.x = 1.0
+			myDirection.x = randf_range(0.1, 1.0)
+		
 	if stats.globalPosition.x > GameManager.currentLevelWidth - 50:
 		if myDirection.x > 0.0:
-			myDirection.x = 0.0
-		elif myDirection.x == 0.0:
-			myDirection.x = -1.0
+			myDirection.x = randf_range(-0.1, -1.0)
 	
 	if position.y > GameManager.currentLevelHeight - GameManager.floorHeight:
-		myDirection.y = -1.0
+		myDirection.y = randf_range(-0.1, -1.0)
 		
 	stats.move_direction = myDirection
 	

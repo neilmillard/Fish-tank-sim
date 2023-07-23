@@ -7,3 +7,7 @@ class_name FoodCharacter extends Resource
 @export var move_speed : float = 10
 @export var rotTime: float = 4000
 @export var nutritionValue: Nutrition
+@export var animSprite: bool = false
+
+func get_sprite() -> CompressedTexture2D:
+	return ResourceLoader.load("res://Resources/food/%s.png" % type)
