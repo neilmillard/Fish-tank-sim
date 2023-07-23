@@ -17,6 +17,9 @@ func update(_delta: float) -> void:
 	if myBody.food_is_near():
 		emit_signal("Transitioned", "Hunting", "Feeding")
 		return
+	if !myBody.myStomach.could_eat():
+		emit_signal("Transitioned", "Hunting", "Idle")
+		return
 		
 func physics_update(delta: float) -> void:
 	myBody.rotate_to_direction(Vector2(myBody.velocity.x, 0.0), delta)
