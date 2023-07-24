@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bb2611wtuse72"]
+[gd_scene load_steps=11 format=3 uid="uid://bb2611wtuse72"]
 
 [ext_resource type="Script" path="res://Scenes/game/game_world.gd" id="1_ayi5y"]
 [ext_resource type="PackedScene" uid="uid://7pafpo7utcpp" path="res://Scenes/game/tank/underwater.tscn" id="2_yd0gd"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://Scenes/game/FishStateContainer.gd" id="5_l8hwt"]
 [ext_resource type="Script" path="res://Scenes/InterfaceManager.gd" id="6_btoso"]
 [ext_resource type="LabelSettings" uid="uid://s5caed4j5v6a" path="res://Resources/new_label_settings.tres" id="7_4vf33"]
+[ext_resource type="Script" path="res://Scenes/game/Messages.gd" id="9_14a7g"]
 
 [node name="Game" type="Node2D"]
 process_mode = 3
@@ -31,8 +32,8 @@ layer = 100
 layer = 100
 
 [node name="DebugStats" type="MarginContainer" parent="CanvasLayer"]
-offset_right = 250.0
-offset_bottom = 500.0
+offset_right = 206.0
+offset_bottom = 167.0
 script = ExtResource("5_hgqng")
 
 [node name="Panel" type="Panel" parent="CanvasLayer/DebugStats"]
@@ -358,6 +359,19 @@ layout_mode = 2
 [node name="SpawnGreenPlantButton" type="Button" parent="CanvasLayer/InterfaceManager/Panel/HCont/SpawnContainer"]
 layout_mode = 2
 text = "GreenPlant"
+
+[node name="Messages" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -61.0
+offset_right = 246.0
+offset_bottom = 61.0
+grow_vertical = 2
+script = ExtResource("9_14a7g")
+
+[node name="MessagesContainer" type="VBoxContainer" parent="CanvasLayer/Messages"]
+layout_mode = 2
 
 [node name="Camera_Focus" type="Node2D" parent="."]
 position = Vector2(575, 322)

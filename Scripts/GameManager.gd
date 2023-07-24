@@ -10,6 +10,7 @@ signal toggle_game_paused(is_paused: bool)
 signal save_button_pressed()
 signal load_button_pressed()
 signal goto_main()
+signal show_warning_message(message: String)
 
 
 const CHUNK_HEIGHT: int = 128
@@ -21,6 +22,7 @@ const STOMACH_CAPACITY_BASE: float = 10.0
 const TANKTEMPDELTA: float = 0.1
 const TANKMINTEMP: float = 14.0
 const TANKMAXTEMP: float = 35.0
+const MESSAGE_DISPLAY_TIME: float = 5
 
 # Layers
 const WALLS = 1
@@ -99,6 +101,9 @@ func quit_game_pressed():
 
 func run_water_test():
 	emit_signal("run_test_button_pressed")
+
+func display_warning_message(message: String) -> void:
+	emit_signal("show_warning_message", message)
 
 func set_debug_overlay(debugOverlay):
 	debug = debugOverlay
