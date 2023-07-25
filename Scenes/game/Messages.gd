@@ -24,11 +24,13 @@ func remove_message(message_scene:UIMessage) -> void:
 	live_messages.erase(message_scene.currentMessage)
 
 func get_message_container() -> UIMessage:
+	var new_message_scene
 	if message_container_pool.size() > 0:
-		return message_container_pool.pop_back()
+		new_message_scene = message_container_pool.pop_back()
 	else:
-		var new_message_scene = message_scene.instantiate()
+		new_message_scene = message_scene.instantiate()
 		new_message_scene.tree_exiting.connect(
 			func():remove_message(new_message_scene)
 		)
-		return new_message_scene
+	new_message_scene.currentMessage = "BLANK"
+	return new_message_scene

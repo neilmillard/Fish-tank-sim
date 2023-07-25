@@ -1,16 +1,21 @@
 class_name UIMessage extends Control
 
-@onready var label : Label = $Panel/Label
 @onready var timer : Timer = $Timer
 
+var label : Label
 var currentMessage: String = ""
 
+func _ready():
+	pass
+
 func set_message(message : String) -> void:
-	await ready
+	if not label:
+		label = $Panel/Label
 	if message.length() > 19:
 		print("Message length 19 exceeding for: %s" % message)
 	label.text = message
 	currentMessage = message
+	await ready
 	timer.start(GameManager.MESSAGE_DISPLAY_TIME)
 
 func remove() -> void:
