@@ -70,11 +70,10 @@ func _on_spawn_new_object(
 		spawn_flakefood()
 		return
 	
+	# This special case where a fish stomach is emptying after death
 	if objectName == "FishFood":
-		print("called spawn_new_object with FishFood")
-		return
-		var myObj = spawn_obj(GameManager.foods["flakeFood"], p_position)
-		myObj.nutritionValue = p_nutrition
+		var myObj = spawn_food(null,"FlakeFood",p_position)
+		myObj.myCharacter.nutritionValue = p_nutrition
 		return
 		
 	if objectName in GameManager.foods:
@@ -149,6 +148,7 @@ func spawn_food(foodStats: Food, type: String ="FlakeFood", myPosition: Vector2 
 	var myFood = spawn_obj(GameManager.myFoodScene, myPosition)
 	myFood.stats = foodStats
 	myFood.myCharacter = myFoodCharacter
+	return myFood
 	
 func spawn_flakefood():
 	var spawnLocation = randf_range(100, GameManager.currentLevelWidth - 100)
