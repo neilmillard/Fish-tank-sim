@@ -4,14 +4,24 @@ extends MarginContainer
 @onready var message_scene = preload("res://Scenes/menu/ui_message.tscn")
 
 var message_container_pool:Array[UIMessage] = []
+var live_messages:Array[String] = []
 
 func _ready() -> void:
 	GameManager.connect("show_warning_message", spawn_message)
 
 func spawn_message(message:String) -> void:
+	if message in live_messages:
+		return
 	var message_container = get_message_container()
 	message_container.set_message(message)
-	add_child(message_container)
+	live_messages.append(message)
+	warning_messages_container.add_child(message_container)
+	if warning_messages_container.get_child_count() > 4:
+		print("Warning More than 4 messages")
+
+func remove_message(message_scene:UIMessage) -> void:
+	message_container_pool.append(message_scene)
+	live_messages.erase(message_scene.currentMessage)
 
 func get_message_container() -> UIMessage:
 	if message_container_pool.size() > 0:
@@ -19,6 +29,6 @@ func get_message_container() -> UIMessage:
 	else:
 		var new_message_scene = message_scene.instantiate()
 		new_message_scene.tree_exiting.connect(
-			func():message_container_pool.append(new_message_scene)
+			func():remove_message(new_message_scene)
 		)
 		return new_message_scene

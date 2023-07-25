@@ -12,7 +12,9 @@ class_name FishBody
 @onready var thought : Thought = $Thought
 @onready var interactionArea : InteractionArea = $InteractionArea2D
 @onready var idle_timer = $IdleTimer
+@onready var message_timer: Timer
 
+var can_print_message: bool = true
 var fishFaceRight: bool
 var fishState: String = ""
 var currentSwimspeed: float
@@ -101,9 +103,26 @@ func set_health_bar() -> void:
 	var bg_color = Color(0.2, 1.0, 0)
 	if healthBar.value < myCharacter.maxHealth / 2:
 		bg_color = Color(1.0, 0.0, 0)
+		show_fish_dying_message()
 	var sb = healthBar.get_theme_stylebox("fill")
 	sb.bg_color = bg_color
 	
+func show_fish_dying_message() -> void:
+	if not message_timer:
+		message_timer = Timer.new()
+		add_child(message_timer)
+		message_timer.connect("timeout", Callable(self, "_on_message_timeout"))
+		message_timer.set_wait_time(15.0)
+		message_timer.set_one_shot(true) # so it no loop
+		
+	if message_timer and can_print_message:
+		can_print_message = false
+		GameManager.display_warning_message("Fish Dying")
+		message_timer.start()
+
+func _on_message_timeout() -> void:
+	can_print_message = true
+
 
 func get_safe_direction():
 	var myDirection = Vector2(

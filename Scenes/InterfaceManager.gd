@@ -28,7 +28,12 @@ func _process(delta):
 		else:
 			GameManager.currentCameraTarget = null
 
-		
+func _unhandled_input(event) -> void:
+#	if event is InputEventMouseButton:
+#		if event.get_button_index() == MOUSE_BUTTON_RIGHT:
+#			GameManager.display_warning_message("Right Mouse Pressed")
+	pass
+
 func check_camera_moves(delta: float):
 	if GameManager.currentCameraTarget:
 		camera_focus.position = GameManager.currentCameraTarget.globalPosition
@@ -76,14 +81,16 @@ func update_inventory_display():
 	# Warnings
 	if GameManager.get_nh3_ppm() > GameManager.nh3PpmHealthThreshold:
 		$Panel/HCont/TankStatsContainer2/NH3Label/NH3Value.add_theme_color_override("font_color", COLOR_CRITICAL)
+		GameManager.display_warning_message("Check Water")
 	else:
 		$Panel/HCont/TankStatsContainer2/NH3Label/NH3Value.remove_theme_color_override("font_color")
 	
 	if GameManager.currentFishInTank() > GameManager.currentFoodInTank():
 		$Panel/HCont/TankStatsContainer/FoodQuantLabel/FoodQuantValue.add_theme_color_override("font_color", COLOR_WARNING)
+		GameManager.display_warning_message("Check Food")
 	else:
 		$Panel/HCont/TankStatsContainer/FoodQuantLabel/FoodQuantValue.remove_theme_color_override("font_color")
-	
+
 func _on_flake_food_button_button_down():
 	if GameManager.flakeFood > 0:
 		GameManager.flakeFood -= 1
