@@ -113,4 +113,9 @@ offset_right = 34.0
 offset_bottom = 24.0
 texture_normal = ExtResource("5_yuyg8")
 
+[node name="CooldownTimer" type="Timer" parent="."]
+wait_time = 60.0
+one_shot = true
+
 [connection signal="button_down" from="Panel/CloseButton" to="." method="_on_close_button_button_down"]
+[connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]

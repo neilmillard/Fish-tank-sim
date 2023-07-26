@@ -31,8 +31,9 @@ const PH70 = Color8(105, 163, 100, 192)
 const PH72 = Color8(86, 156, 116, 192)
 const PH76 = Color8(46, 138, 149, 192)
 
-# TODO:
-# Needs a cooldown, with a message saying it's busy if triggered too soon
+@onready var timer = $CooldownTimer
+
+var cooldownExpired = true
 
 func _init():
 	GameManager.connect("run_test_button_pressed", run_test)
@@ -43,19 +44,25 @@ func run_test():
 	if is_visible_in_tree():
 		hide()
 		return
+	
+	if cooldownExpired:
+		cooldownExpired = false
+		timer.start(60)
+		$Panel/TestBench/TestTubepH.set_color(PH70)
+		var ammColor = get_nh3_color()
+		$Panel/TestBench/TestTubeNH3.set_color(ammColor)
 		
-	$Panel/TestBench/TestTubepH.set_color(PH70)
-	var ammColor = get_nh3_color()
-	$Panel/TestBench/TestTubeNH3.set_color(ammColor)
-	
-	var nitriteColor = get_no2_color()
-	$Panel/TestBench/TestTubeNO2.set_color(nitriteColor)
-	
-	var nitrateColor = get_no3_color()
-	$Panel/TestBench/TestTubeNO3.set_color(nitrateColor)
+		var nitriteColor = get_no2_color()
+		$Panel/TestBench/TestTubeNO2.set_color(nitriteColor)
+		
+		var nitrateColor = get_no3_color()
+		$Panel/TestBench/TestTubeNO3.set_color(nitrateColor)
 
-	show()
-	
+		show()
+	else:
+		var timeLeft = timer.time_left
+		GameManager.display_warning_message("Test Unlock in %2.0fS" % timeLeft)
+
 func get_nh3_color() -> Color:
 	var ppm = GameManager.get_nh3_ppm()
 	if ppm > 0.08: # 8%
@@ -106,3 +113,7 @@ func get_no3_color() -> Color:
 
 func _on_close_button_button_down():
 	hide()
+
+
+func _on_cooldown_timer_timeout():
+	cooldownExpired = true
