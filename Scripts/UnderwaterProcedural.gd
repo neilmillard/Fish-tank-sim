@@ -1,10 +1,12 @@
 extends Node2D
 class_name UnderwaterPrecedural
 
-# We always keep a reference to the SaveGame resource here to prevent it from unloading.
+# We always keep a reference to the SaveGame resource here to prevent it from 
+# unloading.
 var _save: SaveGame
 var middleWater: MiddleWater
 
+@onready var itemPlacer: ItemPlacer = $ItemPlacer
 @onready var chunk_layers = get_children()
 
 func _ready():
@@ -12,7 +14,7 @@ func _ready():
 	# Then we trigger the .build() functions
 	build(_save.tankData)
 	GameManager.connect("save_button_pressed", _on_save_tank_button_pressed)
-	
+	GameManager.connect("set_placeable_item", _on_set_placeable_item)
 	
 func build(tank: TankData) -> void:
 	GameManager.set_current_level(tank)
@@ -52,3 +54,5 @@ func _create_or_load_save() -> void:
 	GameManager.currentTankData = _save.tankData
 	
 	
+func _on_set_placeable_item(item: PlaceableItem) -> void:
+	itemPlacer.item_to_place = item

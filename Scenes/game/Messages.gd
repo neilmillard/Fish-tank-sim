@@ -19,9 +19,9 @@ func spawn_message(message:String) -> void:
 	if warning_messages_container.get_child_count() > 4:
 		print("Warning More than 4 messages")
 
-func remove_message(message_scene:UIMessage) -> void:
-	message_container_pool.append(message_scene)
-	live_messages.erase(message_scene.currentMessage)
+func remove_message(old_message_scene:UIMessage) -> void:
+	message_container_pool.append(old_message_scene)
+	live_messages.erase(old_message_scene.currentMessage)
 
 func get_message_container() -> UIMessage:
 	var new_message_scene

@@ -1,5 +1,4 @@
-extends Resource
-class_name Filter
+class_name Filter extends Resource
 
 @export var id: int
 @export var type: String

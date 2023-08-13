@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cl7objusxiiwg"]
+
+[ext_resource type="Shader" path="res://Resources/Shaders/Materials/PlaceableShader.gdshader" id="1_s8ty7"]
+
+[resource]
+shader = ExtResource("1_s8ty7")
+shader_parameter/PREVIEW = false
+shader_parameter/PLACEABLE = true

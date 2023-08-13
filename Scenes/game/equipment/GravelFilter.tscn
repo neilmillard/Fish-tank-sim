@@ -1,7 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://c7xo63ominopr"]
+[gd_scene load_steps=3 format=3 uid="uid://c7xo63ominopr"]
 
 [ext_resource type="Script" path="res://Scenes/game/equipment/filter_body.gd" id="1_2j4lq"]
+[ext_resource type="Script" path="res://Scripts/Placeable.gd" id="1_4ncaf"]
 
-[node name="GravelFilter" type="Node2D"]
+[node name="GravelFilter" type="StaticBody2D"]
+script = ExtResource("1_4ncaf")
+
+[node name="Body" type="Node2D" parent="."]
 script = ExtResource("1_2j4lq")
-type = "Gravel"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]

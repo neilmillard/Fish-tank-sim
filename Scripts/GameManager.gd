@@ -5,12 +5,14 @@ enum State {
 }
 
 signal spawn_new(objectName: String, position: Vector2, myNutrition: Nutrition)
+signal spawn_placeable(object: Placeable)
 signal run_test_button_pressed()
 signal toggle_game_paused(is_paused: bool)
 signal save_button_pressed()
 signal load_button_pressed()
 signal goto_main()
 signal show_warning_message(message: String)
+signal set_placeable_item(item: PlaceableItem)
 
 
 const CHUNK_HEIGHT: int = 128
@@ -42,7 +44,12 @@ var plants := {
 }
 
 var filters := {
-	'Gravel' = ResourceLoader.load("res://Scenes/game/equipment/GravelFilter.tscn")
+	'Gravel' = ResourceLoader.load("res://Scenes/game/equipment/GravelFilter.tscn"),
+	'CanisterFilter' = ResourceLoader.load("res://Scenes/game/equipment/CanisterFilter.tscn")
+}
+
+var placeableItems := {
+	'CanisterFilter' = ResourceLoader.load("res://Resources/filter/CanisterFilterCharacter.tres")
 }
 
 var debug
@@ -164,7 +171,19 @@ func new_filter_resource(type: String) -> Filter:
 	var myFilterRes = Filter.new(type)
 	currentTankData.add_filter(myFilterRes)
 	return myFilterRes
-	
+
+func new_resource(category: String, type: String) -> Resource:
+	match category:
+		"Filter":
+			return new_filter_resource(type)
+		"Food":
+			return new_food_resource(type)
+		"Fish":
+			return new_fish_resource(type)
+		_:
+			print("Category: %s Not found for GameManager.new_resource" % category)
+			return
+
 func remove_food_resource(myFood: Food) -> void:
 	currentTankData.remove_food(myFood)
 
@@ -216,8 +235,15 @@ func water_change() -> void:
 func spawn_fishfood(myPosition: Vector2, myNutrition: Nutrition):
 	spawn_new_object("FishFood", myPosition, myNutrition)
 
+func spawn_placeable_object(object: Placeable) -> void:
+	emit_signal("spawn_placeable", object)
+	
 func spawn_new_object(objectName: String, position: Vector2 = Vector2.ZERO, myNutrition: Nutrition = null):
 	emit_signal("spawn_new", objectName, position, myNutrition)
+
+func place_placeable_item(item: String) -> void:
+	var myItem = placeableItems[item]
+	emit_signal("set_placeable_item", myItem)
 
 func get_fish_mates(type: String, isMale: bool) -> Array[Fish]:
 	var mates: Array[Fish] = []

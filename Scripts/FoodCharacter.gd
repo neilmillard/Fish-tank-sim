@@ -1,4 +1,4 @@
-class_name FoodCharacter extends Resource
+class_name FoodCharacter extends Item
 
 @export var type: String = "Generic"
 @export var doesFloat: bool = true

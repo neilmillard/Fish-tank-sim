@@ -8,7 +8,7 @@ var triggeredTimer
 func enter(_msg:={}):
 	previousState = _msg.previousState
 	if previousState == "Swimming":
-		previousState == "Idle"
+		previousState = "Idle"
 	triggeredTimer = 0.4
 	fleeDirection = myBody.get_safe_direction()
 	set_fish_velocity()

@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://tipvp2ye1wl2"]
+
+[ext_resource type="Script" path="res://Scenes/game/equipment/filter_body.gd" id="1_k3i5d"]
+[ext_resource type="Script" path="res://Scripts/Placeable.gd" id="1_p8x0o"]
+[ext_resource type="Material" uid="uid://cl7objusxiiwg" path="res://Resources/Shaders/Materials/PlaceableShaderMaterial.tres" id="1_xl6u0"]
+[ext_resource type="Texture2D" uid="uid://8jlbmbrrof7e" path="res://art/filter1.png" id="2_qh4xu"]
+
+[node name="CanisterFilter" type="StaticBody2D"]
+script = ExtResource("1_p8x0o")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = ExtResource("1_xl6u0")
+texture = ExtResource("2_qh4xu")
+
+[node name="Body" type="Node2D" parent="."]
+script = ExtResource("1_k3i5d")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-75, -101, -60, -101, -55, -95, 10, -94, 72, -94, 72, -77, 13, -77, 13, 83, -75, 83)

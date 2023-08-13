@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PlaceableItem" load_steps=2 format=3 uid="uid://culnk32g6n7dg"]
+
+[ext_resource type="Script" path="res://Resources/PlaceableItem.gd" id="1_i7k6b"]
+
+[resource]
+script = ExtResource("1_i7k6b")
+placeable_scene_path = "res://Scenes/game/equipment/CanisterFilter.tscn"
+name = "CanisterFilter"
+description = "Filter, internal canister"
+category = "Filter"

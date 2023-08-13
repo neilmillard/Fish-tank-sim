@@ -130,3 +130,6 @@ func _on_water_test_button_button_down():
 func _on_water_change_button_button_down():
 	GameManager.water_change()
 
+
+func _on_place_canister_filter_button_button_up():
+	GameManager.place_placeable_item('CanisterFilter')

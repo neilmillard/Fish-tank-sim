@@ -1,4 +1,4 @@
-class_name FishCharacter extends Resource
+class_name FishCharacter extends Item
 
 @export var type: String = "Generic"
 @export var maxSize: float = 2.0

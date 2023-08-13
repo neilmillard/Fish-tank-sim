@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://7pafpo7utcpp"]
+[gd_scene load_steps=6 format=3 uid="uid://7pafpo7utcpp"]
 
 [ext_resource type="Script" path="res://Scripts/UnderwaterProcedural.gd" id="1_ilmkv"]
 [ext_resource type="PackedScene" uid="uid://dr7yr46m6ebpw" path="res://Scenes/game/tank/BackgroundFarTerrain.tscn" id="2_8wyk3"]
 [ext_resource type="PackedScene" path="res://Scenes/game/tank/middle_water.tscn" id="2_rcjv1"]
 [ext_resource type="PackedScene" uid="uid://cmsxq0rjabw6a" path="res://Scenes/game/tank/Floor.tscn" id="3_xf8mu"]
+[ext_resource type="Script" path="res://Scenes/game/items/item_placer.gd" id="5_8qcms"]
 
 [node name="Underwater" type="Node2D"]
 script = ExtResource("1_ilmkv")
@@ -25,3 +26,6 @@ script = ExtResource("1_ilmkv")
 [node name="Foreground Terrain" type="Node2D" parent="."]
 
 [node name="Foreground Water" type="Node2D" parent="."]
+
+[node name="ItemPlacer" type="Node2D" parent="."]
+script = ExtResource("5_8qcms")

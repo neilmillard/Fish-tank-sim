@@ -22,3 +22,7 @@ doesSwim = false
 move_speed = 10.0
 rotTime = 4000.0
 nutritionValue = SubResource("Resource_mwkle")
+animSprite = false
+name = "FlakeFood"
+description = "Food that sinks"
+category = "Food"

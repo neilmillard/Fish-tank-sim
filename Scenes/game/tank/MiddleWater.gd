@@ -11,6 +11,7 @@ var wallsWidth: float = 60.0
 
 func _ready():
 	GameManager.connect("spawn_new", _on_spawn_new_object)
+	GameManager.connect("spawn_placeable", _on_spawn_placeable)
 
 func _process(delta):
 	calc_O2_surface_transfer(delta)
@@ -129,7 +130,7 @@ func spawn_filter(stats: Filter = null, type: String = "Generic"):
 		myFilterScene = GameManager.filters[type]
 	var myFilter = spawn_obj(myFilterScene, myPosition)
 	if stats:
-		myFilter.stats = stats
+		myFilter.set_stats(stats)
 
 func spawn_food(foodStats: Food, type: String ="FlakeFood", myPosition: Vector2 = Vector2.ZERO):
 	var myFoodCharacter : FoodCharacter
@@ -192,7 +193,10 @@ func spawn_obj(obj : PackedScene, where : Vector2) -> Node2D:
 	add_child.call_deferred(myObject)
 	myObject.position = where
 	return myObject
-	
+
+func _on_spawn_placeable(object: Placeable) -> void:
+	add_child(object)
+
 func calc_O2_surface_transfer(delta):
 	var newO2 = delta * GameManager.currentLevelWidth * surfaceO2TransferEfficiency
 	GameManager.charge_o2(newO2)

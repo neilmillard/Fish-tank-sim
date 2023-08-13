@@ -1,5 +1,4 @@
-extends CharacterBody2D
-class_name FishBody
+class_name FishBody extends CharacterBody2D
 
 @export var stats: Fish
 @export var myStomach: Stomach
@@ -155,7 +154,9 @@ func is_preditor(otherFish: FishBody) -> bool:
 		return false
 	if stats.fishSize < otherFish.stats.fishSize / 2.0:
 		return true
-	if stats.fishSize < otherFish.stats.fishSize and otherFish.myStomach.could_eat():
+	if (stats.fishSize < otherFish.stats.fishSize 
+		and otherFish.myStomach.could_eat()
+		):
 		return true
 	return false
 
@@ -227,25 +228,36 @@ func check_environment() -> String:
 
 func shoot_physics_ray(p_direction: Vector2) -> Dictionary:
 	var space_state = get_world_2d().direct_space_state
-	var query = PhysicsRayQueryParameters2D.create(global_position, global_position + p_direction)
+	var query = PhysicsRayQueryParameters2D.create(
+		global_position, 
+		global_position + p_direction
+		)
 	query.exclude = [self]
 	var result = space_state.intersect_ray(query)
 	if debug:
 		queue_redraw()
-		debugLines.append([global_position, global_position + p_direction, result != {}])
+		debugLines.append(
+			[global_position, global_position + p_direction, result != {}]
+			)
 	return result
 	
 func process_lung(delta: float) -> void:
 	myLung._process(delta)
 
 func process_food(delta: float) -> void:
-	myStomach._process(delta, myCharacter.preferredTemp, myCharacter.toleranceRange)
+	myStomach._process(
+		delta, 
+		myCharacter.preferredTemp, 
+		myCharacter.toleranceRange
+		)
 
 func process_health(delta: float) -> void:
 	# The fish will expend energy on fighting infection
 	stats.currentHealth -= delta
 	var healthRatio = 1 - (stats.currentHealth / myCharacter.maxHealth)
-	var energyRequired = delta * GameManager.infectionEnergy * stats.fishSize * healthRatio
+	var energyRequired = (
+		delta * GameManager.infectionEnergy * stats.fishSize * healthRatio
+		)
 	var energyReceived = myStomach.get_energy(energyRequired)
 	var o2Used = myLung.requestO2(energyReceived)
 	myStomach.receive_nh3(energyReceived / 4.0)
@@ -318,7 +330,9 @@ func use_muscle_energy(delta: float) -> void:
 	# energy is needed to accelerate
 	var velocityDiff =  velocity.length_squared() - oldVelocity.length_squared()
 	if velocityDiff > 0:
-		var energyRequired = (velocityDiff / myCharacter.swimSpeed) * delta * stats.fishSize
+		var energyRequired = (
+			(velocityDiff / myCharacter.swimSpeed) * delta * stats.fishSize
+		)
 		var energyReceived = myStomach.get_energy(energyRequired)
 		var o2Used = myLung.requestO2(energyReceived)
 		# stash waste in the stomach (well sorta kidneys bladder)
@@ -350,20 +364,27 @@ func process_waste(delta: float) -> void:
 	# lets get rid of waste if we are moving
 	if(abs(velocity.x)) > myCharacter.swimSpeed / 10.0:
 		GameManager.currentTankData.add_waste(myStomach.flush_waste(1.0 * delta))
-		var nh3Flushed = GameManager.currentTankData.add_nh3(myStomach.flush_nh3(1.0 * delta))
+		var nh3Flushed = GameManager.currentTankData.add_nh3(
+			myStomach.flush_nh3(1.0 * delta)
+		)
 		myStomach.flush_nh3(nh3Flushed, true)
 		
 #Currently never called. just here for reference
 func rotate_to_target(target, delta):
 	direction = target.global_position - global_position
 	var angleTo = transform.x.angle_to(direction)
-	transform.rotated(sign(angleTo) * min(delta * myCharacter.rotationSpeed, abs(angleTo)))
+	transform.rotated(
+		sign(angleTo) * min(delta * myCharacter.rotationSpeed, 
+		abs(angleTo))
+		)
 
 func rotate_to_direction(newDirection: Vector2, delta: float) -> void:
 	if newDirection.x == 0:
 		newDirection.x = 1
 	var angleTo = transform.x.angle_to(newDirection)
-	var angleDelta = sign(angleTo) * min(delta * myCharacter.rotationSpeed, abs(angleTo))
+	var angleDelta = sign(angleTo) * min(
+			delta * myCharacter.rotationSpeed, abs(angleTo)
+		)
 	if velocity.x < 0:
 		rotation_degrees -= angleDelta 
 	else:
@@ -394,7 +415,9 @@ func eat_food(foodObject: Node):
 		# Dead fish cannot eat
 		if fsm.currentState.name == "Dead":
 			return
-		if myStomach.has_space_to_eat(foodObject.myCharacter.nutritionValue.size):
+		if myStomach.has_space_to_eat(
+				foodObject.myCharacter.nutritionValue.size
+			):
 			myStomach.receive_food(foodObject.eat())
 		nearestFoodPosition = Vector2.ZERO
 
@@ -432,7 +455,9 @@ func preditor_is_near():
 func food_is_near():
 	var food = get_nearest_food(position)
 	if food:
-		if food.position.distance_to(position) < myCharacter.idleFoodDistanceThreshold:
+		if (food.position.distance_to(position) 
+		< 
+		myCharacter.idleFoodDistanceThreshold):
 			return true
 	return false
 
@@ -473,7 +498,7 @@ func _on_state_machine_state_changed():
 	thought.start_thought(myThought)
 
 func expire_mated():
-	var timeLimit = myCharacter.growBabyTime * 1000  # Time limit in milliseconds
+	var timeLimit = myCharacter.growBabyTime * 1000  # Time limit milliseconds
 	var currentTime = Time.get_ticks_msec()
 	var itemsToRemove = []
 	
@@ -514,10 +539,16 @@ func _on_grow_baby_timeout():
 	_growBabyTimer.queue_free()
 	var _babyEnergy = myStomach.get_energy(40.0)
 	# TODO: maybe more that one, smaller and less energy on spawn
-	var childrenDropped = randi_range(myCharacter.minChildren, myCharacter.maxChildren)
+	var childrenDropped = randi_range(
+			myCharacter.minChildren, 
+			myCharacter.maxChildren
+		)
 	print("%s Baby spawn %s" % [name, childrenDropped])
 	for i in range(childrenDropped):
-		GameManager.spawn_new_object(stats.type, Vector2(position.x, position.y + 10*i))
+		GameManager.spawn_new_object(
+			stats.type, 
+			Vector2(position.x, position.y + 10*i)
+		)
 
 func get_nearest_mates(detectionDistance: float) -> Array[Fish]:
 	var fishes = GameManager.get_fish_mates(stats.type, not stats.isMale)

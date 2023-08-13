@@ -1,23 +1,16 @@
-extends Node2D
+class_name FilterBody extends Node2D
 
 # max Bacteria would be calculated based on media, surface area and such
 @export var maxBacteria: float = 100.0
 # stats track two types of bacteria
 @export var stats: Filter
-@export var type: String = "Generic"
+@export var myCharacter: PlaceableItem
 
 # bacteria growth rate, real = double in 13hrs
 var bacteriaGrowthRate: float
 
 func _ready():
-	# GameManager.stats.add_property(self, "currentBacteriaSomonas", "round")
-	# GameManager.stats.add_property(self, "currentBacteriaBacter", "round")
 	bacteriaGrowthRate = GameManager.bacteriaGrowthRate
-	if !stats:
-		if type.length() > 0:
-			stats = GameManager.new_filter_resource(type)
-	stats.type = type
-	stats.globalPosition = global_position
 
 func _process(delta):
 	if stats == null:

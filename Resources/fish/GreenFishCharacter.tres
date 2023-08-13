@@ -20,3 +20,6 @@ mateSize = 1.8
 growBabyTime = 300.0
 minChildren = 2
 maxChildren = 5
+name = "GreenFish"
+description = "Fish that is green"
+category = "Fish"
